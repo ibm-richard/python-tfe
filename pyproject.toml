@@ -16,7 +16,8 @@ dependencies = ["requests>=2.25.0"]
 dev = ["pytest>=7.0.0", "mypy>=1.17.1", "ruff>=0.12.10"]
 
 [project.urls]
-Repository = "https://github.com/hashicorp/python-tfe"
+"Repository" = "https://github.com/hashicorp/python-tfe"
+"Bug Tracker" = "https://github.com/hashicorp/python-tfe/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -25,7 +26,6 @@ where = ["src"]
 "" = "src"
 
 readme = "README.md"
-
 classifiers = [
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.10",
@@ -104,8 +104,3 @@ show_error_codes = true
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
-
-
-[project.urls]
-"Homepage" = "https://github.com/hashicorp/python-tfe"
-"Bug Tracker" = "https://github.com/hashicorp/python-tfe/issues"
