@@ -34,7 +34,8 @@ where = ["src"]
 
 # Ruff configuration
 [tool.ruff]
-line-length = 80
+target-version = "py310"
+line-length = 88
 exclude = [
     ".bzr",
     ".direnv",
