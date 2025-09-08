@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Iterator, Optional
 import builtins
+from collections.abc import Iterator
+from typing import Any
 
 from ..types import ExecutionMode, Workspace
 from ._base import _Service
@@ -29,13 +30,13 @@ def _ws_from(d: dict[str, Any], org: str | None = None) -> Workspace:
     # Optional fields
     em: ExecutionMode | None = _em_safe(attr.get("execution-mode"))
 
-    proj_id: Optional[str] = None
+    proj_id: str | None = None
     proj = attr.get("project")
     if isinstance(proj, dict):
         proj_id = proj.get("id") if isinstance(proj.get("id"), str) else None
 
     tags_val = attr.get("tags", []) or []
-    tags_list: list[str] = list(tags_val) if isinstance(tags_val, (list, tuple)) else []
+    tags_list: list[str] = list(tags_val) if isinstance(tags_val, list | tuple) else []
 
     return Workspace(
         id=id_str,

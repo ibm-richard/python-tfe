@@ -149,7 +149,7 @@ class HTTPTransport:
 
     def _raise_if_error(self, resp: httpx.Response) -> None:
         status = resp.status_code
-        
+
         if 200 <= status < 300:
             return
         try:
