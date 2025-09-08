@@ -1,5 +1,5 @@
 from __future__ import annotations
-
+from typing import Any
 
 class TFEError(Exception):
     def __init__(
@@ -21,7 +21,13 @@ class NotFound(TFEError): ...
 
 
 class RateLimited(TFEError):
-    def __init__(self, message: str, *, retry_after: float | None = None, **kw):
+    def __init__(
+        self,
+        message: str,
+        *,
+        retry_after: float | None = None,
+        **kw: Any,
+    ) -> None:
         super().__init__(message, **kw)
         self.retry_after = retry_after
 

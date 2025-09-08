@@ -28,5 +28,5 @@ class TFEClient:
         self.projects = Projects(self._transport)
         self.workspaces = Workspaces(self._transport)
 
-    def close(self):
+    def close(self) -> None:
         pass

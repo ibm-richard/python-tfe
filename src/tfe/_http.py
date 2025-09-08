@@ -133,30 +133,39 @@ class HTTPTransport:
             self._raise_if_error(resp)
             return resp
 
-    def _sleep(self, attempt: int, retry_after: float | None):
+    def _sleep(self, attempt: int, retry_after: float | None) -> None:
         if retry_after is not None:
             time.sleep(retry_after)
             return
         delay = min(self.backoff_cap, self.backoff_base * (2**attempt))
         time.sleep(delay)
 
-    async def _asleep(self, attempt: int, retry_after: float | None):
+    async def _asleep(self, attempt: int, retry_after: float | None) -> None:
         if retry_after is not None:
             await anyio.sleep(retry_after)
             return
         delay = min(self.backoff_cap, self.backoff_base * (2**attempt))
         await anyio.sleep(delay)
 
-    def _raise_if_error(self, resp: httpx.Response):
-        if 200 <= resp.status_code < 300:
+    def _raise_if_error(self, resp: httpx.Response) -> None:
+        status = resp.status_code
+        
+        if 200 <= status < 300:
             return
         try:
-            payload = resp.json()
+            payload: Any = resp.json()
         except Exception:
             payload = {}
         errors = parse_error_payload(payload)
-        msg = errors[0].get("detail") if errors else f"HTTP {resp.status_code}"
-        status = resp.status_code
+        msg: str = f"HTTP {status}"
+        if errors:
+            maybe_detail = errors[0].get("detail")
+            maybe_title = errors[0].get("title")
+            if isinstance(maybe_detail, str) and maybe_detail:
+                msg = maybe_detail
+            elif isinstance(maybe_title, str) and maybe_title:
+                msg = maybe_title
+
         if status in (401, 403):
             raise AuthError(msg, status=status, errors=errors)
         if status == 404:

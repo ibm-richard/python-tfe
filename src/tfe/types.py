@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from enum import Enum
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ExecutionMode(str, Enum):
@@ -37,4 +37,4 @@ class Workspace(BaseModel):
     organization: str
     execution_mode: ExecutionMode | None = None
     project_id: str | None = None
-    tags: list[str] = []
+    tags: list[str] = Field(default_factory=list)

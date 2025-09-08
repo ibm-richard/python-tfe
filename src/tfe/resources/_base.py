@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+from typing import Any, AsyncIterator, Iterator
 from .._http import HTTPTransport
 
 
 class _Service:
-    def __init__(self, t: HTTPTransport):
+    def __init__(self, t: HTTPTransport) -> None:
         self.t = t
 
-    def _list(self, path: str, *, params: dict | None = None):
+    def _list(self, path: str, *, params: dict | None = None) -> Iterator[dict[str, Any]]:
         page = 1
         while True:
             p = dict(params or {})
@@ -27,10 +28,10 @@ Warning: Do Not Use this Async Service as its not stable with HashiCorp API.
 
 
 class _AService:
-    def __init__(self, t: HTTPTransport):
+    def __init__(self, t: HTTPTransport) -> None:
         self.t = t
 
-    async def _alist(self, path: str, *, params: dict | None = None):
+    async def _alist(self, path: str, *, params: dict | None = None) -> AsyncIterator[dict[str, Any]]:
         page = 1
         while True:
             p = dict(params or {})

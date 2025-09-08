@@ -1,7 +1,7 @@
 .PHONY: help fmt fmt-check lint check test install dev-install type-check clean all venv activate
 
 PYTHON := python3
-SRC_DIR := tfe
+SRC_DIR := src/tfe
 TEST_DIR := tests
 VENV := .venv
 VENV_PYTHON := $(VENV)/bin/python
@@ -53,7 +53,7 @@ lint:
 check:
 	$(VENV_PYTHON) -m ruff format --check .
 	$(VENV_PYTHON) -m ruff check .
-	$(VENV_PYTHON) -m pi $(SRC_DIR)
+	$(VENV_PYTHON) -m mypy $(SRC_DIR)
 
 type-check:
 	$(VENV_PYTHON) -m mypy $(SRC_DIR)
