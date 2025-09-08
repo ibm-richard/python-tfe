@@ -2,7 +2,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tfe import client, config
+from src import client, config
 
 
 @pytest.fixture

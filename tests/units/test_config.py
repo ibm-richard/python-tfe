@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-from tfe import config
+from src import config
 
 
 @pytest.fixture(autouse=True)
