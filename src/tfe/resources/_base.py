@@ -2,9 +2,11 @@ from __future__ import annotations
 from typing import Iterator, AsyncIterator
 from .._http import HTTPTransport
 
+
 class _Service:
     def __init__(self, t: HTTPTransport):
         self.t = t
+
     def _list(self, path: str, *, params: dict | None = None):
         page = 1
         while True:
@@ -19,12 +21,16 @@ class _Service:
                 break
             page += 1
 
-'''
+
+"""
 Warning: Do Not Use this Async Service as its not stable with HashiCorp API.
-'''
+"""
+
+
 class _AService:
     def __init__(self, t: HTTPTransport):
         self.t = t
+
     async def _alist(self, path: str, *, params: dict | None = None):
         page = 1
         while True:

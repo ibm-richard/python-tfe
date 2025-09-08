@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Any
 
+
 def build_headers(user_agent_suffix: str | None = None) -> dict[str, str]:
     ua = "python-tfe/0.1"
     if user_agent_suffix:
@@ -11,10 +12,11 @@ def build_headers(user_agent_suffix: str | None = None) -> dict[str, str]:
         "User-Agent": ua,
     }
 
+
 def parse_error_payload(payload: dict[str, Any]) -> list[dict]:
     errs = payload.get("errors")
     if isinstance(errs, list):
         return errs
     if "message" in payload:
-        return [ {"detail": payload.get("message")} ]
+        return [{"detail": payload.get("message")}]
     return []
