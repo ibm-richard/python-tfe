@@ -3,9 +3,9 @@ Async TFE Client: This client should not be used for now.
 """
 
 from __future__ import annotations
-from .config import TFEConfig
+
 from ._http import HTTPTransport
-from .resources.admin.settings import AdminSettingsAsync
+from .config import TFEConfig
 
 
 class AsyncTFEClient:

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterator, AsyncIterator
+
 from .._http import HTTPTransport
 
 
@@ -15,8 +15,7 @@ class _Service:
             p.setdefault("page[size]", 100)
             r = self.t.request("GET", path, params=p)
             data = r.json().get("data", [])
-            for item in data:
-                yield item
+            yield from data
             if len(data) < p["page[size]"]:
                 break
             page += 1

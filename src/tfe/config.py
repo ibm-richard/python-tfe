@@ -1,6 +1,8 @@
 from __future__ import annotations
-from pydantic import BaseModel, Field
+
 import os
+
+from pydantic import BaseModel, Field
 
 
 class TFEConfig(BaseModel):
@@ -24,5 +26,5 @@ class TFEConfig(BaseModel):
     ca_bundle: str | None = os.getenv("SSL_CERT_FILE", None)
 
     @classmethod
-    def from_env(cls) -> "TFEConfig":
+    def from_env(cls) -> TFEConfig:
         return cls()

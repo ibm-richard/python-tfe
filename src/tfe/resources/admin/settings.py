@@ -1,5 +1,6 @@
 from __future__ import annotations
-from .._base import _Service, _AService
+
+from .._base import _AService, _Service
 
 
 class AdminSettings(_Service):

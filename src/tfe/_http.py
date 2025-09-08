@@ -1,8 +1,20 @@
 from __future__ import annotations
-import httpx, time, anyio
-from typing import Any, Mapping
-from .errors import *
+
+import time
+from collections.abc import Mapping
+from typing import Any
+
+import anyio
+import httpx
+
 from ._jsonapi import build_headers, parse_error_payload
+from .errors import (
+    AuthError,
+    NotFound,
+    RateLimited,
+    ServerError,
+    TFEError,
+)
 
 _RETRY_STATUSES = {429, 502, 503, 504}
 
@@ -71,7 +83,7 @@ class HTTPTransport:
                 )
             except httpx.HTTPError as e:
                 if attempt >= self.max_retries:
-                    raise ServerError(str(e))
+                    raise ServerError(str(e)) from e
                 self._sleep(attempt, None)
                 attempt += 1
                 continue
@@ -109,7 +121,7 @@ class HTTPTransport:
                 )
             except httpx.HTTPError as e:
                 if attempt >= self.max_retries:
-                    raise ServerError(str(e))
+                    raise ServerError(str(e)) from e
                 await self._asleep(attempt, None)
                 attempt += 1
                 continue

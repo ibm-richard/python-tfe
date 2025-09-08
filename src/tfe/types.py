@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 from enum import Enum
-from typing import Optional, Any, List, Dict
+
 from pydantic import BaseModel
 
 
@@ -21,7 +22,7 @@ class RunStatus(str, Enum):
 class Organization(BaseModel):
     id: str
     name: str
-    email: Optional[str] = None
+    email: str | None = None
 
 
 class Project(BaseModel):
@@ -35,5 +36,5 @@ class Workspace(BaseModel):
     name: str
     organization: str
     execution_mode: ExecutionMode | None = None
-    project_id: Optional[str] = None
-    tags: List[str] = []
+    project_id: str | None = None
+    tags: list[str] = []

@@ -1,6 +1,7 @@
 from __future__ import annotations
-from ._base import _Service
+
 from ..types import Organization
+from ._base import _Service
 
 
 class Organizations(_Service):

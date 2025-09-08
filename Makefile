@@ -53,7 +53,7 @@ lint:
 check:
 	$(VENV_PYTHON) -m ruff format --check .
 	$(VENV_PYTHON) -m ruff check .
-	$(VENV_PYTHON) -m mypy $(SRC_DIR)
+	$(VENV_PYTHON) -m pi $(SRC_DIR)
 
 type-check:
 	$(VENV_PYTHON) -m mypy $(SRC_DIR)

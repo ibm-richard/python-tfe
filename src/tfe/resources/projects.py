@@ -1,6 +1,7 @@
 from __future__ import annotations
-from ._base import _Service, _AService
+
 from ..types import Project
+from ._base import _Service
 
 
 class Projects(_Service):

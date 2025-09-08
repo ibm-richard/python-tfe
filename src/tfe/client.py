@@ -1,10 +1,10 @@
 from __future__ import annotations
-from .config import TFEConfig
+
 from ._http import HTTPTransport
+from .config import TFEConfig
 from .resources.organizations import Organizations
 from .resources.projects import Projects
 from .resources.workspaces import Workspaces
-from .resources.admin.settings import AdminSettings
 
 
 class TFEClient:

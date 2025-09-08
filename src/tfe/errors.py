@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from __future__ import annotations
 
 
 class TFEError(Exception):
@@ -6,8 +6,8 @@ class TFEError(Exception):
         self,
         message: str,
         *,
-        status: Optional[int] = None,
-        errors: Optional[List[Dict]] = None,
+        status: int | None = None,
+        errors: list[dict] | None = None,
     ):
         super().__init__(message)
         self.status = status
@@ -21,7 +21,7 @@ class NotFound(TFEError): ...
 
 
 class RateLimited(TFEError):
-    def __init__(self, message: str, *, retry_after: Optional[float] = None, **kw):
+    def __init__(self, message: str, *, retry_after: float | None = None, **kw):
         super().__init__(message, **kw)
         self.retry_after = retry_after
 

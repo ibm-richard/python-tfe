@@ -1,6 +1,7 @@
 from __future__ import annotations
+
+from ..types import ExecutionMode, Workspace
 from ._base import _Service
-from ..types import Workspace, ExecutionMode
 
 
 def _ws_from(d, org: str | None = None) -> Workspace:
