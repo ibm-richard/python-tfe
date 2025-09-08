@@ -49,7 +49,9 @@ def _ws_from(d: dict[str, Any], org: str | None = None) -> Workspace:
 
 
 class Workspaces(_Service):
-    def list(self, organization: str, *, search: str | None = None) -> Iterator[Workspace]:
+    def list(
+        self, organization: str, *, search: str | None = None
+    ) -> Iterator[Workspace]:
         params: dict[str, Any] = {}
         if search:
             params["search[name]"] = search
@@ -94,7 +96,9 @@ class Workspaces(_Service):
         return _ws_from(r.json()["data"], organization)
 
     def update(self, id: str, **attrs: Any) -> Workspace:
-        body: dict[str, Any] = {"data": {"type": "workspaces", "id": id, "attributes": {}}}
+        body: dict[str, Any] = {
+            "data": {"type": "workspaces", "id": id, "attributes": {}}
+        }
         for k, v in attrs.items():
             kk = k.replace("_", "-")
             # Map enum back to string if provided
