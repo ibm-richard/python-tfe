@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Iterator
+from typing import Any
 
 from ..errors import (
     ERR_INVALID_VARIABLE_ID,
@@ -27,7 +28,7 @@ class Variables(_Service):
             raise ValueError(ERR_INVALID_WORKSPACE_ID)
 
         path = f"/api/v2/workspaces/{workspace_id}/vars"
-        params = {}
+        params: dict[str, Any] = {}
         if options:
             # Add any options if needed in the future
             pass
@@ -47,7 +48,7 @@ class Variables(_Service):
             raise ValueError(ERR_INVALID_WORKSPACE_ID)
 
         path = f"/api/v2/workspaces/{workspace_id}/all-vars"
-        params = {}
+        params: dict[str, Any] = {}
         if options:
             # Add any options if needed in the future
             pass
