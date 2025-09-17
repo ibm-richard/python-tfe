@@ -326,7 +326,7 @@ class VariableUpdateOptions(BaseModel):
     category: CategoryType | None = None
     hcl: bool | None = None
     sensitive: bool | None = None
-=======
+
 class Tag(BaseModel):
     id: str | None = None
     name: str = ""
