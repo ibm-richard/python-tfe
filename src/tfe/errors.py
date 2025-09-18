@@ -57,6 +57,11 @@ ERR_INVALID_NAME = "invalid value for name"
 ERR_REQUIRED_NAME = "name is required"
 ERR_INVALID_ORG = "invalid organization name"
 ERR_REQUIRED_EMAIL = "email is required"
+# Workspaces
+ERR_INVALID_WORKSPACE_ID = "invalid workspace ID"
+ERR_INVALID_VARIABLE_ID = "invalid variable ID"
+ERR_REQUIRED_KEY = "key is required"
+ERR_REQUIRED_CATEGORY = "category is required"
 
 
 class WorkspaceNotFound(NotFound): ...
