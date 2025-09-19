@@ -52,6 +52,9 @@ class InvalidValues(TFEError): ...
 class RequiredFieldMissing(TFEError): ...
 
 
+class ErrStateVersionUploadNotSupported(TFEError): ...
+
+
 # Error message constants
 ERR_INVALID_NAME = "invalid value for name"
 ERR_REQUIRED_NAME = "name is required"
