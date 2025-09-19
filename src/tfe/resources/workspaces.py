@@ -69,7 +69,8 @@ def _em_safe(v: Any) -> ExecutionMode | None:
     # Only accept strings; map to enum if known, else None
     if not isinstance(v, str):
         return None
-    return ExecutionMode._value2member_map_.get(v)  # type: ignore[return-value]
+    result = ExecutionMode._value2member_map_.get(v)
+    return result if isinstance(result, ExecutionMode) else None
 
 
 def _ws_from(d: dict[str, Any], org: str | None = None) -> Workspace:
