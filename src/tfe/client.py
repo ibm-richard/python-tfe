@@ -3,6 +3,7 @@ from __future__ import annotations
 from ._http import HTTPTransport
 from .config import TFEConfig
 from .resources.apply import Applies
+from .resources.configuration_version import ConfigurationVersions
 from .resources.organizations import Organizations
 from .resources.plan import Plans
 from .resources.projects import Projects
@@ -35,6 +36,7 @@ class TFEClient:
             proxies=cfg.proxies,
             ca_bundle=cfg.ca_bundle,
         )
+        self.configuration_versions = ConfigurationVersions(self._transport)
         self.applies = Applies(self._transport)
         self.plans = Plans(self._transport)
         self.organizations = Organizations(self._transport)
