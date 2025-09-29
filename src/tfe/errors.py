@@ -87,6 +87,16 @@ ERR_INVALID_VARIABLE_ID = "invalid variable ID"
 ERR_REQUIRED_KEY = "key is required"
 ERR_REQUIRED_CATEGORY = "category is required"
 
+# OAuth Client Error Constants
+ERR_INVALID_OAUTH_CLIENT_ID = "invalid OAuth client ID"
+ERR_REQUIRED_API_URL = "API URL is required"
+ERR_REQUIRED_HTTP_URL = "HTTP URL is required"
+ERR_REQUIRED_OAUTH_TOKEN = "OAuth token is required"
+ERR_REQUIRED_SERVICE_PROVIDER = "service provider is required"
+ERR_UNSUPPORTED_PRIVATE_KEY = "private key is not supported for this service provider"
+ERR_REQUIRED_PROJECT = "projects are required"
+ERR_PROJECT_MIN_LIMIT = "must specify at least one project"
+
 
 class WorkspaceNotFound(NotFound): ...
 

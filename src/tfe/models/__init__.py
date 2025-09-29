@@ -4,6 +4,20 @@
 import importlib.util
 import os
 
+# Re-export all OAuth client types
+from .oauth_client import (
+    OAuthClient,
+    OAuthClientAddProjectsOptions,
+    OAuthClientCreateOptions,
+    OAuthClientIncludeOpt,
+    OAuthClientList,
+    OAuthClientListOptions,
+    OAuthClientReadOptions,
+    OAuthClientRemoveProjectsOptions,
+    OAuthClientUpdateOptions,
+    ServiceProviderType,
+)
+
 # Re-export all registry module types
 from .registry_module_types import (
     AgentExecutionMode,
