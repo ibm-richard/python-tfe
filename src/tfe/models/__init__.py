@@ -4,6 +4,25 @@
 import importlib.util
 import os
 
+# Re-export all agent and agent pool types
+from .agent import (
+    Agent,
+    AgentListOptions,
+    AgentPool,
+    AgentPoolAllowedWorkspacePolicy,
+    AgentPoolAssignToWorkspacesOptions,
+    AgentPoolCreateOptions,
+    AgentPoolListOptions,
+    AgentPoolReadOptions,
+    AgentPoolRemoveFromWorkspacesOptions,
+    AgentPoolUpdateOptions,
+    AgentReadOptions,
+    AgentStatus,
+    AgentToken,
+    AgentTokenCreateOptions,
+    AgentTokenListOptions,
+)
+
 # Re-export all configuration version types
 from .configuration_version_types import (
     ConfigurationSource,
@@ -65,6 +84,22 @@ from .registry_provider_types import (
 
 # Define what should be available when importing with *
 __all__ = [
+    # Agent and agent pool types
+    "Agent",
+    "AgentPool",
+    "AgentPoolAllowedWorkspacePolicy",
+    "AgentPoolAssignToWorkspacesOptions",
+    "AgentPoolCreateOptions",
+    "AgentPoolListOptions",
+    "AgentPoolReadOptions",
+    "AgentPoolRemoveFromWorkspacesOptions",
+    "AgentPoolUpdateOptions",
+    "AgentStatus",
+    "AgentListOptions",
+    "AgentReadOptions",
+    "AgentToken",
+    "AgentTokenCreateOptions",
+    "AgentTokenListOptions",
     # Configuration version types
     "ConfigurationSource",
     "ConfigurationStatus",
