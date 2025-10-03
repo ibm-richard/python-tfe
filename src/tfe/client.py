@@ -6,6 +6,7 @@ from .resources.agent_pools import AgentPools
 from .resources.agents import Agents, AgentTokens
 from .resources.apply import Applies
 from .resources.configuration_version import ConfigurationVersions
+from .resources.oauth_client import OAuthClients
 from .resources.organizations import Organizations
 from .resources.plan import Plans
 from .resources.projects import Projects
@@ -40,6 +41,7 @@ class TFEClient:
             proxies=cfg.proxies,
             ca_bundle=cfg.ca_bundle,
         )
+        self.oauth_clients = OAuthClients(self._transport)
         # Agent resources
         self.agent_pools = AgentPools(self._transport)
         self.agents = Agents(self._transport)

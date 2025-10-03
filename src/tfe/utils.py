@@ -4,7 +4,15 @@ import io
 import re
 import time
 from collections.abc import Callable, Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .models.oauth_client import (
+        OAuthClientAddProjectsOptions,
+        OAuthClientCreateOptions,
+        OAuthClientRemoveProjectsOptions,
+    )
+
 from urllib.parse import urlparse
 
 try:
@@ -204,6 +212,77 @@ def validate_workspace_update_options(options: WorkspaceUpdateOptions) -> None:
 
         if options.file_triggers_enabled is not None and options.file_triggers_enabled:
             raise UnsupportedBothTagsRegexAndFileTriggersEnabledError()
+
+
+def validate_oauth_client_create_options(options: OAuthClientCreateOptions) -> None:
+    """
+    Validate OAuth client create options similar to Go implementation.
+    Raises specific validation errors if validation fails.
+    """
+    from .errors import (
+        ERR_REQUIRED_API_URL,
+        ERR_REQUIRED_HTTP_URL,
+        ERR_REQUIRED_OAUTH_TOKEN,
+        ERR_REQUIRED_SERVICE_PROVIDER,
+        ERR_UNSUPPORTED_PRIVATE_KEY,
+    )
+    from .models.oauth_client import ServiceProviderType
+
+    if not valid_string(options.api_url):
+        raise ValueError(ERR_REQUIRED_API_URL)
+
+    if not valid_string(options.http_url):
+        raise ValueError(ERR_REQUIRED_HTTP_URL)
+
+    if options.service_provider is None:
+        raise ValueError(ERR_REQUIRED_SERVICE_PROVIDER)
+
+    # OAuth token not required for Bitbucket Server and Data Center
+    if (
+        not valid_string(options.oauth_token)
+        and options.service_provider != ServiceProviderType.BITBUCKET_SERVER
+        and options.service_provider != ServiceProviderType.BITBUCKET_DATA_CENTER
+    ):
+        raise ValueError(ERR_REQUIRED_OAUTH_TOKEN)
+
+    # Private key only supported for Azure DevOps Server
+    if (
+        valid_string(options.private_key)
+        and options.service_provider != ServiceProviderType.AZURE_DEVOPS_SERVER
+    ):
+        raise ValueError(ERR_UNSUPPORTED_PRIVATE_KEY)
+
+
+def validate_oauth_client_add_projects_options(
+    options: OAuthClientAddProjectsOptions,
+) -> None:
+    """
+    Validate OAuth client add projects options.
+    Raises specific validation errors if validation fails.
+    """
+    from .errors import ERR_PROJECT_MIN_LIMIT, ERR_REQUIRED_PROJECT
+
+    if options.projects is None:
+        raise ValueError(ERR_REQUIRED_PROJECT)
+
+    if len(options.projects) == 0:
+        raise ValueError(ERR_PROJECT_MIN_LIMIT)
+
+
+def validate_oauth_client_remove_projects_options(
+    options: OAuthClientRemoveProjectsOptions,
+) -> None:
+    """
+    Validate OAuth client remove projects options.
+    Raises specific validation errors if validation fails.
+    """
+    from .errors import ERR_PROJECT_MIN_LIMIT, ERR_REQUIRED_PROJECT
+
+    if options.projects is None:
+        raise ValueError(ERR_REQUIRED_PROJECT)
+
+    if len(options.projects) == 0:
+        raise ValueError(ERR_PROJECT_MIN_LIMIT)
 
 
 def pack_contents(path: str) -> io.BytesIO:

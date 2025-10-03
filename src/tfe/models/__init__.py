@@ -37,6 +37,20 @@ from .configuration_version_types import (
     IngressAttributes,
 )
 
+# Re-export all OAuth client types
+from .oauth_client import (
+    OAuthClient,
+    OAuthClientAddProjectsOptions,
+    OAuthClientCreateOptions,
+    OAuthClientIncludeOpt,
+    OAuthClientList,
+    OAuthClientListOptions,
+    OAuthClientReadOptions,
+    OAuthClientRemoveProjectsOptions,
+    OAuthClientUpdateOptions,
+    ServiceProviderType,
+)
+
 # Re-export all query run types
 from .query_run import (
     QueryRun,
@@ -99,6 +113,17 @@ from .registry_provider_types import (
 
 # Define what should be available when importing with *
 __all__ = [
+    # OAuth client types
+    "OAuthClient",
+    "OAuthClientAddProjectsOptions",
+    "OAuthClientCreateOptions",
+    "OAuthClientIncludeOpt",
+    "OAuthClientList",
+    "OAuthClientListOptions",
+    "OAuthClientReadOptions",
+    "OAuthClientRemoveProjectsOptions",
+    "OAuthClientUpdateOptions",
+    "ServiceProviderType",
     # Agent and agent pool types
     "Agent",
     "AgentPool",
