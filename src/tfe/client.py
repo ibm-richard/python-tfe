@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from ._http import HTTPTransport
 from .config import TFEConfig
-from .resources.oauth_client import OAuthClients
 from .resources.agent_pools import AgentPools
 from .resources.agents import Agents, AgentTokens
 from .resources.apply import Applies
 from .resources.configuration_version import ConfigurationVersions
+from .resources.oauth_client import OAuthClients
 from .resources.organizations import Organizations
 from .resources.plan import Plans
 from .resources.projects import Projects

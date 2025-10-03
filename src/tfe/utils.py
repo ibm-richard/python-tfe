@@ -12,7 +12,7 @@ if TYPE_CHECKING:
         OAuthClientCreateOptions,
         OAuthClientRemoveProjectsOptions,
     )
-from typing import Any
+
 from urllib.parse import urlparse
 
 try:
