@@ -9,7 +9,6 @@ from ..models.oauth_client import (
     OAuthClient,
     OAuthClientAddProjectsOptions,
     OAuthClientCreateOptions,
-    OAuthClientList,
     OAuthClientListOptions,
     OAuthClientReadOptions,
     OAuthClientRemoveProjectsOptions,
@@ -60,7 +59,7 @@ class OAuthClients(_Service):
 
         validate_oauth_client_create_options(options)
 
-        body = {
+        body: dict[str, Any] = {
             "data": {
                 "type": "oauth-clients",
                 "attributes": options.model_dump(exclude_none=True, by_alias=True),
@@ -69,10 +68,8 @@ class OAuthClients(_Service):
 
         # Handle relations separately
         if options.projects:
-            body["data"]["relationships"] = {
-                "projects": {"data": options.projects}
-            }
-        
+            body["data"]["relationships"] = {"projects": {"data": options.projects}}
+
         if options.agent_pool:
             if "relationships" not in body["data"]:
                 body["data"]["relationships"] = {}
@@ -122,9 +119,7 @@ class OAuthClients(_Service):
 
         # Handle relations separately
         if options.agent_pool:
-            body["data"]["relationships"] = {
-                "agent-pool": {"data": options.agent_pool}
-            }
+            body["data"]["relationships"] = {"agent-pool": {"data": options.agent_pool}}
 
         path = f"/api/v2/oauth-clients/{quote(oauth_client_id)}"
         response = self.t.request("PATCH", path, json_body=body)
@@ -173,16 +168,16 @@ class OAuthClients(_Service):
 
         # Handle relationships
         relationships = data.get("relationships", {})
-        
+
         if "organization" in relationships:
             oauth_client.organization = relationships["organization"].get("data")
-            
+
         if "oauth-tokens" in relationships:
             oauth_client.oauth_tokens = relationships["oauth-tokens"].get("data", [])
-            
+
         if "agent-pool" in relationships:
             oauth_client.agent_pool = relationships["agent-pool"].get("data")
-            
+
         if "projects" in relationships:
             oauth_client.projects = relationships["projects"].get("data", [])
 

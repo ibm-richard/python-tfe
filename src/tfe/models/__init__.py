@@ -65,6 +65,17 @@ from .registry_provider_types import (
 
 # Define what should be available when importing with *
 __all__ = [
+    # OAuth client types
+    "OAuthClient",
+    "OAuthClientAddProjectsOptions",
+    "OAuthClientCreateOptions",
+    "OAuthClientIncludeOpt",
+    "OAuthClientList",
+    "OAuthClientListOptions",
+    "OAuthClientReadOptions",
+    "OAuthClientRemoveProjectsOptions",
+    "OAuthClientUpdateOptions",
+    "ServiceProviderType",
     # Registry module types
     "AgentExecutionMode",
     "Commit",

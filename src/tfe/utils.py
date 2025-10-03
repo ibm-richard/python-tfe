@@ -3,7 +3,14 @@ from __future__ import annotations
 import re
 import time
 from collections.abc import Callable, Mapping
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .models.oauth_client import (
+        OAuthClientAddProjectsOptions,
+        OAuthClientCreateOptions,
+        OAuthClientRemoveProjectsOptions,
+    )
 
 from .errors import (
     InvalidNameError,
@@ -204,7 +211,7 @@ def valid_oauth_client_id(v: str | None) -> bool:
     return valid_string_id(v)
 
 
-def validate_oauth_client_create_options(options) -> None:
+def validate_oauth_client_create_options(options: OAuthClientCreateOptions) -> None:
     """
     Validate OAuth client create options similar to Go implementation.
     Raises specific validation errors if validation fails.
@@ -217,51 +224,59 @@ def validate_oauth_client_create_options(options) -> None:
         ERR_UNSUPPORTED_PRIVATE_KEY,
     )
     from .models.oauth_client import ServiceProviderType
-    
+
     if not valid_string(options.api_url):
         raise ValueError(ERR_REQUIRED_API_URL)
-    
+
     if not valid_string(options.http_url):
         raise ValueError(ERR_REQUIRED_HTTP_URL)
-    
+
     if options.service_provider is None:
         raise ValueError(ERR_REQUIRED_SERVICE_PROVIDER)
-    
+
     # OAuth token not required for Bitbucket Server and Data Center
-    if (not valid_string(options.oauth_token) and 
-        options.service_provider != ServiceProviderType.BITBUCKET_SERVER and
-        options.service_provider != ServiceProviderType.BITBUCKET_DATA_CENTER):
+    if (
+        not valid_string(options.oauth_token)
+        and options.service_provider != ServiceProviderType.BITBUCKET_SERVER
+        and options.service_provider != ServiceProviderType.BITBUCKET_DATA_CENTER
+    ):
         raise ValueError(ERR_REQUIRED_OAUTH_TOKEN)
-    
+
     # Private key only supported for Azure DevOps Server
-    if (valid_string(options.private_key) and 
-        options.service_provider != ServiceProviderType.AZURE_DEVOPS_SERVER):
+    if (
+        valid_string(options.private_key)
+        and options.service_provider != ServiceProviderType.AZURE_DEVOPS_SERVER
+    ):
         raise ValueError(ERR_UNSUPPORTED_PRIVATE_KEY)
 
 
-def validate_oauth_client_add_projects_options(options) -> None:
+def validate_oauth_client_add_projects_options(
+    options: OAuthClientAddProjectsOptions,
+) -> None:
     """
     Validate OAuth client add projects options.
     Raises specific validation errors if validation fails.
     """
-    from .errors import ERR_REQUIRED_PROJECT, ERR_PROJECT_MIN_LIMIT
-    
+    from .errors import ERR_PROJECT_MIN_LIMIT, ERR_REQUIRED_PROJECT
+
     if options.projects is None:
         raise ValueError(ERR_REQUIRED_PROJECT)
-    
+
     if len(options.projects) == 0:
         raise ValueError(ERR_PROJECT_MIN_LIMIT)
 
 
-def validate_oauth_client_remove_projects_options(options) -> None:
+def validate_oauth_client_remove_projects_options(
+    options: OAuthClientRemoveProjectsOptions,
+) -> None:
     """
     Validate OAuth client remove projects options.
     Raises specific validation errors if validation fails.
     """
-    from .errors import ERR_REQUIRED_PROJECT, ERR_PROJECT_MIN_LIMIT
-    
+    from .errors import ERR_PROJECT_MIN_LIMIT, ERR_REQUIRED_PROJECT
+
     if options.projects is None:
         raise ValueError(ERR_REQUIRED_PROJECT)
-    
+
     if len(options.projects) == 0:
         raise ValueError(ERR_PROJECT_MIN_LIMIT)
