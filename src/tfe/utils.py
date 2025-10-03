@@ -214,11 +214,6 @@ def validate_workspace_update_options(options: WorkspaceUpdateOptions) -> None:
             raise UnsupportedBothTagsRegexAndFileTriggersEnabledError()
 
 
-def valid_oauth_client_id(v: str | None) -> bool:
-    """Validate OAuth client ID format."""
-    return valid_string_id(v)
-
-
 def validate_oauth_client_create_options(options: OAuthClientCreateOptions) -> None:
     """
     Validate OAuth client create options similar to Go implementation.

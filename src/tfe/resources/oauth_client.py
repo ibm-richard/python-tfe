@@ -15,7 +15,6 @@ from ..models.oauth_client import (
     OAuthClientUpdateOptions,
 )
 from ..utils import (
-    valid_oauth_client_id,
     valid_string_id,
     validate_oauth_client_add_projects_options,
     validate_oauth_client_create_options,
@@ -89,7 +88,7 @@ class OAuthClients(_Service):
         self, oauth_client_id: str, options: OAuthClientReadOptions | None
     ) -> OAuthClient:
         """Read an OAuth client by its ID with options."""
-        if not valid_oauth_client_id(oauth_client_id):
+        if not valid_string_id(oauth_client_id):
             raise ValueError(ERR_INVALID_OAUTH_CLIENT_ID)
 
         path = f"/api/v2/oauth-clients/{quote(oauth_client_id)}"
@@ -107,7 +106,7 @@ class OAuthClients(_Service):
         self, oauth_client_id: str, options: OAuthClientUpdateOptions
     ) -> OAuthClient:
         """Update an OAuth client by its ID."""
-        if not valid_oauth_client_id(oauth_client_id):
+        if not valid_string_id(oauth_client_id):
             raise ValueError(ERR_INVALID_OAUTH_CLIENT_ID)
 
         body = {
@@ -129,7 +128,7 @@ class OAuthClients(_Service):
 
     def delete(self, oauth_client_id: str) -> None:
         """Delete an OAuth client by its ID."""
-        if not valid_oauth_client_id(oauth_client_id):
+        if not valid_string_id(oauth_client_id):
             raise ValueError(ERR_INVALID_OAUTH_CLIENT_ID)
 
         path = f"/api/v2/oauth-clients/{quote(oauth_client_id)}"
@@ -139,7 +138,7 @@ class OAuthClients(_Service):
         self, oauth_client_id: str, options: OAuthClientAddProjectsOptions
     ) -> None:
         """Add projects to a given OAuth client."""
-        if not valid_oauth_client_id(oauth_client_id):
+        if not valid_string_id(oauth_client_id):
             raise ValueError(ERR_INVALID_OAUTH_CLIENT_ID)
 
         validate_oauth_client_add_projects_options(options)
@@ -151,7 +150,7 @@ class OAuthClients(_Service):
         self, oauth_client_id: str, options: OAuthClientRemoveProjectsOptions
     ) -> None:
         """Remove projects from an OAuth client."""
-        if not valid_oauth_client_id(oauth_client_id):
+        if not valid_string_id(oauth_client_id):
             raise ValueError(ERR_INVALID_OAUTH_CLIENT_ID)
 
         validate_oauth_client_remove_projects_options(options)
