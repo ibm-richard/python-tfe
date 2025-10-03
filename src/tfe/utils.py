@@ -288,6 +288,8 @@ def validate_oauth_client_remove_projects_options(
 
     if len(options.projects) == 0:
         raise ValueError(ERR_PROJECT_MIN_LIMIT)
+
+
 def pack_contents(path: str) -> io.BytesIO:
     """
     Pack directory contents into a tar.gz archive suitable for upload.
