@@ -9,7 +9,7 @@ class TFEError(Exception):
         message: str,
         *,
         status: int | None = None,
-        errors: list[dict] | None = None,
+        errors: list[dict | str] | None = None,
     ):
         super().__init__(message)
         self.status = status
@@ -84,6 +84,8 @@ ERR_INVALID_MODULE_ID = "invalid module ID"
 # Workspaces
 ERR_INVALID_WORKSPACE_ID = "invalid workspace ID"
 ERR_INVALID_VARIABLE_ID = "invalid variable ID"
+# Configuration Versions
+ERR_INVALID_CONFIG_VERSION_ID = "invalid configuration version ID"
 ERR_REQUIRED_KEY = "key is required"
 ERR_REQUIRED_CATEGORY = "category is required"
 
@@ -341,6 +343,13 @@ class InvalidRunIDError(InvalidValues):
         super().__init__(message)
 
 
+class InvalidQueryRunIDError(InvalidValues):
+    """Raised when an invalid query run ID is provided."""
+
+    def __init__(self, message: str = "invalid value for query run ID"):
+        super().__init__(message)
+
+
 class TerraformVersionValidForPlanOnlyError(ValidationError):
     """Raised when terraform_version is set without plan_only being true."""
 
@@ -348,4 +357,28 @@ class TerraformVersionValidForPlanOnlyError(ValidationError):
         self,
         message: str = "setting terraform-version is only valid when plan-only is set to true",
     ):
+        super().__init__(message)
+
+
+# Plan errors
+class InvalidPlanIDError(InvalidValues):
+    """Raised when an invalid plan ID is provided."""
+
+    def __init__(self, message: str = "invalid value for plan ID"):
+        super().__init__(message)
+
+
+# Apply errors
+class InvalidApplyIDError(InvalidValues):
+    """Raised when an invalid apply ID is provided."""
+
+    def __init__(self, message: str = "invalid value for apply ID"):
+        super().__init__(message)
+
+
+# Run Event errors
+class InvalidRunEventIDError(InvalidValues):
+    """Raised when an invalid run event ID is provided."""
+
+    def __init__(self, message: str = "invalid value for run event ID"):
         super().__init__(message)

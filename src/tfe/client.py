@@ -3,11 +3,18 @@ from __future__ import annotations
 from ._http import HTTPTransport
 from .config import TFEConfig
 from .resources.oauth_client import OAuthClients
+from .resources.agent_pools import AgentPools
+from .resources.agents import Agents, AgentTokens
+from .resources.apply import Applies
+from .resources.configuration_version import ConfigurationVersions
 from .resources.organizations import Organizations
+from .resources.plan import Plans
 from .resources.projects import Projects
+from .resources.query_run import QueryRuns
 from .resources.registry_module import RegistryModules
 from .resources.registry_provider import RegistryProviders
 from .resources.run import Runs
+from .resources.run_event import RunEvents
 from .resources.run_task import RunTasks
 from .resources.run_trigger import RunTriggers
 from .resources.state_version_outputs import StateVersionOutputs
@@ -35,6 +42,15 @@ class TFEClient:
             ca_bundle=cfg.ca_bundle,
         )
         self.oauth_clients = OAuthClients(self._transport)
+        # Agent resources
+        self.agent_pools = AgentPools(self._transport)
+        self.agents = Agents(self._transport)
+        self.agent_tokens = AgentTokens(self._transport)
+
+        # Core resources
+        self.configuration_versions = ConfigurationVersions(self._transport)
+        self.applies = Applies(self._transport)
+        self.plans = Plans(self._transport)
         self.organizations = Organizations(self._transport)
         self.projects = Projects(self._transport)
         self.variables = Variables(self._transport)
@@ -44,11 +60,14 @@ class TFEClient:
         self.registry_modules = RegistryModules(self._transport)
         self.registry_providers = RegistryProviders(self._transport)
 
+        # State and execution resources
         self.state_versions = StateVersions(self._transport)
         self.state_version_outputs = StateVersionOutputs(self._transport)
         self.run_tasks = RunTasks(self._transport)
         self.run_triggers = RunTriggers(self._transport)
         self.runs = Runs(self._transport)
+        self.query_runs = QueryRuns(self._transport)
+        self.run_events = RunEvents(self._transport)
 
     def close(self) -> None:
         pass

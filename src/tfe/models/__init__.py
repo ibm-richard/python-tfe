@@ -18,6 +18,54 @@ from .oauth_client import (
     ServiceProviderType,
 )
 
+# Re-export all agent and agent pool types
+from .agent import (
+    Agent,
+    AgentListOptions,
+    AgentPool,
+    AgentPoolAllowedWorkspacePolicy,
+    AgentPoolAssignToWorkspacesOptions,
+    AgentPoolCreateOptions,
+    AgentPoolListOptions,
+    AgentPoolReadOptions,
+    AgentPoolRemoveFromWorkspacesOptions,
+    AgentPoolUpdateOptions,
+    AgentReadOptions,
+    AgentStatus,
+    AgentToken,
+    AgentTokenCreateOptions,
+    AgentTokenListOptions,
+)
+
+# Re-export all configuration version types
+from .configuration_version_types import (
+    ConfigurationSource,
+    ConfigurationStatus,
+    ConfigurationVersion,
+    ConfigurationVersionCreateOptions,
+    ConfigurationVersionList,
+    ConfigurationVersionListOptions,
+    ConfigurationVersionReadOptions,
+    ConfigurationVersionUpload,
+    ConfigVerIncludeOpt,
+    IngressAttributes,
+)
+
+# Re-export all query run types
+from .query_run import (
+    QueryRun,
+    QueryRunCancelOptions,
+    QueryRunCreateOptions,
+    QueryRunForceCancelOptions,
+    QueryRunList,
+    QueryRunListOptions,
+    QueryRunLogs,
+    QueryRunReadOptions,
+    QueryRunResults,
+    QueryRunStatus,
+    QueryRunType,
+)
+
 # Re-export all registry module types
 from .registry_module_types import (
     AgentExecutionMode,
@@ -76,6 +124,33 @@ __all__ = [
     "OAuthClientRemoveProjectsOptions",
     "OAuthClientUpdateOptions",
     "ServiceProviderType",
+    # Agent and agent pool types
+    "Agent",
+    "AgentPool",
+    "AgentPoolAllowedWorkspacePolicy",
+    "AgentPoolAssignToWorkspacesOptions",
+    "AgentPoolCreateOptions",
+    "AgentPoolListOptions",
+    "AgentPoolReadOptions",
+    "AgentPoolRemoveFromWorkspacesOptions",
+    "AgentPoolUpdateOptions",
+    "AgentStatus",
+    "AgentListOptions",
+    "AgentReadOptions",
+    "AgentToken",
+    "AgentTokenCreateOptions",
+    "AgentTokenListOptions",
+    # Configuration version types
+    "ConfigurationSource",
+    "ConfigurationStatus",
+    "ConfigurationVersion",
+    "ConfigurationVersionCreateOptions",
+    "ConfigurationVersionList",
+    "ConfigurationVersionListOptions",
+    "ConfigurationVersionReadOptions",
+    "ConfigurationVersionUpload",
+    "ConfigVerIncludeOpt",
+    "IngressAttributes",
     # Registry module types
     "AgentExecutionMode",
     "Commit",
@@ -115,6 +190,18 @@ __all__ = [
     "RegistryProviderListOptions",
     "RegistryProviderPermissions",
     "RegistryProviderReadOptions",
+    # Query run types
+    "QueryRun",
+    "QueryRunCancelOptions",
+    "QueryRunCreateOptions",
+    "QueryRunForceCancelOptions",
+    "QueryRunList",
+    "QueryRunListOptions",
+    "QueryRunLogs",
+    "QueryRunReadOptions",
+    "QueryRunResults",
+    "QueryRunStatus",
+    "QueryRunType",
     # Main types from types.py (will be dynamically added below)
     "Capacity",
     "DataRetentionPolicy",
