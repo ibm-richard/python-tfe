@@ -102,6 +102,11 @@ ERR_PROJECT_MIN_LIMIT = "must specify at least one project"
 # SSH Key Error Constants
 ERR_INVALID_SSH_KEY_ID = "invalid SSH key ID"
 
+# Reserved Tag Key Error Constants
+ERR_INVALID_RESERVED_TAG_KEY_ID = "invalid reserved tag key ID"
+ERR_REQUIRED_TAG_KEY = "tag key is required"
+ERR_INVALID_TAG_KEY = "invalid tag key"
+
 
 class WorkspaceNotFound(NotFound): ...
 

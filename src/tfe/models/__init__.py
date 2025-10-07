@@ -111,6 +111,15 @@ from .registry_provider_types import (
     RegistryProviderReadOptions,
 )
 
+# Re-export all reserved tag key types
+from .reserved_tag_key import (
+    ReservedTagKey,
+    ReservedTagKeyCreateOptions,
+    ReservedTagKeyList,
+    ReservedTagKeyListOptions,
+    ReservedTagKeyUpdateOptions,
+)
+
 # Re-export all SSH key types
 from .ssh_key import (
     SSHKey,
@@ -139,6 +148,12 @@ __all__ = [
     "SSHKeyList",
     "SSHKeyListOptions",
     "SSHKeyUpdateOptions",
+    # Reserved tag key types
+    "ReservedTagKey",
+    "ReservedTagKeyCreateOptions",
+    "ReservedTagKeyList",
+    "ReservedTagKeyListOptions",
+    "ReservedTagKeyUpdateOptions",
     # Agent and agent pool types
     "Agent",
     "AgentPool",
