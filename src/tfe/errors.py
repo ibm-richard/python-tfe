@@ -99,6 +99,9 @@ ERR_UNSUPPORTED_PRIVATE_KEY = "private key is not supported for this service pro
 ERR_REQUIRED_PROJECT = "projects are required"
 ERR_PROJECT_MIN_LIMIT = "must specify at least one project"
 
+# OAuth Token Error Constants
+ERR_INVALID_OAUTH_TOKEN_ID = "invalid OAuth token ID"
+
 # SSH Key Error Constants
 ERR_INVALID_SSH_KEY_ID = "invalid SSH key ID"
 
