@@ -85,7 +85,9 @@ def main():
             print(f"     Total count: {token_list_with_options.total_count}")
 
     except NotFound:
-        print("   ✓ No OAuth tokens found (organization may not exist or no tokens available)")
+        print(
+            "   ✓ No OAuth tokens found (organization may not exist or no tokens available)"
+        )
     except Exception as e:
         print(f"   ✗ Error: {e}")
 
@@ -144,7 +146,9 @@ Z1n8X3c4l3X8Y2v3Z1n8QwECggEBAO1X3c4l3X8Y2v3Z1n8X3c4l3X8Y2v3Z1n8X
 
         except Exception as e:
             print(f"   ✗ Error: {e}")
-            print("   Note: This may fail if the SSH key format is invalid or constraints apply")
+            print(
+                "   Note: This may fail if the SSH key format is invalid or constraints apply"
+            )
     else:
         print("\n3. Testing update() function:")
         print("   ⚠ Skipped - No OAuth token available to update")

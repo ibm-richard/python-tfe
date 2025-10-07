@@ -89,9 +89,7 @@ class TestOAuthTokenParsing:
                 "has-ssh-key": False,
                 "service-provider-user": "testuser",
             },
-            "relationships": {
-                "oauth-client": {"data": None}
-            },
+            "relationships": {"oauth-client": {"data": None}},
         }
 
         result = oauth_tokens_service._parse_oauth_token(data)
@@ -175,7 +173,8 @@ class TestOAuthTokens:
         oauth_tokens_service.list("test-org", options)
 
         mock_transport.request.assert_called_once_with(
-            "GET", "/api/v2/organizations/test-org/oauth-tokens?page[number]=2&page[size]=50"
+            "GET",
+            "/api/v2/organizations/test-org/oauth-tokens?page[number]=2&page[size]=50",
         )
 
     def test_list_oauth_tokens_invalid_org(self, oauth_tokens_service):

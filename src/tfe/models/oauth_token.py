@@ -61,6 +61,7 @@ class OAuthTokenUpdateOptions(BaseModel):
 # Rebuild models to resolve forward references
 try:
     from .oauth_client import OAuthClient  # noqa: F401
+
     OAuthToken.model_rebuild()
     OAuthTokenList.model_rebuild()
 except ImportError:
