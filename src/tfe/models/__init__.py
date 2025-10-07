@@ -51,6 +51,14 @@ from .oauth_client import (
     ServiceProviderType,
 )
 
+# Re-export all OAuth token types
+from .oauth_token import (
+    OAuthToken,
+    OAuthTokenList,
+    OAuthTokenListOptions,
+    OAuthTokenUpdateOptions,
+)
+
 # Re-export all query run types
 from .query_run import (
     QueryRun,
@@ -142,6 +150,11 @@ __all__ = [
     "OAuthClientRemoveProjectsOptions",
     "OAuthClientUpdateOptions",
     "ServiceProviderType",
+    # OAuth token types
+    "OAuthToken",
+    "OAuthTokenList",
+    "OAuthTokenListOptions",
+    "OAuthTokenUpdateOptions",
     # SSH key types
     "SSHKey",
     "SSHKeyCreateOptions",
