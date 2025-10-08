@@ -1,7 +1,7 @@
 """
 Comprehensive Integration Test for python-tfe Projects CRUD Operations
 
-This file tests all CRUD operations from src/tfe/resources/projects.py:
+This file tests all CRUD operations:
 - List: Get all projects in an organization
 - Create: Add new projects with validation
 - Read: Get specific project details
@@ -29,10 +29,10 @@ import uuid
 
 import pytest
 
-from tfe._http import HTTPTransport
-from tfe.config import TFEConfig
-from tfe.resources.projects import Projects
-from tfe.types import (
+from pytfe._http import HTTPTransport
+from pytfe.config import TFEConfig
+from pytfe.resources.projects import Projects
+from pytfe.types import (
     ProjectAddTagBindingsOptions,
     ProjectCreateOptions,
     ProjectListOptions,

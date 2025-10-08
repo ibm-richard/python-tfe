@@ -2,7 +2,7 @@
 """
 Complete OAuth Client Testing Suite
 
-This file contains individual tests for all 8 OAuth client functions implemented in src/tfe/resources/oauth_client.py:
+This file contains individual tests for all 8 OAuth client functions:
 
 PUBLIC FUNCTIONS AVAILABLE FOR TESTING:
 1. list() - List all OAuth clients for an organization
@@ -35,9 +35,9 @@ import time
 # Add the src directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import NotFound
-from tfe.models.oauth_client import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import NotFound
+from pytfe.models.oauth_client import (
     OAuthClientAddProjectsOptions,
     OAuthClientCreateOptions,
     OAuthClientIncludeOpt,

@@ -4,14 +4,14 @@ import argparse
 import os
 from pathlib import Path
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import ErrStateVersionUploadNotSupported
-from tfe.models.state_version import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import ErrStateVersionUploadNotSupported
+from pytfe.models.state_version import (
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
     StateVersionListOptions,
 )
-from tfe.models.state_version_output import StateVersionOutputsListOptions
+from pytfe.models.state_version_output import StateVersionOutputsListOptions
 
 
 def _print_header(title: str):

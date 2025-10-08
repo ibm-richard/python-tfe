@@ -30,8 +30,8 @@ import os
 import time
 from datetime import datetime
 
-from tfe import TFEClient, TFEConfig
-from tfe.models.query_run import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models.query_run import (
     QueryRunCancelOptions,
     QueryRunCreateOptions,
     QueryRunForceCancelOptions,

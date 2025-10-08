@@ -82,4 +82,7 @@ class TFEClient:
         self.reserved_tag_key = ReservedTagKey(self._transport)
 
     def close(self) -> None:
-        pass
+        try:
+            self._transport._sync.close()
+        except Exception:
+            pass

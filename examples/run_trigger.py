@@ -1,14 +1,14 @@
 import time
 import traceback
 
-from tfe import TFEClient, TFEConfig
-from tfe.models.run_trigger import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models.run_trigger import (
     RunTriggerCreateOptions,
     RunTriggerFilterOp,
     RunTriggerIncludeOp,
     RunTriggerListOptions,
 )
-from tfe.models.workspace import Workspace
+from pytfe.models.workspace import Workspace
 
 
 def run_trigger_list(client, workspace_id):

@@ -31,30 +31,3 @@ class _Service:
             if len(data) < page_size:
                 break
             page += 1
-
-
-"""
-Warning: Do Not Use this Async Service as its not stable with HashiCorp API.
-"""
-
-
-class _AService:
-    def __init__(self, t: HTTPTransport) -> None:
-        self.t = t
-
-    async def _alist(
-        self, path: str, *, params: dict | None = None
-    ) -> AsyncIterator[dict[str, Any]]:
-        page = 1
-        while True:
-            p = dict(params or {})
-            p.setdefault("page[number]", page)
-            p.setdefault("page[size]", 100)
-            r = await self.t.arequest("GET", path, params=p)
-            data = r.json().get("data", [])
-            for item in data:
-                yield item
-            page_size = int(p["page[size]"])
-            if len(data) < page_size:
-                break
-            page += 1

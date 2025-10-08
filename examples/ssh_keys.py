@@ -28,9 +28,9 @@ import sys
 # Add the source directory to the path for direct execution
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import NotFound, TFEError
-from tfe.models import SSHKeyCreateOptions, SSHKeyListOptions, SSHKeyUpdateOptions
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import NotFound, TFEError
+from pytfe.models import SSHKeyCreateOptions, SSHKeyListOptions, SSHKeyUpdateOptions
 
 # Configuration
 TFE_TOKEN = os.getenv("TFE_TOKEN")

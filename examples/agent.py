@@ -17,15 +17,15 @@ Make sure to set the following environment variables:
 Usage:
     export TFE_TOKEN="your-token-here"
     export TFE_ORG="your-organization"
-    python examples/agent_simple.py
+    python examples/agent.py
 """
 
 import os
 
-from tfe.client import TFEClient
-from tfe.config import TFEConfig
-from tfe.errors import NotFound
-from tfe.models.agent import AgentListOptions
+from pytfe.client import TFEClient
+from pytfe.config import TFEConfig
+from pytfe.errors import NotFound
+from pytfe.models.agent import AgentListOptions
 
 
 def main():
@@ -45,7 +45,7 @@ def main():
 
     # Create TFE client
     config = TFEConfig(token=token, address=address)
-    client = TFEClient(config=config)
+    client = TFEClient(config)
 
     print(f"🔗 Connected to: {address}")
     print(f"🏢 Organization: {org}")

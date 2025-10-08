@@ -4,7 +4,7 @@ from typing import Any
 
 
 def build_headers(user_agent_suffix: str | None = None) -> dict[str, str]:
-    ua = "python-tfe/0.1"
+    ua = "pytfe/0.1"
     if user_agent_suffix:
         ua = f"{ua} {user_agent_suffix}"
     return {

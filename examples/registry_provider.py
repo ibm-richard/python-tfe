@@ -23,8 +23,8 @@ import sys
 # Add the src directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient
-from tfe.models.registry_provider_types import (
+from pytfe import TFEClient
+from pytfe.models.registry_provider_types import (
     RegistryName,
     RegistryProviderCreateOptions,
     RegistryProviderID,

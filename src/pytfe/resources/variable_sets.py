@@ -3,9 +3,9 @@
 import builtins
 from typing import Any
 
-from tfe._http import HTTPTransport
-from tfe.resources._base import _Service
-from tfe.types import (
+from .._http import HTTPTransport
+from ._base import _Service
+from ..types import (
     VariableSet,
     VariableSetApplyToProjectsOptions,
     VariableSetApplyToWorkspacesOptions,

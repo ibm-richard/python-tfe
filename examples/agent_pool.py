@@ -14,22 +14,21 @@ Make sure to set the following environment variables:
 Usage:
     export TFE_TOKEN="your-token-here"
     export TFE_ORG="your-organization"
-    python examples/agent_pool_simple.py
+    python examples/agent_pool.py
 """
 
 import os
 import uuid
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import NotFound
-from tfe.models.agent import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import NotFound
+from pytfe.models.agent import (
     AgentPoolAllowedWorkspacePolicy,
     AgentPoolCreateOptions,
     AgentPoolListOptions,
     AgentPoolUpdateOptions,
     AgentTokenCreateOptions,
 )
-
 
 def main():
     """Main function demonstrating agent pool operations."""

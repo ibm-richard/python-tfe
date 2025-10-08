@@ -2,7 +2,7 @@
 """
 Complete Configuration Version Testing Suite
 
-This file contains individual tests for all 12 configuration version functions implemented in src/tfe/resources/configuration_version.py:
+This file contains individual tests for all 12 configuration version functions:
 
 CONFIGURATION VERSION FUNCTIONS AVAILABLE FOR TESTING:
 1.  list() - List configuration versions for a workspace
@@ -35,8 +35,8 @@ import time
 # Add the src directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.models import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models import (
     ConfigurationVersionCreateOptions,
     ConfigurationVersionListOptions,
     ConfigurationVersionReadOptions,

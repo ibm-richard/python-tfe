@@ -18,9 +18,9 @@ import sys
 # Add the source directory to the path for direct execution
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import TFEError
-from tfe.models import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import TFEError
+from pytfe.models import (
     ReservedTagKeyCreateOptions,
     ReservedTagKeyListOptions,
     ReservedTagKeyUpdateOptions,

@@ -6,7 +6,6 @@ from collections.abc import Mapping
 from typing import Any
 from urllib.parse import urljoin
 
-import anyio
 import httpx
 
 from ._jsonapi import build_headers, parse_error_payload
@@ -109,45 +108,6 @@ class HTTPTransport:
             self._raise_if_error(resp)
             return resp
 
-    async def arequest(
-        self,
-        method: str,
-        path: str,
-        *,
-        params: Mapping[str, Any] | None = None,
-        json_body: Mapping[str, Any] | None = None,
-        data: bytes | None = None,
-        headers: dict[str, str] | None = None,
-        allow_redirects: bool = True,
-    ) -> httpx.Response:
-        url = f"{self.base}{path}"
-        hdrs = dict(self.headers)
-        hdrs.update(headers or {})
-        attempt = 0
-        while True:
-            try:
-                resp = await self._async.request(
-                    method,
-                    url,
-                    params=params,
-                    json=json_body,
-                    content=data,
-                    headers=hdrs,
-                    follow_redirects=allow_redirects,
-                )
-            except httpx.HTTPError as e:
-                if attempt >= self.max_retries:
-                    raise ServerError(str(e)) from e
-                await self._asleep(attempt, None)
-                attempt += 1
-                continue
-            if resp.status_code in _RETRY_STATUSES and attempt < self.max_retries:
-                retry_after = _parse_retry_after(resp)
-                await self._asleep(attempt, retry_after)
-                attempt += 1
-                continue
-            self._raise_if_error(resp)
-            return resp
 
     def _sleep(self, attempt: int, retry_after: float | None) -> None:
         if retry_after is not None:
@@ -156,12 +116,6 @@ class HTTPTransport:
         delay = min(self.backoff_cap, self.backoff_base * (2**attempt))
         time.sleep(delay)
 
-    async def _asleep(self, attempt: int, retry_after: float | None) -> None:
-        if retry_after is not None:
-            await anyio.sleep(retry_after)
-            return
-        delay = min(self.backoff_cap, self.backoff_base * (2**attempt))
-        await anyio.sleep(delay)
 
     def _raise_if_error(self, resp: httpx.Response) -> None:
         status = resp.status_code

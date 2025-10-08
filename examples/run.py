@@ -4,8 +4,8 @@ import argparse
 import os
 from datetime import datetime
 
-from tfe import TFEClient, TFEConfig
-from tfe.models.run import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models.run import (
     RunCreateOptions,
     RunIncludeOpt,
     RunListForOrganizationOptions,
@@ -141,7 +141,7 @@ def main():
                 workspace_data = client.workspaces.read_by_id(args.workspace_id)
 
                 # Create the workspace object that run models expect
-                from tfe.models.workspace import Workspace
+                from pytfe.models.workspace import Workspace
 
                 workspace = Workspace(
                     id=workspace_data.id,

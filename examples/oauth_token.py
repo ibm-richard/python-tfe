@@ -2,7 +2,7 @@
 """
 Complete OAuth Token Testing Suite
 
-This file contains individual tests for all 4 OAuth token functions implemented in src/tfe/resources/oauth_token.py:
+This file contains individual tests for all 4 OAuth token functions:
 
 FUNCTIONS AVAILABLE FOR TESTING:
 1. list() - List OAuth tokens for an organization
@@ -28,9 +28,9 @@ import sys
 # Add the src directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import NotFound
-from tfe.models.oauth_token import OAuthTokenListOptions, OAuthTokenUpdateOptions
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import NotFound
+from pytfe.models.oauth_token import OAuthTokenListOptions, OAuthTokenUpdateOptions
 
 
 def main():

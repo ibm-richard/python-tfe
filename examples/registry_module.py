@@ -2,7 +2,7 @@
 """
 Complete Registry Module Testing Suite
 
-This file contains individual tests for all 15 registry module functions implemented in src/tfe/resources/registry_module.py:
+This file contains individual tests for all 15 registry module functions:
 
 PUBLIC FUNCTIONS AVAILABLE FOR TESTING:
 1.  list() - List registry modules in organization
@@ -39,9 +39,9 @@ import time
 # Add the src directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import NotFound
-from tfe.models.registry_module_types import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import NotFound
+from pytfe.models.registry_module_types import (
     AgentExecutionMode,
     RegistryModuleCreateOptions,
     RegistryModuleCreateVersionOptions,
