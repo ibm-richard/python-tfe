@@ -304,7 +304,7 @@ class NotificationConfigurationCreateOptions:
             errors.append("Name is required")
 
         if not isinstance(self.enabled, bool):
-            errors.append("Enabled must be a boolean")
+            errors.append("Enabled must be a boolean")  # type: ignore[unreachable]
 
         # URL validation for certain destination types
         if self.destination_type in [
@@ -318,7 +318,7 @@ class NotificationConfigurationCreateOptions:
         # Trigger validation
         for trigger in self.triggers:
             if not isinstance(trigger, NotificationTriggerType):
-                errors.append(f"Invalid trigger type: {trigger}")
+                errors.append(f"Invalid trigger type: {trigger}")  # type: ignore[unreachable]
 
         return errors
 
@@ -405,7 +405,7 @@ class NotificationConfigurationUpdateOptions:
         if self.triggers is not None:
             for trigger in self.triggers:
                 if not isinstance(trigger, NotificationTriggerType):
-                    errors.append(f"Invalid trigger type: {trigger}")
+                    errors.append(f"Invalid trigger type: {trigger}")  # type: ignore[unreachable]
 
         return errors
 
