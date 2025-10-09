@@ -31,7 +31,7 @@ import time
 from datetime import datetime
 
 from pytfe import TFEClient, TFEConfig
-from pytfe.models.query_run import (
+from pytfe.models import (
     QueryRunCancelOptions,
     QueryRunCreateOptions,
     QueryRunForceCancelOptions,

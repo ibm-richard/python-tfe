@@ -9,12 +9,12 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from src.tfe._http import HTTPTransport
-from src.tfe.errors import (
+from src.pytfe._http import HTTPTransport
+from src.pytfe.errors import (
     ERR_INVALID_OAUTH_CLIENT_ID,
     ERR_INVALID_ORG,
 )
-from src.tfe.models.oauth_client import (
+from src.pytfe.models.oauth_client import (
     OAuthClientAddProjectsOptions,
     OAuthClientCreateOptions,
     OAuthClientIncludeOpt,
@@ -24,7 +24,7 @@ from src.tfe.models.oauth_client import (
     OAuthClientUpdateOptions,
     ServiceProviderType,
 )
-from src.tfe.resources.oauth_client import OAuthClients
+from src.pytfe.resources.oauth_client import OAuthClients
 
 
 class TestOAuthClientParsing:

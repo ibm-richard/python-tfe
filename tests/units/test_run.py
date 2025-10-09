@@ -4,13 +4,13 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tfe._http import HTTPTransport
-from tfe.errors import (
+from pytfe._http import HTTPTransport
+from pytfe.errors import (
     InvalidRunIDError,
     RequiredWorkspaceError,
     TerraformVersionValidForPlanOnlyError,
 )
-from tfe.models.run import (
+from pytfe.models.run import (
     OrganizationRunList,
     Run,
     RunApplyOptions,
@@ -27,8 +27,8 @@ from tfe.models.run import (
     RunStatus,
     RunVariable,
 )
-from tfe.models.workspace import Workspace
-from tfe.resources.run import Runs
+from pytfe.models.workspace import Workspace
+from pytfe.resources.run import Runs
 
 
 class TestRuns:

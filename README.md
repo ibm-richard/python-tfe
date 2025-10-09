@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pytfe.svg)](https://pypi.org/project/pytfe/)
 [![Python Versions](https://img.shields.io/pypi/pyversions/pytfe.svg)](https://pypi.org/project/pytfe/)
-[![CI](https://github.com/hashicorp/python-tfe/actions/workflows/ci.yml/badge.svg)](https://github.com/hashicorp/python-tfe/actions/workflows/ci.yml)
+[![Test](https://github.com/hashicorp/python-tfe/actions/workflows/test.yml/badge.svg)](https://github.com/hashicorp/python-tfe/actions/workflows/test.yml)
 [![License](https://img.shields.io/github/license/hashicorp/python-tfe.svg)](./LICENSE)
 [![Issues](https://img.shields.io/github/issues/hashicorp/python-tfe.svg)](https://github.com/hashicorp/python-tfe/issues)
 

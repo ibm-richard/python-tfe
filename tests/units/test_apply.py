@@ -5,9 +5,9 @@ from __future__ import annotations
 import unittest
 from unittest.mock import MagicMock, patch
 
-from tfe.errors import InvalidApplyIDError
-from tfe.models.apply import Apply
-from tfe.resources.apply import Applies
+from pytfe.errors import InvalidApplyIDError
+from pytfe.models.apply import Apply
+from pytfe.resources.apply import Applies
 
 
 class TestApplies(unittest.TestCase):

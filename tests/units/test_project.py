@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
-from tfe.resources.projects import Projects, _safe_str
-from tfe.types import (
+from pytfe.resources.projects import Projects, _safe_str
+from pytfe.types import (
     EffectiveTagBinding,
     Project,
     ProjectAddTagBindingsOptions,

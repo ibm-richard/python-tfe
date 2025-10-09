@@ -4,16 +4,16 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tfe._http import HTTPTransport
-from tfe.errors import (
+from pytfe._http import HTTPTransport
+from pytfe.errors import (
     InvalidOrgError,
     InvalidRunTaskCategoryError,
     InvalidRunTaskIDError,
     InvalidRunTaskURLError,
     RequiredNameError,
 )
-from tfe.models.agent import AgentPool
-from tfe.models.run_task import (
+from pytfe.models.agent import AgentPool
+from pytfe.models.run_task import (
     GlobalRunTaskOptions,
     RunTaskCreateOptions,
     RunTaskIncludeOptions,
@@ -23,7 +23,7 @@ from tfe.models.run_task import (
     Stage,
     TaskEnforcementLevel,
 )
-from tfe.resources.run_task import RunTasks, _run_task_from
+from pytfe.resources.run_task import RunTasks, _run_task_from
 
 
 class TestRunTaskFrom:

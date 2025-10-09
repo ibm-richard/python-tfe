@@ -22,7 +22,7 @@ import uuid
 
 from pytfe import TFEClient, TFEConfig
 from pytfe.errors import NotFound
-from pytfe.models.agent import (
+from pytfe.models import (
     AgentPoolAllowedWorkspacePolicy,
     AgentPoolCreateOptions,
     AgentPoolListOptions,

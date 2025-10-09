@@ -9,7 +9,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.tfe.errors import (
+from src.pytfe.errors import (
     InvalidOrgError,
     InvalidSSHKeyIDError,
     InvalidWorkspaceIDError,
@@ -19,8 +19,8 @@ from src.tfe.errors import (
     RequiredSSHKeyIDError,
     WorkspaceMinimumLimitError,
 )
-from src.tfe.resources.workspaces import Workspaces, _ws_from
-from src.tfe.types import (
+from src.pytfe.resources.workspaces import Workspaces, _ws_from
+from src.pytfe.types import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
@@ -233,7 +233,7 @@ class TestWorkspaceOperations:
             sample_workspace_response
         )
 
-        from src.tfe.types import WorkspaceIncludeOpt
+        from src.pytfe.types import WorkspaceIncludeOpt
 
         options = WorkspaceReadOptions(
             include=[WorkspaceIncludeOpt.CURRENT_RUN, WorkspaceIncludeOpt.OUTPUTS]

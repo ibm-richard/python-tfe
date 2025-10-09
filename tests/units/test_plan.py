@@ -4,8 +4,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tfe.errors import InvalidPlanIDError
-from tfe.resources.plan import Plans
+from pytfe.errors import InvalidPlanIDError
+from pytfe.resources.plan import Plans
 
 
 class TestPlans:

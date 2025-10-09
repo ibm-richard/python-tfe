@@ -30,7 +30,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from pytfe import TFEClient, TFEConfig
 from pytfe.errors import NotFound
-from pytfe.models.oauth_token import OAuthTokenListOptions, OAuthTokenUpdateOptions
+from pytfe.models import OAuthTokenListOptions, OAuthTokenUpdateOptions
 
 
 def main():

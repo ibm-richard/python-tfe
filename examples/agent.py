@@ -25,7 +25,7 @@ import os
 from pytfe.client import TFEClient
 from pytfe.config import TFEConfig
 from pytfe.errors import NotFound
-from pytfe.models.agent import AgentListOptions
+from pytfe.models import AgentListOptions
 
 
 def main():

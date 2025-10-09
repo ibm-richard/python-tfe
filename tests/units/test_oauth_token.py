@@ -9,16 +9,16 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.tfe._http import HTTPTransport
-from src.tfe.errors import (
+from src.pytfe._http import HTTPTransport
+from src.pytfe.errors import (
     ERR_INVALID_OAUTH_TOKEN_ID,
     ERR_INVALID_ORG,
 )
-from src.tfe.models.oauth_token import (
+from src.pytfe.models.oauth_token import (
     OAuthTokenListOptions,
     OAuthTokenUpdateOptions,
 )
-from src.tfe.resources.oauth_token import OAuthTokens
+from src.pytfe.resources.oauth_token import OAuthTokens
 
 
 class TestOAuthTokenParsing:

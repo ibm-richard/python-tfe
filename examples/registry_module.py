@@ -41,7 +41,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from pytfe import TFEClient, TFEConfig
 from pytfe.errors import NotFound
-from pytfe.models.registry_module_types import (
+from pytfe.models import (
     AgentExecutionMode,
     RegistryModuleCreateOptions,
     RegistryModuleCreateVersionOptions,

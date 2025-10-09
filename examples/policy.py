@@ -23,7 +23,7 @@ import os
 from pathlib import Path
 
 from pytfe import TFEClient, TFEConfig
-from pytfe.models.policy import (
+from pytfe.models import (
     EnforcementLevel,
     PolicyCreateOptions,
     PolicyListOptions,

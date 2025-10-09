@@ -14,8 +14,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from tfe.errors import AuthError, NotFound
-from tfe.models.agent import (
+from pytfe.errors import AuthError, NotFound
+from pytfe.models.agent import (
     Agent,
     AgentStatus,
 )
@@ -72,7 +72,7 @@ class TestAgentOperations:
     @pytest.fixture
     def agents_service(self, mock_transport):
         """Create agents service with mocked transport."""
-        from tfe.resources.agents import Agents
+        from pytfe.resources.agents import Agents
 
         return Agents(mock_transport)
 
@@ -154,7 +154,7 @@ class TestAgentErrorHandling:
     @pytest.fixture
     def agents_service(self, mock_transport):
         """Create agents service with mocked transport."""
-        from tfe.resources.agents import Agents
+        from pytfe.resources.agents import Agents
 
         return Agents(mock_transport)
 

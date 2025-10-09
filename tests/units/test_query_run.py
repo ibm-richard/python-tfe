@@ -3,9 +3,9 @@ from unittest.mock import MagicMock, Mock
 
 import pytest
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import InvalidOrgError, InvalidQueryRunIDError
-from tfe.models.query_run import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import InvalidOrgError, InvalidQueryRunIDError
+from pytfe.models.query_run import (
     QueryRun,
     QueryRunCancelOptions,
     QueryRunCreateOptions,

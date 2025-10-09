@@ -4,8 +4,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from tfe.resources.variable_sets import VariableSets, VariableSetVariables
-from tfe.types import (
+from pytfe.resources.variable_sets import VariableSets, VariableSetVariables
+from pytfe.types import (
     CategoryType,
     Parent,
     Project,

@@ -53,10 +53,7 @@ class HTTPTransport:
         self.proxies = proxies
         self.ca_bundle = ca_bundle
         self._sync = httpx.Client(
-            http2=http2, timeout=timeout, verify=ca_bundle or verify_tls
-        )  # proxies=proxies
-        self._async = httpx.AsyncClient(
-            http2=http2, timeout=timeout, verify=ca_bundle or verify_tls
+            http2=http2, timeout=timeout, verify=ca_bundle or verify_tls, proxies=proxies
         )  # proxies=proxies
 
     def _build_url(self, path: str) -> str:

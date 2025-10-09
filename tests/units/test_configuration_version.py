@@ -21,8 +21,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from src.tfe.errors import NotFound, TFEError
-from src.tfe.models.configuration_version_types import (
+from src.pytfe.errors import NotFound, TFEError
+from src.pytfe.models.configuration_version_types import (
     ConfigurationSource,
     ConfigurationStatus,
     ConfigurationVersionCreateOptions,
@@ -30,7 +30,7 @@ from src.tfe.models.configuration_version_types import (
     ConfigurationVersionReadOptions,
     ConfigVerIncludeOpt,
 )
-from src.tfe.resources.configuration_version import ConfigurationVersions
+from src.pytfe.resources.configuration_version import ConfigurationVersions
 
 
 @pytest.fixture
@@ -645,7 +645,7 @@ class TestConfigurationVersionsValidation:
 
     def test_valid_string_id_valid(self, configuration_versions_service):
         """Test valid_string_id with valid configuration version ID."""
-        from src.tfe.utils import valid_string_id
+        from src.pytfe.utils import valid_string_id
 
         # This should return True and not raise an exception
         result = valid_string_id("cv-ntv3HbhJqvFzamy7")
@@ -653,7 +653,7 @@ class TestConfigurationVersionsValidation:
 
     def test_valid_string_id_invalid(self, configuration_versions_service):
         """Test valid_string_id with invalid configuration version ID."""
-        from src.tfe.utils import valid_string_id
+        from src.pytfe.utils import valid_string_id
 
         # This should return False
         result = valid_string_id("")

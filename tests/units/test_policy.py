@@ -4,21 +4,21 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tfe._http import HTTPTransport
-from tfe.errors import (
+from pytfe._http import HTTPTransport
+from pytfe.errors import (
     InvalidOrgError,
     InvalidPolicyIDError,
     RequiredNameError,
 )
-from tfe.models.policy import (
+from pytfe.models.policy import (
     EnforcementLevel,
     Policy,
     PolicyCreateOptions,
     PolicyList,
     PolicyUpdateOptions,
 )
-from tfe.models.policy_set import PolicyKind
-from tfe.resources.policy import Policies
+from pytfe.models.policy_set import PolicyKind
+from pytfe.resources.policy import Policies
 
 
 class TestPolicies:

@@ -24,7 +24,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from pytfe import TFEClient
-from pytfe.models.registry_provider_types import (
+from pytfe.models import (
     RegistryName,
     RegistryProviderCreateOptions,
     RegistryProviderID,
