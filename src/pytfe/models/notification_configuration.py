@@ -48,6 +48,14 @@ class NotificationDestinationType(Enum):
 class DeliveryResponse:
     """Represents a notification configuration delivery response."""
 
+    # Type annotations for instance attributes
+    body: str
+    code: str
+    headers: dict[str, Any]
+    sent_at: datetime | None
+    successful: str
+    url: str
+
     def __init__(self, data: dict[str, Any]):
         self.body = data.get("body", "")
         self.code = data.get("code", "")
@@ -65,18 +73,22 @@ class DeliveryResponse:
         except (ValueError, AttributeError):
             return None
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"DeliveryResponse(url='{self.url}', code='{self.code}', successful='{self.successful}')"
 
 
 class NotificationConfigurationSubscribableChoice:
     """Choice type struct that represents the possible values within a polymorphic relation."""
 
+    # Type annotations for instance attributes
+    team: Any | None
+    workspace: Any | None
+
     def __init__(self, team: Any | None = None, workspace: Any | None = None):
         self.team = team
         self.workspace = workspace
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.team:
             return f"NotificationConfigurationSubscribableChoice(team={self.team})"
         elif self.workspace:
@@ -86,6 +98,22 @@ class NotificationConfigurationSubscribableChoice:
 
 class NotificationConfiguration:
     """Represents a Notification Configuration."""
+
+    # Type annotations for instance attributes
+    id: str | None
+    created_at: datetime | None
+    updated_at: datetime | None
+    destination_type: str | None
+    enabled: bool
+    name: str
+    token: str
+    url: str
+    triggers: list[NotificationTriggerType]
+    delivery_responses: list[Any]
+    email_addresses: list[str]
+    email_users: list[Any]
+    subscribable: Any
+    subscribable_choice: Any | None
 
     def __init__(self, data: dict[str, Any]):
         self.id = data.get("id")
@@ -153,12 +181,17 @@ class NotificationConfiguration:
             team=team, workspace=workspace
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"NotificationConfiguration(id='{self.id}', name='{self.name}', enabled={self.enabled})"
 
 
 class NotificationConfigurationListOptions:
     """Represents the options for listing notification configurations."""
+
+    # Type annotations for instance attributes
+    page_number: int | None
+    page_size: int | None
+    subscribable_choice: NotificationConfigurationSubscribableChoice | None
 
     def __init__(
         self,
@@ -184,6 +217,17 @@ class NotificationConfigurationListOptions:
 
 class NotificationConfigurationCreateOptions:
     """Represents the options for creating a new notification configuration."""
+
+    # Type annotations for instance attributes
+    destination_type: NotificationDestinationType
+    enabled: bool
+    name: str
+    token: str | None
+    triggers: list[NotificationTriggerType]
+    url: str | None
+    email_addresses: list[str]
+    email_users: list[Any]
+    subscribable_choice: NotificationConfigurationSubscribableChoice | None
 
     def __init__(
         self,
@@ -212,7 +256,7 @@ class NotificationConfigurationCreateOptions:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for API requests."""
-        data = {
+        data: dict[str, Any] = {
             "type": "notification-configurations",
             "attributes": {
                 "destination-type": self.destination_type.value,
@@ -282,6 +326,15 @@ class NotificationConfigurationCreateOptions:
 class NotificationConfigurationUpdateOptions:
     """Represents the options for updating an existing notification configuration."""
 
+    # Type annotations for instance attributes
+    enabled: bool | None
+    name: str | None
+    token: str | None
+    triggers: list[NotificationTriggerType] | None
+    url: str | None
+    email_addresses: list[str] | None
+    email_users: list[Any] | None
+
     def __init__(
         self,
         enabled: bool | None = None,
@@ -302,7 +355,7 @@ class NotificationConfigurationUpdateOptions:
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for API requests."""
-        data = {"type": "notification-configurations", "attributes": {}}
+        data: dict[str, Any] = {"type": "notification-configurations", "attributes": {}}
 
         # Add only specified attributes
         if self.enabled is not None:
@@ -360,6 +413,15 @@ class NotificationConfigurationUpdateOptions:
 class NotificationConfigurationList:
     """Represents a list of notification configurations with pagination."""
 
+    # Type annotations for instance attributes
+    items: list[NotificationConfiguration]
+    current_page: int
+    page_size: int
+    prev_page: int | None
+    next_page: int | None
+    total_pages: int
+    total_count: int
+
     def __init__(self, data: dict[str, Any]):
         self.items = [
             NotificationConfiguration(item.get("attributes", {}))
@@ -377,14 +439,14 @@ class NotificationConfigurationList:
         self.total_pages = pagination.get("total-pages", 0)
         self.total_count = pagination.get("total-count", 0)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.items)
 
-    def __iter__(self):
+    def __iter__(self) -> Any:
         return iter(self.items)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int) -> NotificationConfiguration:
         return self.items[index]
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"NotificationConfigurationList(count={len(self.items)}, page={self.current_page}, total={self.total_count})"
