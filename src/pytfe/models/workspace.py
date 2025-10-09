@@ -67,7 +67,7 @@ class Workspace(BaseModel):
     project: Project | None = None
     ssh_key: Any | None = None  # SSHKey object
     outputs: list[WorkspaceOutputs] = Field(default_factory=list)
-    tags: list[str] = Field(default_factory=list)
+    tags: list[Tag] = Field(default_factory=list)
     # tags: list[Tag] = Field(default_factory=list)
     current_configuration_version: Any | None = None  # ConfigurationVersion object
     locked_by: LockedByChoice | None = None

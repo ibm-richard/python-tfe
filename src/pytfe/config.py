@@ -22,7 +22,7 @@ class TFEConfig(BaseModel):
     backoff_cap: float = 8.0
     backoff_jitter: bool = True
     http2: bool = True
-    proxies: dict[str, str] | None = None
+    proxies: str | None = None
     ca_bundle: str | None = os.getenv("SSL_CERT_FILE", None)
 
     @classmethod

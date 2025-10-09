@@ -20,7 +20,23 @@ from src.pytfe.errors import (
     WorkspaceMinimumLimitError,
 )
 from src.pytfe.resources.workspaces import Workspaces, _ws_from
-from src.pytfe.types import (
+
+from src.pytfe.models.organization import (
+    DataRetentionPolicyDeleteOlderSetOptions,
+    DataRetentionPolicyDontDeleteSetOptions,
+    DataRetentionPolicySetOptions,
+    ExecutionMode,
+)
+
+from src.pytfe.models.project import Project
+
+from src.pytfe.models.common import (
+    EffectiveTagBinding,
+    Tag,
+    TagBinding,
+)
+
+from src.pytfe.models.workspace import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
@@ -233,7 +249,7 @@ class TestWorkspaceOperations:
             sample_workspace_response
         )
 
-        from src.pytfe.types import WorkspaceIncludeOpt
+        from src.pytfe.models.workspace import WorkspaceIncludeOpt
 
         options = WorkspaceReadOptions(
             include=[WorkspaceIncludeOpt.CURRENT_RUN, WorkspaceIncludeOpt.OUTPUTS]

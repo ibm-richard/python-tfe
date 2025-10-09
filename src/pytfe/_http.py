@@ -36,7 +36,7 @@ class HTTPTransport:
         backoff_cap: float,
         backoff_jitter: bool,
         http2: bool,
-        proxies: dict | None,
+        proxies: str | None,
         ca_bundle: str | None,
     ):
         self.base = address.rstrip("/")
@@ -56,8 +56,8 @@ class HTTPTransport:
             http2=http2,
             timeout=timeout,
             verify=ca_bundle or verify_tls,
-            proxies=proxies,
-        )  # proxies=proxies
+            proxy=proxies,
+        )
 
     def _build_url(self, path: str) -> str:
         # IMPORTANT: don't prefix absolute URLs (hosted_state, signed blobs, etc.)

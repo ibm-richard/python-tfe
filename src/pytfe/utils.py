@@ -31,7 +31,7 @@ from .errors import (
     UnsupportedBothTriggerPatternsAndPrefixesError,
     UnsupportedOperationsError,
 )
-from .types import (
+from .models.workspace import (
     VCSRepo,
     WorkspaceCreateOptions,
     WorkspaceUpdateOptions,
