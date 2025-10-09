@@ -9,7 +9,7 @@ from ..errors import (
     ERR_REQUIRED_CATEGORY,
     ERR_REQUIRED_KEY,
 )
-from ..types import (
+from ..models.variable import (
     Variable,
     VariableCreateOptions,
     VariableListOptions,

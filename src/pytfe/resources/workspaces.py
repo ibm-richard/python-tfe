@@ -16,7 +16,8 @@ from ..errors import (
     WorkspaceMinimumLimitError,
     WorkspaceRequiredError,
 )
-from ..types import (
+
+from ..types. import (
     DataRetentionPolicy,
     DataRetentionPolicyChoice,
     DataRetentionPolicyDeleteOlder,
@@ -24,11 +25,21 @@ from ..types import (
     DataRetentionPolicyDontDelete,
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
-    EffectiveTagBinding,
-    ExecutionMode,
-    LockedByChoice,
+    
+
+)
+
+from ..models.common import (
     Tag,
     TagBinding,
+    EffectiveTagBinding,
+)
+
+from ..models.workspace import (
+
+    ExecutionMode,
+    LockedByChoice,
+
     VCSRepo,
     Workspace,
     WorkspaceActions,
@@ -52,6 +63,7 @@ from ..types import (
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
+
 from ..utils import (
     valid_string,
     valid_string_id,

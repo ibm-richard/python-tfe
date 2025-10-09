@@ -4,7 +4,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
-from ..types import Pagination
+from ..models.common import Pagination
 from .agent import AgentPool
 from .organization import Organization
 from .workspace_run_task import WorkspaceRunTask

@@ -101,11 +101,6 @@ class Organization(BaseModel):
     data_retention_policy_choice: dict | None = None
 
 
-class Project(BaseModel):
-    id: str
-    name: str
-    organization: str
-
 
 class Capacity(BaseModel):
     organization: str

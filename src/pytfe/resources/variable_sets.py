@@ -5,7 +5,7 @@ from typing import Any
 
 from .._http import HTTPTransport
 from ._base import _Service
-from ..types import (
+from ..models.variable_set import (
     VariableSet,
     VariableSetApplyToProjectsOptions,
     VariableSetApplyToWorkspacesOptions,
