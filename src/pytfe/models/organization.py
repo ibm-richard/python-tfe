@@ -101,7 +101,6 @@ class Organization(BaseModel):
     data_retention_policy_choice: dict | None = None
 
 
-
 class Capacity(BaseModel):
     organization: str
     pending: int

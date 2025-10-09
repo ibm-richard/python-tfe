@@ -30,6 +30,7 @@ from pytfe.models import (
     AgentTokenCreateOptions,
 )
 
+
 def main():
     """Main function demonstrating agent pool operations."""
     # Get environment variables

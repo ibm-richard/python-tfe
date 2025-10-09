@@ -12,7 +12,6 @@ from .common import Pagination, Tag, TagBinding, EffectiveTagBinding
 from .organization import DataRetentionPolicy, DataRetentionPolicyChoice
 
 
-
 class Workspace(BaseModel):
     id: str
     name: str | None = None
@@ -69,7 +68,7 @@ class Workspace(BaseModel):
     ssh_key: Any | None = None  # SSHKey object
     outputs: list[WorkspaceOutputs] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
-    #tags: list[Tag] = Field(default_factory=list)
+    # tags: list[Tag] = Field(default_factory=list)
     current_configuration_version: Any | None = None  # ConfigurationVersion object
     locked_by: LockedByChoice | None = None
     variables: list[Any] = Field(default_factory=list)  # Variable objects
@@ -99,11 +98,13 @@ class WorkspaceIncludeOpt(str, Enum):
     CURRENT_STATE_VER = "current-state-version"
     PROJECT = "project"
 
+
 class WorkspaceSource(str, Enum):
     API = "tfe-api"
     MODULE = "tfe-module"
     UI = "tfe-ui"
     TERRAFORM = "terraform"
+
 
 class WorkspaceActions(BaseModel):
     is_destroyable: bool = False
@@ -135,8 +136,6 @@ class WorkspaceOutputs(BaseModel):
     sensitive: bool = False
     output_type: str
     value: Any | None = None
-
-
 
 
 class LockedByChoice(BaseModel):
@@ -335,7 +334,6 @@ class WorkspaceAddTagBindingsOptions(BaseModel):
     """Options for adding tag bindings to a workspace."""
 
     tag_bindings: list[TagBinding] = Field(default_factory=list)
-
 
 
 class VCSRepo(BaseModel):

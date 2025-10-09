@@ -53,7 +53,10 @@ class HTTPTransport:
         self.proxies = proxies
         self.ca_bundle = ca_bundle
         self._sync = httpx.Client(
-            http2=http2, timeout=timeout, verify=ca_bundle or verify_tls, proxies=proxies
+            http2=http2,
+            timeout=timeout,
+            verify=ca_bundle or verify_tls,
+            proxies=proxies,
         )  # proxies=proxies
 
     def _build_url(self, path: str) -> str:
@@ -105,14 +108,12 @@ class HTTPTransport:
             self._raise_if_error(resp)
             return resp
 
-
     def _sleep(self, attempt: int, retry_after: float | None) -> None:
         if retry_after is not None:
             time.sleep(retry_after)
             return
         delay = min(self.backoff_cap, self.backoff_base * (2**attempt))
         time.sleep(delay)
-
 
     def _raise_if_error(self, resp: httpx.Response) -> None:
         status = resp.status_code

@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from enum import Enum
@@ -23,9 +22,11 @@ class Variable(BaseModel):
     version_id: str | None = None
     workspace: dict | None = None
 
+
 class VariableListOptions(BaseModel):
     # Base pagination options would be handled by the service layer
     pass
+
 
 class VariableCreateOptions(BaseModel):
     key: str | None = None

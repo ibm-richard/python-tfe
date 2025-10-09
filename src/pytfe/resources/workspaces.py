@@ -17,7 +17,7 @@ from ..errors import (
     WorkspaceRequiredError,
 )
 
-from ..types. import (
+from ..models.organization import (
     DataRetentionPolicy,
     DataRetentionPolicyChoice,
     DataRetentionPolicyDeleteOlder,
@@ -25,8 +25,6 @@ from ..types. import (
     DataRetentionPolicyDontDelete,
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
-    
-
 )
 
 from ..models.common import (
@@ -36,10 +34,8 @@ from ..models.common import (
 )
 
 from ..models.workspace import (
-
     ExecutionMode,
     LockedByChoice,
-
     VCSRepo,
     Workspace,
     WorkspaceActions,

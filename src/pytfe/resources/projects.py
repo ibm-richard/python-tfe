@@ -6,13 +6,11 @@ from collections.abc import Iterator
 from typing import Any
 
 from ..models.project import (
-    
     Project,
     ProjectAddTagBindingsOptions,
     ProjectCreateOptions,
     ProjectListOptions,
     ProjectUpdateOptions,
-    
 )
 
 from ..models.common import (

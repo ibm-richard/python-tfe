@@ -284,6 +284,7 @@ def validate_oauth_client_remove_projects_options(
     if len(options.projects) == 0:
         raise ValueError(ERR_PROJECT_MIN_LIMIT)
 
+
 def valid_project_name(name: str) -> bool:
     """Validate project name format"""
     if not valid_string(name):
@@ -352,7 +353,8 @@ def validate_project_list_options(
 
     if name and not valid_project_name(name):
         raise ValueError("Project name must be valid")
-    
+
+
 def pack_contents(path: str) -> io.BytesIO:
     """
     Pack directory contents into a tar.gz archive suitable for upload.

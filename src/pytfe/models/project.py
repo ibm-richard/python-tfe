@@ -56,5 +56,3 @@ class ProjectAddTagBindingsOptions(BaseModel):
     """Options for adding tag bindings to a project"""
 
     tag_bindings: list[TagBinding] = Field(default_factory=list)
-
-
