@@ -21,7 +21,6 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from src.pytfe.errors import NotFound, TFEError
 from pytfe.models.configuration_version import (
     ConfigurationSource,
     ConfigurationStatus,
@@ -30,6 +29,7 @@ from pytfe.models.configuration_version import (
     ConfigurationVersionReadOptions,
     ConfigVerIncludeOpt,
 )
+from src.pytfe.errors import NotFound, TFEError
 from src.pytfe.resources.configuration_version import ConfigurationVersions
 
 

@@ -4,7 +4,6 @@ import builtins
 from typing import Any
 
 from .._http import HTTPTransport
-from ._base import _Service
 from ..models.variable_set import (
     VariableSet,
     VariableSetApplyToProjectsOptions,
@@ -22,6 +21,7 @@ from ..models.variable_set import (
     VariableSetVariableListOptions,
     VariableSetVariableUpdateOptions,
 )
+from ._base import _Service
 
 
 class VariableSets(_Service):

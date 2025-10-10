@@ -16,8 +16,12 @@ from ..errors import (
     WorkspaceMinimumLimitError,
     WorkspaceRequiredError,
 )
-
-from ..models.organization import (
+from ..models.common import (
+    EffectiveTagBinding,
+    Tag,
+    TagBinding,
+)
+from ..models.data_retention_policy import (
     DataRetentionPolicy,
     DataRetentionPolicyChoice,
     DataRetentionPolicyDeleteOlder,
@@ -26,13 +30,6 @@ from ..models.organization import (
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
 )
-
-from ..models.common import (
-    Tag,
-    TagBinding,
-    EffectiveTagBinding,
-)
-
 from ..models.workspace import (
     ExecutionMode,
     LockedByChoice,
@@ -59,7 +56,6 @@ from ..models.workspace import (
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
-
 from ..utils import (
     valid_string,
     valid_string_id,

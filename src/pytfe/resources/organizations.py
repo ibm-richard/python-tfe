@@ -9,8 +9,7 @@ from ..errors import (
     ERR_REQUIRED_EMAIL,
     ERR_REQUIRED_NAME,
 )
-from ..models.organization import (
-    Capacity,
+from ..models.data_retention_policy import (
     DataRetentionPolicy,
     DataRetentionPolicyChoice,
     DataRetentionPolicyDeleteOlder,
@@ -18,6 +17,9 @@ from ..models.organization import (
     DataRetentionPolicyDontDelete,
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
+)
+from ..models.organization import (
+    Capacity,
     Entitlements,
     Organization,
     OrganizationCreateOptions,

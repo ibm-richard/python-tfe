@@ -4,7 +4,6 @@ from unittest.mock import Mock
 
 import pytest
 
-from pytfe.resources.variable_sets import VariableSets, VariableSetVariables
 from pytfe.models.variable_set import (
     CategoryType,
     Parent,
@@ -25,6 +24,7 @@ from pytfe.models.variable_set import (
     VariableSetVariableUpdateOptions,
     Workspace,
 )
+from pytfe.resources.variable_sets import VariableSets, VariableSetVariables
 
 
 class TestVariableSets:

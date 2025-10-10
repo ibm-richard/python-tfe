@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime
-from enum import Enum
 from typing import Any
 
 from pydantic import BaseModel, Field
@@ -25,6 +23,7 @@ class TagBinding(BaseModel):
     id: str | None = None
     key: str
     value: str | None = None
+
 
 class TagList(BaseModel):
     items: list[Tag] = Field(default_factory=list)

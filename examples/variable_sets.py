@@ -15,7 +15,6 @@ Make sure to set the following environment variables:
 
 import os
 
-from pytfe import TFEClient, TFEConfig
 from pytfe.types import (
     CategoryType,
     Parent,
@@ -33,6 +32,8 @@ from pytfe.types import (
     VariableSetVariableUpdateOptions,
     Workspace,
 )
+
+from pytfe import TFEClient, TFEConfig
 
 
 def variable_set_example():

@@ -28,10 +28,6 @@ import os
 import uuid
 
 import pytest
-
-from pytfe._http import HTTPTransport
-from pytfe.config import TFEConfig
-from pytfe.resources.projects import Projects
 from pytfe.types import (
     ProjectAddTagBindingsOptions,
     ProjectCreateOptions,
@@ -39,6 +35,10 @@ from pytfe.types import (
     ProjectUpdateOptions,
     TagBinding,
 )
+
+from pytfe._http import HTTPTransport
+from pytfe.config import TFEConfig
+from pytfe.resources.projects import Projects
 
 
 @pytest.fixture

@@ -6,10 +6,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from .common import EffectiveTagBinding, Pagination, Tag, TagBinding
+from .data_retention_policy import DataRetentionPolicy, DataRetentionPolicyChoice
 from .organization import ExecutionMode
 from .project import Project
-from .common import Pagination, Tag, TagBinding, EffectiveTagBinding
-from .organization import DataRetentionPolicy, DataRetentionPolicyChoice
 
 
 class Workspace(BaseModel):

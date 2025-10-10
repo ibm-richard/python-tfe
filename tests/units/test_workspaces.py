@@ -19,26 +19,21 @@ from src.pytfe.errors import (
     RequiredSSHKeyIDError,
     WorkspaceMinimumLimitError,
 )
-from src.pytfe.resources.workspaces import Workspaces, _ws_from
-
-from src.pytfe.models.organization import (
-    DataRetentionPolicyDeleteOlderSetOptions,
-    DataRetentionPolicyDontDeleteSetOptions,
-    DataRetentionPolicySetOptions,
-    ExecutionMode,
-)
-
-from src.pytfe.models.project import Project
-
 from src.pytfe.models.common import (
     EffectiveTagBinding,
     Tag,
     TagBinding,
 )
-
-from src.pytfe.models.workspace import (
+from src.pytfe.models.data_retention_policy import (
+    DataRetentionPolicyDeleteOlderSetOptions,
+    DataRetentionPolicyDontDeleteSetOptions,
+    DataRetentionPolicySetOptions,
+)
+from src.pytfe.models.organization import (
     ExecutionMode,
-    Project,
+)
+from src.pytfe.models.project import Project
+from src.pytfe.models.workspace import (
     VCSRepo,
     Workspace,
     WorkspaceAddRemoteStateConsumersOptions,
@@ -57,6 +52,7 @@ from src.pytfe.models.workspace import (
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
+from src.pytfe.resources.workspaces import Workspaces, _ws_from
 
 
 class TestWorkspaceOperations:

@@ -19,6 +19,17 @@ from .agent import (
     AgentTokenListOptions,
 )
 
+# ── Core models split out of old types.py ─────────────────────────────────────
+# Adjust these imports to match where you placed them during the split.
+# Common / pagination / enums
+from .common import (
+    EffectiveTagBinding,
+    Pagination,
+    Tag,
+    TagBinding,
+    TagList,
+)  # if you put ExecutionMode enum here
+
 # ── Configuration Versions ────────────────────────────────────────────────────
 # (Old: .configuration_version_types) → import directly from real module
 from .configuration_version import (
@@ -34,6 +45,17 @@ from .configuration_version import (
     IngressAttributes,
 )
 
+# Data retention policy family
+from .data_retention_policy import (
+    DataRetentionPolicy,
+    DataRetentionPolicyChoice,
+    DataRetentionPolicyDeleteOlder,
+    DataRetentionPolicyDeleteOlderSetOptions,
+    DataRetentionPolicyDontDelete,
+    DataRetentionPolicyDontDeleteSetOptions,
+    DataRetentionPolicySetOptions,
+)
+
 # ── OAuth ─────────────────────────────────────────────────────────────────────
 from .oauth_client import (
     OAuthClient,
@@ -47,13 +69,24 @@ from .oauth_client import (
     OAuthClientUpdateOptions,
     ServiceProviderType,
 )
-
 from .oauth_token import (
     OAuthToken,
     OAuthTokenList,
     OAuthTokenListOptions,
     OAuthTokenUpdateOptions,
 )
+
+# Organization / Project
+from .organization import (
+    Entitlements,
+    ExecutionMode,
+    Organization,
+    OrganizationCreateOptions,
+    OrganizationUpdateOptions,
+    ReadRunQueueOptions,
+    RunQueue,
+)
+from .project import Project
 
 # ── Query Runs ────────────────────────────────────────────────────────────────
 from .query_run import (
@@ -103,7 +136,6 @@ from .registry_module import (
     TerraformRegistryModule,
     TestConfig,
 )
-
 from .registry_provider import (
     RegistryProvider,
     RegistryProviderCreateOptions,
@@ -124,6 +156,12 @@ from .reserved_tag_key import (
     ReservedTagKeyUpdateOptions,
 )
 
+# Runs
+from .run import (
+    Run,
+    RunStatus,
+)
+
 # ── SSH Keys ──────────────────────────────────────────────────────────────────
 from .ssh_key import (
     SSHKey,
@@ -132,34 +170,6 @@ from .ssh_key import (
     SSHKeyListOptions,
     SSHKeyUpdateOptions,
 )
-
-# ── Core models split out of old types.py ─────────────────────────────────────
-# Adjust these imports to match where you placed them during the split.
-
-# Common / pagination / enums
-from .common import Pagination, Tag, TagBinding, EffectiveTagBinding, TagList   # if you put ExecutionMode enum here
-from .organization import Entitlements, ExecutionMode
-
-# Organization / Project
-from .organization import (
-    Organization,
-    OrganizationCreateOptions,
-    OrganizationUpdateOptions,
-)
-
-from .project import Project
-
-# Data retention policy family
-from .organization import (
-    DataRetentionPolicy,
-    DataRetentionPolicyChoice,             
-    DataRetentionPolicyDeleteOlder,
-    DataRetentionPolicyDeleteOlderSetOptions,
-    DataRetentionPolicyDontDelete,
-    DataRetentionPolicyDontDeleteSetOptions,
-    DataRetentionPolicySetOptions,
-)
-
 
 # Variables
 from .variable import (
@@ -196,17 +206,6 @@ from .workspace import (
     WorkspaceTagListOptions,
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
-)
-
-# Runs
-from .run import (
-    Run,
-    RunStatus,
-)
-
-from .organization import (
-     RunQueue,
-     ReadRunQueueOptions,
 )
 
 # ── Public surface ────────────────────────────────────────────────────────────

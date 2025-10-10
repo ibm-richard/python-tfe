@@ -6,10 +6,9 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 from .organization import Organization
-from .workspace import Workspace
-from .variable import CategoryType
-
 from .project import Project
+from .variable import CategoryType
+from .workspace import Workspace
 
 
 class VariableSetIncludeOpt(str, Enum):
