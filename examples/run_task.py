@@ -2,7 +2,7 @@ import time
 import traceback
 
 from pytfe import TFEClient, TFEConfig
-from pytfe.models.run_task import (
+from pytfe.models import (
     RunTaskCreateOptions,
     RunTaskIncludeOptions,
     RunTaskListOptions,

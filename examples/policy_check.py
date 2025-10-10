@@ -3,8 +3,8 @@ from __future__ import annotations
 import argparse
 import os
 
-from tfe import TFEClient, TFEConfig
-from tfe.models.policy_check import PolicyCheckListOptions
+from pytfe import TFEClient, TFEConfig
+from pytfe.models import PolicyCheckListOptions
 
 
 def _print_header(title: str):

@@ -28,7 +28,7 @@ import os
 import uuid
 
 import pytest
-from pytfe.types import (
+from pytfe.models import (
     ProjectAddTagBindingsOptions,
     ProjectCreateOptions,
     ProjectListOptions,

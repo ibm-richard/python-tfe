@@ -22,7 +22,7 @@ from datetime import datetime
 # Add the source directory to the path for direct execution
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from pytfe.types import (
+from pytfe.models import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     ExecutionMode,

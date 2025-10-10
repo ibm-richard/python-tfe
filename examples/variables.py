@@ -11,7 +11,7 @@ import time
 # Add the src directory to the path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from pytfe.types import CategoryType, VariableCreateOptions, VariableUpdateOptions
+from pytfe.models import CategoryType, VariableCreateOptions, VariableUpdateOptions
 
 from pytfe import TFEClient, TFEConfig
 

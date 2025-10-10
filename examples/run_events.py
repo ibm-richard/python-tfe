@@ -38,7 +38,7 @@ import argparse
 import os
 
 from pytfe import TFEClient, TFEConfig
-from pytfe.models.run_event import (
+from pytfe.models import (
     RunEventIncludeOpt,
     RunEventListOptions,
     RunEventReadOptions,

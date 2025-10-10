@@ -28,8 +28,8 @@ from pytfe.models import (
     PolicyCreateOptions,
     PolicyListOptions,
     PolicyUpdateOptions,
+    PolicyKind
 )
-from pytfe.models.policy_set import PolicyKind
 
 
 def _print_header(title: str):

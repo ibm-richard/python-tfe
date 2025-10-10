@@ -6,12 +6,12 @@ from pathlib import Path
 
 from pytfe import TFEClient, TFEConfig
 from pytfe.errors import ErrStateVersionUploadNotSupported
-from pytfe.models.state_version import (
+from pytfe.models import (
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
     StateVersionListOptions,
 )
-from pytfe.models.state_version_output import StateVersionOutputsListOptions
+from pytfe.models import StateVersionOutputsListOptions
 
 
 def _print_header(title: str):

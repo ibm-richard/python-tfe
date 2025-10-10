@@ -1,4 +1,4 @@
-from pytfe.types import (
+from pytfe.models import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     OrganizationCreateOptions,

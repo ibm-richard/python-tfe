@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 from pytfe import TFEClient, TFEConfig
-from pytfe.models.run import (
+from pytfe.models import (
     RunCreateOptions,
     RunIncludeOpt,
     RunListForOrganizationOptions,
