@@ -9,7 +9,7 @@ from ..errors import (
     ERR_INVALID_ORG,
     ERR_INVALID_VERSION,
 )
-from ..models.registry_module_types import (
+from ..models.registry_module import (
     AgentExecutionMode,
     Commit,
     CommitList,

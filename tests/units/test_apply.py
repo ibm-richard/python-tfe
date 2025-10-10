@@ -65,7 +65,7 @@ class TestApplies(unittest.TestCase):
         assert result.resource_destructions == 0
         assert result.resource_imports == 0
 
-    @patch("tfe.resources.apply.Applies.read")
+    @patch("pytfe.resources.apply.Applies.read")
     def test_logs_success(self, mock_read):
         """Test successful logs retrieval."""
         # Mock the apply object
@@ -81,7 +81,7 @@ class TestApplies(unittest.TestCase):
         # Verify it returns empty string (placeholder implementation)
         assert result == ""
 
-    @patch("tfe.resources.apply.Applies.read")
+    @patch("pytfe.resources.apply.Applies.read")
     def test_logs_no_url_error(self, mock_read):
         """Test logs method when apply has no log URL."""
         # Mock apply with no log URL

@@ -1,10 +1,6 @@
-"""Types package for TFE client."""
+from __future__ import annotations
 
-# Import all types from the main types module by using importlib to avoid circular imports
-import importlib.util
-import os
-
-# Re-export all agent and agent pool types
+# ── Agent & Agent Pools ────────────────────────────────────────────────────────
 from .agent import (
     Agent,
     AgentListOptions,
@@ -23,8 +19,9 @@ from .agent import (
     AgentTokenListOptions,
 )
 
-# Re-export all configuration version types
-from .configuration_version_types import (
+# ── Configuration Versions ────────────────────────────────────────────────────
+# (Old: .configuration_version_types) → import directly from real module
+from .configuration_version import (
     ConfigurationSource,
     ConfigurationStatus,
     ConfigurationVersion,
@@ -37,7 +34,7 @@ from .configuration_version_types import (
     IngressAttributes,
 )
 
-# Re-export all OAuth client types
+# ── OAuth ─────────────────────────────────────────────────────────────────────
 from .oauth_client import (
     OAuthClient,
     OAuthClientAddProjectsOptions,
@@ -51,7 +48,6 @@ from .oauth_client import (
     ServiceProviderType,
 )
 
-# Re-export all OAuth token types
 from .oauth_token import (
     OAuthToken,
     OAuthTokenList,
@@ -59,7 +55,7 @@ from .oauth_token import (
     OAuthTokenUpdateOptions,
 )
 
-# Re-export all query run types
+# ── Query Runs ────────────────────────────────────────────────────────────────
 from .query_run import (
     QueryRun,
     QueryRunCancelOptions,
@@ -74,8 +70,9 @@ from .query_run import (
     QueryRunType,
 )
 
-# Re-export all registry module types
-from .registry_module_types import (
+# ── Registry Modules / Providers ──────────────────────────────────────────────
+# (Old: .registry_module_types / .registry_provider_types) → import from real modules
+from .registry_module import (
     AgentExecutionMode,
     Commit,
     CommitList,
@@ -107,8 +104,7 @@ from .registry_module_types import (
     TestConfig,
 )
 
-# Re-export all registry provider types
-from .registry_provider_types import (
+from .registry_provider import (
     RegistryProvider,
     RegistryProviderCreateOptions,
     RegistryProviderID,
@@ -119,7 +115,7 @@ from .registry_provider_types import (
     RegistryProviderReadOptions,
 )
 
-# Re-export all reserved tag key types
+# ── Reserved Tag Keys ─────────────────────────────────────────────────────────
 from .reserved_tag_key import (
     ReservedTagKey,
     ReservedTagKeyCreateOptions,
@@ -128,7 +124,7 @@ from .reserved_tag_key import (
     ReservedTagKeyUpdateOptions,
 )
 
-# Re-export all SSH key types
+# ── SSH Keys ──────────────────────────────────────────────────────────────────
 from .ssh_key import (
     SSHKey,
     SSHKeyCreateOptions,
@@ -137,9 +133,85 @@ from .ssh_key import (
     SSHKeyUpdateOptions,
 )
 
-# Define what should be available when importing with *
+# ── Core models split out of old types.py ─────────────────────────────────────
+# Adjust these imports to match where you placed them during the split.
+
+# Common / pagination / enums
+from .common import Pagination, Tag, TagBinding, EffectiveTagBinding, TagList   # if you put ExecutionMode enum here
+from .organization import Entitlements, ExecutionMode
+
+# Organization / Project
+from .organization import (
+    Organization,
+    OrganizationCreateOptions,
+    OrganizationUpdateOptions,
+)
+
+from .project import Project
+
+# Data retention policy family
+from .organization import (
+    DataRetentionPolicy,
+    DataRetentionPolicyChoice,             
+    DataRetentionPolicyDeleteOlder,
+    DataRetentionPolicyDeleteOlderSetOptions,
+    DataRetentionPolicyDontDelete,
+    DataRetentionPolicyDontDeleteSetOptions,
+    DataRetentionPolicySetOptions,
+)
+
+
+# Variables
+from .variable import (
+    Variable,
+    VariableCreateOptions,
+    VariableListOptions,
+    VariableUpdateOptions,
+)
+
+# Workspaces
+from .workspace import (
+    LockedByChoice,
+    VCSRepo,
+    Workspace,
+    WorkspaceActions,
+    WorkspaceAddRemoteStateConsumersOptions,
+    WorkspaceAddTagBindingsOptions,
+    WorkspaceAddTagsOptions,
+    WorkspaceAssignSSHKeyOptions,
+    WorkspaceCreateOptions,
+    WorkspaceIncludeOpt,
+    WorkspaceList,
+    WorkspaceListOptions,
+    WorkspaceListRemoteStateConsumersOptions,
+    WorkspaceLockOptions,
+    WorkspaceOutputs,
+    WorkspacePermissions,
+    WorkspaceReadOptions,
+    WorkspaceRemoveRemoteStateConsumersOptions,
+    WorkspaceRemoveTagsOptions,
+    WorkspaceRemoveVCSConnectionOptions,
+    WorkspaceSettingOverwrites,
+    WorkspaceSource,
+    WorkspaceTagListOptions,
+    WorkspaceUpdateOptions,
+    WorkspaceUpdateRemoteStateConsumersOptions,
+)
+
+# Runs
+from .run import (
+    Run,
+    RunStatus,
+)
+
+from .organization import (
+     RunQueue,
+     ReadRunQueueOptions,
+)
+
+# ── Public surface ────────────────────────────────────────────────────────────
 __all__ = [
-    # OAuth client types
+    # OAuth
     "OAuthClient",
     "OAuthClientAddProjectsOptions",
     "OAuthClientCreateOptions",
@@ -150,24 +222,24 @@ __all__ = [
     "OAuthClientRemoveProjectsOptions",
     "OAuthClientUpdateOptions",
     "ServiceProviderType",
-    # OAuth token types
+    # OAuth token
     "OAuthToken",
     "OAuthTokenList",
     "OAuthTokenListOptions",
     "OAuthTokenUpdateOptions",
-    # SSH key types
+    # SSH keys
     "SSHKey",
     "SSHKeyCreateOptions",
     "SSHKeyList",
     "SSHKeyListOptions",
     "SSHKeyUpdateOptions",
-    # Reserved tag key types
+    # Reserved tag keys
     "ReservedTagKey",
     "ReservedTagKeyCreateOptions",
     "ReservedTagKeyList",
     "ReservedTagKeyListOptions",
     "ReservedTagKeyUpdateOptions",
-    # Agent and agent pool types
+    # Agent & pools
     "Agent",
     "AgentPool",
     "AgentPoolAllowedWorkspacePolicy",
@@ -183,7 +255,7 @@ __all__ = [
     "AgentToken",
     "AgentTokenCreateOptions",
     "AgentTokenListOptions",
-    # Configuration version types
+    # Configuration versions
     "ConfigurationSource",
     "ConfigurationStatus",
     "ConfigurationVersion",
@@ -194,7 +266,7 @@ __all__ = [
     "ConfigurationVersionUpload",
     "ConfigVerIncludeOpt",
     "IngressAttributes",
-    # Registry module types
+    # Registry modules
     "AgentExecutionMode",
     "Commit",
     "CommitList",
@@ -224,7 +296,7 @@ __all__ = [
     "Root",
     "TestConfig",
     "TerraformRegistryModule",
-    # Registry provider types
+    # Registry providers
     "RegistryProvider",
     "RegistryProviderCreateOptions",
     "RegistryProviderID",
@@ -233,7 +305,7 @@ __all__ = [
     "RegistryProviderListOptions",
     "RegistryProviderPermissions",
     "RegistryProviderReadOptions",
-    # Query run types
+    # Query runs
     "QueryRun",
     "QueryRunCancelOptions",
     "QueryRunCreateOptions",
@@ -245,8 +317,14 @@ __all__ = [
     "QueryRunResults",
     "QueryRunStatus",
     "QueryRunType",
-    # Main types from types.py (will be dynamically added below)
-    "Capacity",
+    # Core (from old types.py, now split)
+    "Entitlements",
+    "ExecutionMode",
+    "Pagination",
+    "Organization",
+    "OrganizationCreateOptions",
+    "OrganizationUpdateOptions",
+    "Project",
     "DataRetentionPolicy",
     "DataRetentionPolicyChoice",
     "DataRetentionPolicyDeleteOlder",
@@ -255,18 +333,6 @@ __all__ = [
     "DataRetentionPolicyDontDeleteSetOptions",
     "DataRetentionPolicySetOptions",
     "EffectiveTagBinding",
-    "Entitlements",
-    "ExecutionMode",
-    "LockedByChoice",
-    "Organization",
-    "OrganizationCreateOptions",
-    "OrganizationUpdateOptions",
-    "Pagination",
-    "Project",
-    "ReadRunQueueOptions",
-    "Run",
-    "RunQueue",
-    "RunStatus",
     "Tag",
     "TagBinding",
     "TagList",
@@ -274,6 +340,7 @@ __all__ = [
     "VariableCreateOptions",
     "VariableListOptions",
     "VariableUpdateOptions",
+    "LockedByChoice",
     "VCSRepo",
     "Workspace",
     "WorkspaceActions",
@@ -298,16 +365,8 @@ __all__ = [
     "WorkspaceTagListOptions",
     "WorkspaceUpdateOptions",
     "WorkspaceUpdateRemoteStateConsumersOptions",
+    "Run",
+    "RunQueue",
+    "RunStatus",
+    "ReadRunQueueOptions",
 ]
-
-# Load the main types.py file that's at the same level as this types/ directory
-types_py_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "types.py")
-spec = importlib.util.spec_from_file_location("main_types", types_py_path)
-if spec is not None and spec.loader is not None:
-    main_types = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(main_types)
-
-    # Re-export all main types
-    for name in dir(main_types):
-        if not name.startswith("_"):
-            globals()[name] = getattr(main_types, name)

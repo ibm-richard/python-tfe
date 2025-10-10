@@ -12,7 +12,7 @@ from ..errors import (
     ServerError,
     TFEError,
 )
-from ..models.configuration_version_types import (
+from ..models.configuration_version import (
     ConfigurationVersion,
     ConfigurationVersionCreateOptions,
     ConfigurationVersionListOptions,

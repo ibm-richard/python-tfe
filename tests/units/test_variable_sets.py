@@ -5,7 +5,7 @@ from unittest.mock import Mock
 import pytest
 
 from pytfe.resources.variable_sets import VariableSets, VariableSetVariables
-from pytfe.types import (
+from pytfe.models.variable_set import (
     CategoryType,
     Parent,
     Project,

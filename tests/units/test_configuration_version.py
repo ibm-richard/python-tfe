@@ -22,7 +22,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from src.pytfe.errors import NotFound, TFEError
-from src.pytfe.models.configuration_version_types import (
+from pytfe.models.configuration_version import (
     ConfigurationSource,
     ConfigurationStatus,
     ConfigurationVersionCreateOptions,
@@ -348,11 +348,11 @@ class TestConfigurationVersionsUpload:
         upload_url = "https://example.com/upload"
         directory_path = "/tmp/test"
 
-        with patch("src.tfe.utils.slug", None):
+        with patch("src.pytfe.utils.slug", None):
             with pytest.raises(ImportError, match="go-slug package is required"):
                 configuration_versions_service.upload(upload_url, directory_path)
 
-    @patch("src.tfe.utils.slug")
+    @patch("src.pytfe.utils.slug")
     def test_upload_success(self, mock_slug, configuration_versions_service):
         """Test successful upload."""
         # Mock slug.pack

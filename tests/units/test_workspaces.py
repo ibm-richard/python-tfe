@@ -37,14 +37,8 @@ from src.pytfe.models.common import (
 )
 
 from src.pytfe.models.workspace import (
-    DataRetentionPolicyDeleteOlderSetOptions,
-    DataRetentionPolicyDontDeleteSetOptions,
-    DataRetentionPolicySetOptions,
-    EffectiveTagBinding,
     ExecutionMode,
     Project,
-    Tag,
-    TagBinding,
     VCSRepo,
     Workspace,
     WorkspaceAddRemoteStateConsumersOptions,

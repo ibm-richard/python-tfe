@@ -6,7 +6,7 @@ from typing import Any
 from ..errors import (
     ERR_INVALID_ORG,
 )
-from ..models.registry_provider_types import (
+from ..models.registry_provider import (
     RegistryName,
     RegistryProvider,
     RegistryProviderCreateOptions,

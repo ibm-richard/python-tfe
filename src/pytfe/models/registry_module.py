@@ -7,15 +7,6 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-# Load the main types.py file to get Organization and other main types
-# Path: from /src/tfe/types/registry_module_types.py to /src/tfe/types.py
-types_py_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "types.py")
-spec = importlib.util.spec_from_file_location("main_types", types_py_path)
-if spec is not None and spec.loader is not None:
-    main_types = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(main_types)
-else:
-    raise ImportError("Could not load main types module")
 
 
 class RegistryName(str, Enum):

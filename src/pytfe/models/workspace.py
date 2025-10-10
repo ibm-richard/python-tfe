@@ -248,11 +248,6 @@ class WorkspaceList(BaseModel):
     pagination: Pagination | None = None
 
 
-class TagList(BaseModel):
-    items: list[Tag] = Field(default_factory=list)
-    pagination: Pagination | None = None
-
-
 class WorkspaceRemoveVCSConnectionOptions(BaseModel):
     """Options for removing VCS connection from a workspace."""
 

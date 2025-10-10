@@ -26,6 +26,10 @@ class TagBinding(BaseModel):
     key: str
     value: str | None = None
 
+class TagList(BaseModel):
+    items: list[Tag] = Field(default_factory=list)
+    pagination: Pagination | None = None
+
 
 class EffectiveTagBinding(BaseModel):
     id: str

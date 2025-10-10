@@ -1,13 +1,15 @@
 from unittest.mock import Mock
 
 from pytfe.resources.projects import Projects, _safe_str
-from pytfe.types import (
-    EffectiveTagBinding,
+from pytfe.models.project import (
     Project,
     ProjectAddTagBindingsOptions,
     ProjectCreateOptions,
     ProjectUpdateOptions,
     TagBinding,
+)
+from pytfe.models import (
+    EffectiveTagBinding,
 )
 
 

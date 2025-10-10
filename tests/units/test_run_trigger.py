@@ -310,7 +310,7 @@ class TestRunTriggers:
         """Test validation with invalid filter parameter."""
 
         # This should be tested by mocking the enum validation
-        with patch("tfe.resources.run_trigger.RunTriggerFilterOp") as mock_enum:
+        with patch("pytfe.resources.run_trigger.RunTriggerFilterOp") as mock_enum:
             mock_enum.__contains__ = Mock(return_value=False)
 
             with pytest.raises(InvalidRunTriggerTypeError):

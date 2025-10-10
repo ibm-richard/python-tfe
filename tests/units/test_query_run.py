@@ -450,7 +450,7 @@ class TestQueryRunIntegration:
         from unittest.mock import MagicMock, patch
 
         # Mock the HTTPTransport to prevent any network calls during initialization
-        with patch("tfe.client.HTTPTransport") as mock_transport_class:
+        with patch("pytfe.client.HTTPTransport") as mock_transport_class:
             mock_transport_instance = MagicMock()
             mock_transport_class.return_value = mock_transport_instance
 
