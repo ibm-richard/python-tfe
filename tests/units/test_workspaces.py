@@ -9,7 +9,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.tfe.errors import (
+from src.pytfe.errors import (
     InvalidOrgError,
     InvalidSSHKeyIDError,
     InvalidWorkspaceIDError,
@@ -19,16 +19,21 @@ from src.tfe.errors import (
     RequiredSSHKeyIDError,
     WorkspaceMinimumLimitError,
 )
-from src.tfe.resources.workspaces import Workspaces, _ws_from
-from src.tfe.types import (
+from src.pytfe.models.common import (
+    EffectiveTagBinding,
+    Tag,
+    TagBinding,
+)
+from src.pytfe.models.data_retention_policy import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
-    EffectiveTagBinding,
+)
+from src.pytfe.models.organization import (
     ExecutionMode,
-    Project,
-    Tag,
-    TagBinding,
+)
+from src.pytfe.models.project import Project
+from src.pytfe.models.workspace import (
     VCSRepo,
     Workspace,
     WorkspaceAddRemoteStateConsumersOptions,
@@ -47,6 +52,7 @@ from src.tfe.types import (
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
+from src.pytfe.resources.workspaces import Workspaces, _ws_from
 
 
 class TestWorkspaceOperations:
@@ -233,7 +239,7 @@ class TestWorkspaceOperations:
             sample_workspace_response
         )
 
-        from src.tfe.types import WorkspaceIncludeOpt
+        from src.pytfe.models.workspace import WorkspaceIncludeOpt
 
         options = WorkspaceReadOptions(
             include=[WorkspaceIncludeOpt.CURRENT_RUN, WorkspaceIncludeOpt.OUTPUTS]

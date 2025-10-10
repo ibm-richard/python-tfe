@@ -5,9 +5,9 @@ from __future__ import annotations
 import unittest
 from unittest.mock import MagicMock, patch
 
-from tfe.errors import InvalidApplyIDError
-from tfe.models.apply import Apply
-from tfe.resources.apply import Applies
+from pytfe.errors import InvalidApplyIDError
+from pytfe.models.apply import Apply
+from pytfe.resources.apply import Applies
 
 
 class TestApplies(unittest.TestCase):
@@ -65,7 +65,7 @@ class TestApplies(unittest.TestCase):
         assert result.resource_destructions == 0
         assert result.resource_imports == 0
 
-    @patch("tfe.resources.apply.Applies.read")
+    @patch("pytfe.resources.apply.Applies.read")
     def test_logs_success(self, mock_read):
         """Test successful logs retrieval."""
         # Mock the apply object
@@ -81,7 +81,7 @@ class TestApplies(unittest.TestCase):
         # Verify it returns empty string (placeholder implementation)
         assert result == ""
 
-    @patch("tfe.resources.apply.Applies.read")
+    @patch("pytfe.resources.apply.Applies.read")
     def test_logs_no_url_error(self, mock_read):
         """Test logs method when apply has no log URL."""
         # Mock apply with no log URL

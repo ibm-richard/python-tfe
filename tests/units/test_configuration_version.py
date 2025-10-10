@@ -21,8 +21,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from src.tfe.errors import NotFound, TFEError
-from src.tfe.models.configuration_version_types import (
+from pytfe.models.configuration_version import (
     ConfigurationSource,
     ConfigurationStatus,
     ConfigurationVersionCreateOptions,
@@ -30,7 +29,8 @@ from src.tfe.models.configuration_version_types import (
     ConfigurationVersionReadOptions,
     ConfigVerIncludeOpt,
 )
-from src.tfe.resources.configuration_version import ConfigurationVersions
+from src.pytfe.errors import NotFound, TFEError
+from src.pytfe.resources.configuration_version import ConfigurationVersions
 
 
 @pytest.fixture
@@ -348,11 +348,11 @@ class TestConfigurationVersionsUpload:
         upload_url = "https://example.com/upload"
         directory_path = "/tmp/test"
 
-        with patch("src.tfe.utils.slug", None):
+        with patch("src.pytfe.utils.slug", None):
             with pytest.raises(ImportError, match="go-slug package is required"):
                 configuration_versions_service.upload(upload_url, directory_path)
 
-    @patch("src.tfe.utils.slug")
+    @patch("src.pytfe.utils.slug")
     def test_upload_success(self, mock_slug, configuration_versions_service):
         """Test successful upload."""
         # Mock slug.pack
@@ -645,7 +645,7 @@ class TestConfigurationVersionsValidation:
 
     def test_valid_string_id_valid(self, configuration_versions_service):
         """Test valid_string_id with valid configuration version ID."""
-        from src.tfe.utils import valid_string_id
+        from src.pytfe.utils import valid_string_id
 
         # This should return True and not raise an exception
         result = valid_string_id("cv-ntv3HbhJqvFzamy7")
@@ -653,7 +653,7 @@ class TestConfigurationVersionsValidation:
 
     def test_valid_string_id_invalid(self, configuration_versions_service):
         """Test valid_string_id with invalid configuration version ID."""
-        from src.tfe.utils import valid_string_id
+        from src.pytfe.utils import valid_string_id
 
         # This should return False
         result = valid_string_id("")

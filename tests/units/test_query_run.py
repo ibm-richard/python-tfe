@@ -3,9 +3,9 @@ from unittest.mock import MagicMock, Mock
 
 import pytest
 
-from tfe import TFEClient, TFEConfig
-from tfe.errors import InvalidOrgError, InvalidQueryRunIDError
-from tfe.models.query_run import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.errors import InvalidOrgError, InvalidQueryRunIDError
+from pytfe.models.query_run import (
     QueryRun,
     QueryRunCancelOptions,
     QueryRunCreateOptions,
@@ -450,7 +450,7 @@ class TestQueryRunIntegration:
         from unittest.mock import MagicMock, patch
 
         # Mock the HTTPTransport to prevent any network calls during initialization
-        with patch("tfe.client.HTTPTransport") as mock_transport_class:
+        with patch("pytfe.client.HTTPTransport") as mock_transport_class:
             mock_transport_instance = MagicMock()
             mock_transport_class.return_value = mock_transport_instance
 

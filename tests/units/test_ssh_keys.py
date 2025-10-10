@@ -4,16 +4,16 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.tfe._http import HTTPTransport
-from src.tfe.errors import (
+from src.pytfe._http import HTTPTransport
+from src.pytfe.errors import (
     InvalidOrgError,
     InvalidSSHKeyIDError,
 )
-from src.tfe.models.ssh_key import (
+from src.pytfe.models.ssh_key import (
     SSHKeyCreateOptions,
     SSHKeyUpdateOptions,
 )
-from src.tfe.resources.ssh_keys import SSHKeys
+from src.pytfe.resources.ssh_keys import SSHKeys
 
 
 class TestSSHKeyParsing:

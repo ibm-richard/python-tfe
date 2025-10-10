@@ -37,8 +37,8 @@ from __future__ import annotations
 import argparse
 import os
 
-from tfe import TFEClient, TFEConfig
-from tfe.models.run_event import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models import (
     RunEventIncludeOpt,
     RunEventListOptions,
     RunEventReadOptions,

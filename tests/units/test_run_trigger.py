@@ -5,8 +5,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from tfe._http import HTTPTransport
-from tfe.errors import (
+from pytfe._http import HTTPTransport
+from pytfe.errors import (
     InvalidRunTriggerIDError,
     InvalidRunTriggerTypeError,
     InvalidWorkspaceIDError,
@@ -14,7 +14,7 @@ from tfe.errors import (
     RequiredSourceableError,
     UnsupportedRunTriggerTypeError,
 )
-from tfe.models.run_trigger import (
+from pytfe.models.run_trigger import (
     RunTrigger,
     RunTriggerCreateOptions,
     RunTriggerFilterOp,
@@ -22,8 +22,8 @@ from tfe.models.run_trigger import (
     RunTriggerListOptions,
     SourceableChoice,
 )
-from tfe.models.workspace import Workspace
-from tfe.resources.run_trigger import RunTriggers, _run_trigger_from
+from pytfe.models.workspace import Workspace
+from pytfe.resources.run_trigger import RunTriggers, _run_trigger_from
 
 
 class TestRunTriggerFrom:
@@ -310,7 +310,7 @@ class TestRunTriggers:
         """Test validation with invalid filter parameter."""
 
         # This should be tested by mocking the enum validation
-        with patch("tfe.resources.run_trigger.RunTriggerFilterOp") as mock_enum:
+        with patch("pytfe.resources.run_trigger.RunTriggerFilterOp") as mock_enum:
             mock_enum.__contains__ = Mock(return_value=False)
 
             with pytest.raises(InvalidRunTriggerTypeError):

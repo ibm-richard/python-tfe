@@ -15,8 +15,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from tfe.errors import AuthError, NotFound, ValidationError
-from tfe.models.agent import (
+from pytfe.errors import AuthError, NotFound, ValidationError
+from pytfe.models.agent import (
     AgentPool,
     AgentPoolAllowedWorkspacePolicy,
     AgentPoolCreateOptions,
@@ -98,7 +98,7 @@ class TestAgentPoolOperations:
     @pytest.fixture
     def agent_pools_service(self, mock_transport):
         """Create agent pools service with mocked transport."""
-        from tfe.resources.agent_pools import AgentPools
+        from pytfe.resources.agent_pools import AgentPools
 
         return AgentPools(mock_transport)
 
@@ -276,7 +276,7 @@ class TestAgentTokenOperations:
     @pytest.fixture
     def agent_tokens_service(self, mock_transport):
         """Create agent tokens service with mocked transport."""
-        from tfe.resources.agents import AgentTokens
+        from pytfe.resources.agents import AgentTokens
 
         return AgentTokens(mock_transport)
 
@@ -396,7 +396,7 @@ class TestAgentPoolErrorHandling:
     @pytest.fixture
     def agent_pools_service(self, mock_transport):
         """Create agent pools service with mocked transport."""
-        from tfe.resources.agent_pools import AgentPools
+        from pytfe.resources.agent_pools import AgentPools
 
         return AgentPools(mock_transport)
 

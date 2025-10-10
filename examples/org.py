@@ -1,5 +1,5 @@
-from tfe import TFEClient, TFEConfig
-from tfe.types import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     OrganizationCreateOptions,

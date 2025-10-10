@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 import os
 
-from tfe import TFEClient, TFEConfig
+from pytfe import TFEClient, TFEConfig
 
 
 def _print_header(title: str):

@@ -22,14 +22,14 @@ import argparse
 import os
 from pathlib import Path
 
-from tfe import TFEClient, TFEConfig
-from tfe.models.policy import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models import (
     EnforcementLevel,
     PolicyCreateOptions,
+    PolicyKind,
     PolicyListOptions,
     PolicyUpdateOptions,
 )
-from tfe.models.policy_set import PolicyKind
 
 
 def _print_header(title: str):

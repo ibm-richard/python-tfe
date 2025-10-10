@@ -22,8 +22,8 @@ from datetime import datetime
 # Add the source directory to the path for direct execution
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from tfe import TFEClient, TFEConfig
-from tfe.types import (
+from pytfe import TFEClient, TFEConfig
+from pytfe.models import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     ExecutionMode,
@@ -386,7 +386,7 @@ class WorkspaceManager:
             print("\n  Getting real workspaces for consumer demonstration...")
 
             # Get existing workspaces from the organization to use as examples
-            from tfe.types import WorkspaceListOptions
+            from pytfe.types import WorkspaceListOptions
 
             org_list_options = WorkspaceListOptions(page_size=5)
 
@@ -434,7 +434,7 @@ class WorkspaceManager:
                 )
 
                 # Create mock workspaces for demonstration only
-                from tfe.types import Workspace
+                from pytfe.types import Workspace
 
                 demo_consumer_1 = Workspace(
                     id="ws-demo-consumer-1",

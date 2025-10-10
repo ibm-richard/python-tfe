@@ -3,8 +3,8 @@ requires = ["hatchling>=1.21"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tfe"
-version = "0.1.0a1"
+name = "pytfe"
+version = "0.0.1-alpha"
 description = "Official Python SDK for HashiCorp Terraform Cloud / Terraform Enterprise (TFE) API v2"
 readme = "README.md"
 license = { text = "MPL-2.0" }
@@ -14,7 +14,6 @@ dependencies = [
   "httpx>=0.27.0,<0.29.0",
   "pydantic>=2.6,<3",
   "typing-extensions>=4.8",
-  "anyio>=4.0",
   "h2>=4.3.0"
 ]
 classifiers = [
@@ -42,7 +41,7 @@ dev = [
 "Bug Tracker" = "https://github.com/hashicorp/python-tfe/issues"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/tfe"]
+packages = ["src/pytfe"]
 
 # Ruff configuration
 [tool.ruff]
@@ -115,3 +114,6 @@ show_error_codes = true
 [[tool.mypy.overrides]]
 module = "tests.*"
 disallow_untyped_defs = false
+
+[tool.hatch.build.targets.sdist]
+include = ["src/**", "README.md", "LICENSE", "docs/**"]

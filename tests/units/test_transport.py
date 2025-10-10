@@ -1,5 +1,5 @@
-from tfe._http import HTTPTransport
-from tfe.config import TFEConfig
+from pytfe._http import HTTPTransport
+from pytfe.config import TFEConfig
 
 
 def test_http_transport_init():

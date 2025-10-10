@@ -1,7 +1,7 @@
 .PHONY: help fmt fmt-check lint check test install dev-install type-check clean all venv activate
 
 PYTHON := python3
-SRC_DIR := src/tfe
+SRC_DIR := src/pytfe
 TEST_DIR := tests
 VENV := .venv
 VENV_PYTHON := $(VENV)/bin/python
