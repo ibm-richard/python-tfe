@@ -10,8 +10,8 @@ from pytfe.models import (
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
     StateVersionListOptions,
+    StateVersionOutputsListOptions,
 )
-from pytfe.models import StateVersionOutputsListOptions
 
 
 def _print_header(title: str):

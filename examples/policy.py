@@ -26,9 +26,9 @@ from pytfe import TFEClient, TFEConfig
 from pytfe.models import (
     EnforcementLevel,
     PolicyCreateOptions,
+    PolicyKind,
     PolicyListOptions,
     PolicyUpdateOptions,
-    PolicyKind
 )
 
 

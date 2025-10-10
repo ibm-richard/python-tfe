@@ -7,8 +7,8 @@ from pytfe.models import (
     RunTriggerFilterOp,
     RunTriggerIncludeOp,
     RunTriggerListOptions,
+    Workspace,
 )
-from pytfe.models import Workspace
 
 
 def run_trigger_list(client, workspace_id):

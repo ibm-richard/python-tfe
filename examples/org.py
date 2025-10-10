@@ -1,11 +1,10 @@
+from pytfe import TFEClient, TFEConfig
 from pytfe.models import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
     OrganizationCreateOptions,
     ReadRunQueueOptions,
 )
-
-from pytfe import TFEClient, TFEConfig
 
 
 def test_basic_org_operations(client):

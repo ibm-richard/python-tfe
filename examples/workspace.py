@@ -22,6 +22,7 @@ from datetime import datetime
 # Add the source directory to the path for direct execution
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
+from pytfe import TFEClient, TFEConfig
 from pytfe.models import (
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDeleteSetOptions,
@@ -45,8 +46,6 @@ from pytfe.models import (
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
-
-from pytfe import TFEClient, TFEConfig
 
 
 class WorkspaceManager:
