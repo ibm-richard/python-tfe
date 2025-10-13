@@ -2,6 +2,7 @@
 Notification Configuration Resources
 
 This module provides CRUD operations for Terraform Cloud/Enterprise notification configurations.
+Based on the Go TFE notification_configuration.go implementation.
 """
 
 from __future__ import annotations

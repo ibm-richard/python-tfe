@@ -4,6 +4,8 @@ Example usage of Notification Configuration API
 
 This example demonstrates how to use the Python TFE library to manage
 notification configurations for workspaces and teams.
+
+Based on the Go TFE notification_configuration.go implementation.
 """
 
 import os

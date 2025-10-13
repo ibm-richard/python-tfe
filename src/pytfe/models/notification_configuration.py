@@ -2,6 +2,7 @@
 Notification Configuration Models
 
 This module provides models for working with Terraform Cloud/Enterprise notification configurations.
+Based on the Go TFE notification_configuration.go implementation.
 """
 
 from __future__ import annotations
