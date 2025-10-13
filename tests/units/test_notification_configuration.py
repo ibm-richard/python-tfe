@@ -2,7 +2,6 @@
 Unit tests for Notification Configuration API.
 
 Tests all CRUD operations: List, Create, Read, Update, Delete, and Verify.
-Based on the Go TFE notification_configuration_integration_test.go implementation.
 """
 
 from unittest.mock import Mock
