@@ -251,9 +251,8 @@ class WorkspaceList(BaseModel):
 class WorkspaceRemoveVCSConnectionOptions(BaseModel):
     """Options for removing VCS connection from a workspace."""
 
-    # Currently no options are defined, but this class can be extended in the future
     id: str
-    vcs_repo: VCSRepo | None = None
+    vcs_repo: VCSRepoOptions | None = None
 
 
 class WorkspaceLockOptions(BaseModel):
