@@ -6,6 +6,7 @@ from .resources.agent_pools import AgentPools
 from .resources.agents import Agents, AgentTokens
 from .resources.apply import Applies
 from .resources.configuration_version import ConfigurationVersions
+from .resources.notification_configuration import NotificationConfigurations
 from .resources.oauth_client import OAuthClients
 from .resources.oauth_token import OAuthTokens
 from .resources.organizations import Organizations
@@ -59,6 +60,7 @@ class TFEClient:
 
         # Core resources
         self.configuration_versions = ConfigurationVersions(self._transport)
+        self.notification_configurations = NotificationConfigurations(self._transport)
         self.applies = Applies(self._transport)
         self.plans = Plans(self._transport)
         self.organizations = Organizations(self._transport)
