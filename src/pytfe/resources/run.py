@@ -132,7 +132,7 @@ class Runs(_Service):
 
     def read(self, run_id: str) -> Run:
         """Read a run by its ID."""
-        return self.read_with_options(run_id, None)
+        return self.read_with_options(run_id)
 
     def read_with_options(
         self, run_id: str, options: RunReadOptions | None = None

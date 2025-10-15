@@ -45,7 +45,7 @@ class RunEvents(_Service):
 
     def read(self, run_event_id: str) -> RunEvent:
         """Read a specific run event by its ID."""
-        return self.read_with_options(run_event_id, None)
+        return self.read_with_options(run_event_id)
 
     def read_with_options(
         self, run_event_id: str, options: RunEventReadOptions | None = None

@@ -19,11 +19,6 @@ from .agent import (
     AgentTokenListOptions,
 )
 
-# ──Apply / Plans ──────────────────────────────────────────────────────────────
-from .apply import (
-    Apply,
-)
-
 # ── Core models split out of old types.py ─────────────────────────────────────
 # Adjust these imports to match where you placed them during the split.
 # Common / pagination / enums
@@ -90,9 +85,6 @@ from .organization import (
     OrganizationUpdateOptions,
     ReadRunQueueOptions,
     RunQueue,
-)
-from .plan import (
-    Plan,
 )
 from .policy import (
     Policy,
@@ -474,9 +466,6 @@ __all__ = [
     "WorkspaceUpdateRemoteStateConsumersOptions",
     "RunQueue",
     "ReadRunQueueOptions",
-    # Apply & Plans
-    "Apply",
-    "Plan",
     # Runs
     "Run",
     "RunStatus",

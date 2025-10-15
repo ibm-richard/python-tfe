@@ -80,7 +80,9 @@ class PolicySets(_Service):
             total_count=pagination.get("total-count"),
         )
 
-    def create(self, organization: str, options: PolicySetCreateOptions) -> PolicySet:
+    def create(
+        self, organization: str, *, options: PolicySetCreateOptions
+    ) -> PolicySet:
         """Create a new policy set in the given organization."""
         if not valid_string_id(organization):
             raise InvalidOrgError()
@@ -153,7 +155,7 @@ class PolicySets(_Service):
 
     def read(self, policy_set_id: str) -> PolicySet:
         """Read a policy set by its ID."""
-        return self.read_with_options(policy_set_id, None)
+        return self.read_with_options(policy_set_id)
 
     def read_with_options(
         self, policy_set_id: str, options: PolicySetReadOptions | None = None
@@ -188,7 +190,9 @@ class PolicySets(_Service):
 
         return PolicySet.model_validate(attrs)
 
-    def update(self, policy_set_id: str, options: PolicySetUpdateOptions) -> PolicySet:
+    def update(
+        self, policy_set_id: str, *, options: PolicySetUpdateOptions
+    ) -> PolicySet:
         """Update an existing policy set."""
         if not valid_string_id(policy_set_id):
             raise InvalidPolicySetIDError()
@@ -228,7 +232,7 @@ class PolicySets(_Service):
         return PolicySet.model_validate(attrs)
 
     def add_policies(
-        self, policy_set_id: str, options: PolicySetAddPoliciesOptions
+        self, policy_set_id: str, *, options: PolicySetAddPoliciesOptions
     ) -> None:
         """Add policies to a policy set."""
         if not valid_string_id(policy_set_id):
@@ -254,7 +258,7 @@ class PolicySets(_Service):
         return None
 
     def remove_policies(
-        self, policy_set_id: str, options: PolicySetRemovePoliciesOptions
+        self, policy_set_id: str, *, options: PolicySetRemovePoliciesOptions
     ) -> None:
         """Remove policies from a policy set."""
         if not valid_string_id(policy_set_id):
@@ -280,7 +284,7 @@ class PolicySets(_Service):
         return None
 
     def add_workspaces(
-        self, policy_set_id: str, options: PolicySetAddWorkspacesOptions
+        self, policy_set_id: str, *, options: PolicySetAddWorkspacesOptions
     ) -> None:
         """Add workspaces to a policy set."""
         if not valid_string_id(policy_set_id):
@@ -307,7 +311,7 @@ class PolicySets(_Service):
         return None
 
     def remove_workspaces(
-        self, policy_set_id: str, options: PolicySetRemoveWorkspacesOptions
+        self, policy_set_id: str, *, options: PolicySetRemoveWorkspacesOptions
     ) -> None:
         """Remove workspaces from a policy set."""
         if not valid_string_id(policy_set_id):
@@ -334,7 +338,7 @@ class PolicySets(_Service):
         return None
 
     def add_workspace_exclusions(
-        self, policy_set_id: str, options: PolicySetAddWorkspaceExclusionsOptions
+        self, policy_set_id: str, *, options: PolicySetAddWorkspaceExclusionsOptions
     ) -> None:
         """Add workspace exclusions to a policy set."""
         if not valid_string_id(policy_set_id):
@@ -361,7 +365,7 @@ class PolicySets(_Service):
         return None
 
     def remove_workspace_exclusions(
-        self, policy_set_id: str, options: PolicySetRemoveWorkspaceExclusionsOptions
+        self, policy_set_id: str, *, options: PolicySetRemoveWorkspaceExclusionsOptions
     ) -> None:
         """Remove workspace exclusions from a policy set."""
         if not valid_string_id(policy_set_id):
@@ -388,7 +392,7 @@ class PolicySets(_Service):
         return None
 
     def add_projects(
-        self, policy_set_id: str, options: PolicySetAddProjectsOptions
+        self, policy_set_id: str, *, options: PolicySetAddProjectsOptions
     ) -> None:
         """Add projects to a policy set."""
         if not valid_string_id(policy_set_id):
@@ -414,7 +418,7 @@ class PolicySets(_Service):
         return None
 
     def remove_projects(
-        self, policy_set_id: str, options: PolicySetRemoveProjectsOptions
+        self, policy_set_id: str, *, options: PolicySetRemoveProjectsOptions
     ) -> None:
         """Remove projects from a policy set."""
         if not valid_string_id(policy_set_id):

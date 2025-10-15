@@ -146,7 +146,7 @@ class RunTasks(_Service):
         for item in self._list(path, params=params):
             yield _run_task_from(item, organization_id)
 
-    def create(self, organization_id: str, options: RunTaskCreateOptions) -> RunTask:
+    def create(self, organization_id: str, *, options: RunTaskCreateOptions) -> RunTask:
         if not valid_string_id(organization_id):
             raise InvalidOrgError()
         if not valid_string(options.name):
@@ -195,22 +195,22 @@ class RunTasks(_Service):
         return _run_task_from(r.json()["data"], organization_id)
 
     def read(self, run_task_id: str) -> RunTask:
-        return self.read_with_options(run_task_id, RunTaskReadOptions())
+        return self.read_with_options(run_task_id)
 
     def read_with_options(
-        self, run_task_id: str, options: RunTaskReadOptions
+        self, run_task_id: str, options: RunTaskReadOptions | None = None
     ) -> RunTask:
         if not valid_string_id(run_task_id):
             raise InvalidRunTaskIDError()
         params: dict[str, str] = {}
-        if options.include:
+        if options and options.include:
             params["include"] = ",".join(options.include)
 
         path = f"/api/v2/tasks/{run_task_id}"
         r = self.t.request("GET", path, params=params)
         return _run_task_from(r.json()["data"])
 
-    def update(self, run_task_id: str, options: RunTaskUpdateOptions) -> RunTask:
+    def update(self, run_task_id: str, *, options: RunTaskUpdateOptions) -> RunTask:
         if not valid_string_id(run_task_id):
             raise InvalidRunTaskIDError("Invalid run task ID")
         if options.name is not None and not valid_string(options.name):
