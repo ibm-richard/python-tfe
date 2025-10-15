@@ -52,7 +52,7 @@ class Policies(_Service):
             total_count=pagination.get("total-count"),
         )
 
-    def create(self, organization: str, *, options: PolicyCreateOptions) -> Policy:
+    def create(self, organization: str, options: PolicyCreateOptions) -> Policy:
         """Create a new policy in the given organization."""
         if not valid_string_id(organization):
             raise InvalidOrgError()
@@ -91,7 +91,7 @@ class Policies(_Service):
         attrs["organization"] = d.get("relationships", {}).get("organization", {})
         return Policy.model_validate(attrs)
 
-    def update(self, policy_id: str, *, options: PolicyUpdateOptions) -> Policy:
+    def update(self, policy_id: str, options: PolicyUpdateOptions) -> Policy:
         """Update an existing policy by its ID."""
         if not valid_string_id(policy_id):
             raise InvalidPolicyIDError

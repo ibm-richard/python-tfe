@@ -56,16 +56,13 @@ from ..models.workspace import (
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
 from ..utils import (
+    _safe_str,
     valid_string,
     valid_string_id,
     validate_workspace_create_options,
     validate_workspace_update_options,
 )
 from ._base import _Service
-
-
-def _safe_str(v: Any, default: str = "") -> str:
-    return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
 def _em_safe(v: Any) -> ExecutionMode | None:
@@ -310,15 +307,16 @@ class Workspaces(_Service):
         for item in self._list(path, params=params):
             yield _ws_from(item, organization)
 
-    def read(self, organization: str, workspace: str) -> Workspace:
+    def read(self, workspace: str, *, organization: str) -> Workspace:
         """Read workspace by organization and name."""
-        return self.read_with_options(workspace, organization)
+        return self.read_with_options(workspace, organization=organization)
 
     def read_with_options(
         self,
         workspace: str,
-        organization: str,
         options: WorkspaceReadOptions | None = None,
+        *,
+        organization: str,
     ) -> Workspace:
         # Validate parameters
         if not valid_string_id(organization):
@@ -369,7 +367,6 @@ class Workspaces(_Service):
     def create(
         self,
         organization: str,
-        *,
         options: WorkspaceCreateOptions,
     ) -> Workspace:
         """Create a new workspace in the given organization."""
@@ -388,7 +385,7 @@ class Workspaces(_Service):
 
     # Convenience methods for org+name operations
     def update(
-        self, organization: str, workspace: str, *, options: WorkspaceUpdateOptions
+        self, workspace: str, options: WorkspaceUpdateOptions, *, organization: str
     ) -> Workspace:
         """Update workspace by organization and name."""
         # Validate parameters
@@ -409,7 +406,7 @@ class Workspaces(_Service):
         return _ws_from(r.json()["data"], organization)
 
     def update_by_id(
-        self, workspace_id: str, *, options: WorkspaceUpdateOptions
+        self, workspace_id: str, options: WorkspaceUpdateOptions
     ) -> Workspace:
         """Update workspace by workspace ID."""
         # Validate parameters
@@ -577,7 +574,7 @@ class Workspaces(_Service):
 
         return body
 
-    def delete(self, organization: str, workspace: str) -> None:
+    def delete(self, workspace: str, *, organization: str) -> None:
         """Delete workspace by organization and workspace name."""
         # Validate parameters (similar to Go implementation)
         if not valid_string_id(organization):
@@ -597,7 +594,7 @@ class Workspaces(_Service):
 
         self.t.request("DELETE", f"/api/v2/workspaces/{workspace_id}")
 
-    def safe_delete(self, organization: str, workspace: str) -> None:
+    def safe_delete(self, workspace: str, *, organization: str) -> None:
         """Safely delete workspace by organization and name."""
         # Validate parameters (similar to Go implementation)
         if not valid_string_id(organization):
@@ -620,8 +617,9 @@ class Workspaces(_Service):
 
     def remove_vcs_connection(
         self,
-        organization: str,
         workspace: str,
+        *,
+        organization: str | None = None,
     ) -> Workspace:
         """Remove VCS connection from workspace by organization and name."""
         # Validate parameters
@@ -670,7 +668,7 @@ class Workspaces(_Service):
         )
         return _ws_from(r.json()["data"], None)
 
-    def lock(self, workspace_id: str, *, options: WorkspaceLockOptions) -> Workspace:
+    def lock(self, workspace_id: str, options: WorkspaceLockOptions) -> Workspace:
         """Lock a workspace by workspace ID."""
         # Validate parameters
         if not valid_string_id(workspace_id):
@@ -714,7 +712,7 @@ class Workspaces(_Service):
         return _ws_from(r.json()["data"], None)
 
     def assign_ssh_key(
-        self, workspace_id: str, *, options: WorkspaceAssignSSHKeyOptions
+        self, workspace_id: str, options: WorkspaceAssignSSHKeyOptions
     ) -> Workspace:
         """Assign an SSH key to a workspace by workspace ID."""
         # Validate parameters
@@ -783,7 +781,7 @@ class Workspaces(_Service):
             yield _ws_from(item, None)
 
     def add_remote_state_consumers(
-        self, workspace_id: str, *, options: WorkspaceAddRemoteStateConsumersOptions
+        self, workspace_id: str, options: WorkspaceAddRemoteStateConsumersOptions
     ) -> None:
         """Add remote state consumers to a workspace by workspace ID."""
         if not valid_string_id(workspace_id):
@@ -803,7 +801,7 @@ class Workspaces(_Service):
         )
 
     def remove_remote_state_consumers(
-        self, workspace_id: str, *, options: WorkspaceRemoveRemoteStateConsumersOptions
+        self, workspace_id: str, options: WorkspaceRemoveRemoteStateConsumersOptions
     ) -> None:
         """Remove remote state consumers from a workspace by workspace ID."""
         if not valid_string_id(workspace_id):
@@ -822,7 +820,7 @@ class Workspaces(_Service):
         )
 
     def update_remote_state_consumers(
-        self, workspace_id: str, *, options: WorkspaceUpdateRemoteStateConsumersOptions
+        self, workspace_id: str, options: WorkspaceUpdateRemoteStateConsumersOptions
     ) -> None:
         """Update remote state consumers of a workspace by workspace ID."""
         if not valid_string_id(workspace_id):
@@ -860,7 +858,7 @@ class Workspaces(_Service):
             attr = item.get("attributes", {}) or {}
             yield Tag(id=item.get("id"), name=attr.get("name", ""))
 
-    def add_tags(self, workspace_id: str, *, options: WorkspaceAddTagsOptions) -> None:
+    def add_tags(self, workspace_id: str, options: WorkspaceAddTagsOptions) -> None:
         """AddTags adds a list of tags to a workspace."""
         if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
@@ -883,7 +881,7 @@ class Workspaces(_Service):
         )
 
     def remove_tags(
-        self, workspace_id: str, *, options: WorkspaceRemoveTagsOptions
+        self, workspace_id: str, options: WorkspaceRemoveTagsOptions
     ) -> None:
         """RemoveTags removes a list of tags from a workspace."""
         if not valid_string_id(workspace_id):
@@ -936,7 +934,7 @@ class Workspaces(_Service):
             )
 
     def add_tag_bindings(
-        self, workspace_id: str, *, options: WorkspaceAddTagBindingsOptions
+        self, workspace_id: str, options: WorkspaceAddTagBindingsOptions
     ) -> Iterator[TagBinding]:
         """AddTagBindings adds or modifies the value of existing tag binding keys for a workspace."""
         if not valid_string_id(workspace_id):
@@ -1065,7 +1063,7 @@ class Workspaces(_Service):
         return data_retention_policy_choice
 
     def set_data_retention_policy(
-        self, workspace_id: str, *, options: DataRetentionPolicySetOptions
+        self, workspace_id: str, options: DataRetentionPolicySetOptions
     ) -> DataRetentionPolicy:
         """Set a workspace's data retention policy (deprecated: use set_data_retention_policy_delete_older instead)."""
         if not valid_string_id(workspace_id):
@@ -1097,7 +1095,7 @@ class Workspaces(_Service):
         return f"/api/v2/workspaces/{workspace_id}/relationships/data-retention-policy"
 
     def set_data_retention_policy_delete_older(
-        self, workspace_id: str, *, options: DataRetentionPolicyDeleteOlderSetOptions
+        self, workspace_id: str, options: DataRetentionPolicyDeleteOlderSetOptions
     ) -> DataRetentionPolicyDeleteOlder:
         """Set a workspace's data retention policy to delete data older than a certain number of days."""
         if not valid_string_id(workspace_id):
@@ -1125,8 +1123,7 @@ class Workspaces(_Service):
         )
 
     def set_data_retention_policy_dont_delete(
-        self,
-        workspace_id: str,
+        self, workspace_id: str
     ) -> DataRetentionPolicyDontDelete:
         """Set a workspace's data retention policy to explicitly not delete data."""
         if not valid_string_id(workspace_id):

@@ -22,12 +22,8 @@ from ..models.run_trigger import (
     SourceableChoice,
 )
 from ..models.workspace import Workspace
-from ..utils import valid_string_id
+from ..utils import _safe_str, valid_string_id
 from ._base import _Service
-
-
-def _safe_str(v: Any, default: str = "") -> str:
-    return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
 def _run_trigger_from(d: dict[str, Any], org: str | None = None) -> RunTrigger:
@@ -108,9 +104,7 @@ class RunTriggers(_Service):
             self.backfill_deprecated_sourceable(rt)
             yield rt
 
-    def create(
-        self, workspace_id: str, *, options: RunTriggerCreateOptions
-    ) -> RunTrigger:
+    def create(self, workspace_id: str, options: RunTriggerCreateOptions) -> RunTrigger:
         if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
         if options.sourceable is None:

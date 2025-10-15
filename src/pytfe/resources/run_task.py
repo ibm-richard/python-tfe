@@ -23,12 +23,8 @@ from ..models.run_task import (
     TaskEnforcementLevel,
 )
 from ..models.workspace_run_task import WorkspaceRunTask
-from ..utils import valid_string, valid_string_id
+from ..utils import _safe_str, valid_string, valid_string_id
 from ._base import _Service
-
-
-def _safe_str(v: Any, default: str = "") -> str:
-    return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
 def _run_task_from(d: dict[str, Any], org: str | None = None) -> RunTask:
@@ -146,7 +142,7 @@ class RunTasks(_Service):
         for item in self._list(path, params=params):
             yield _run_task_from(item, organization_id)
 
-    def create(self, organization_id: str, *, options: RunTaskCreateOptions) -> RunTask:
+    def create(self, organization_id: str, options: RunTaskCreateOptions) -> RunTask:
         if not valid_string_id(organization_id):
             raise InvalidOrgError()
         if not valid_string(options.name):
@@ -210,7 +206,7 @@ class RunTasks(_Service):
         r = self.t.request("GET", path, params=params)
         return _run_task_from(r.json()["data"])
 
-    def update(self, run_task_id: str, *, options: RunTaskUpdateOptions) -> RunTask:
+    def update(self, run_task_id: str, options: RunTaskUpdateOptions) -> RunTask:
         if not valid_string_id(run_task_id):
             raise InvalidRunTaskIDError("Invalid run task ID")
         if options.name is not None and not valid_string(options.name):
