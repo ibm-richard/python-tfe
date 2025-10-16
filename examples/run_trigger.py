@@ -1,5 +1,38 @@
+"""
+Terraform Cloud/Enterprise Run Trigger Management Example
+
+This example demonstrates comprehensive run trigger operations using the python-tfe SDK.
+It provides a command-line interface for managing TFE run triggers with various operations
+including create, read, delete, and advanced listing capabilities with filtering options.
+
+Prerequisites:
+    - Set TFE_TOKEN environment variable with your Terraform Cloud API token
+    - Ensure you have access to the target organization and workspaces
+
+Basic Usage:
+    python examples/run_trigger.py --help
+
+Core Operations:
+
+1. List Run Triggers (default operation):
+    python examples/run_trigger.py --org my-org --workspace-id ws-abc123
+    python examples/run_trigger.py --org my-org --workspace-id ws-abc123 --page-size 20
+
+2. Create New Run Trigger:
+    python examples/run_trigger.py --org my-org --workspace-id ws-abc123 --source-workspace-id ws-def456 --create
+
+3. Read Run Trigger Details:
+    python examples/run_trigger.py --org my-org --trigger-id rt-abc123xyz
+
+4. Delete Run Trigger:
+    python examples/run_trigger.py --org my-org --trigger-id rt-abc123xyz --delete
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
 import time
-import traceback
 
 from pytfe import TFEClient, TFEConfig
 from pytfe.models import (
@@ -11,226 +44,219 @@ from pytfe.models import (
 )
 
 
-def run_trigger_list(client, workspace_id):
-    """Test run trigger list with all options combined."""
-    print(
-        f"=== Testing Run Trigger List Comprehensive Options for workspace '{workspace_id}' ==="
-    )
-
-    print("\n1. Listing Run Triggers with options:")
-    try:
-        options = RunTriggerListOptions(
-            page_number=1,
-            page_size=10,
-            run_trigger_type=RunTriggerFilterOp.RUN_TRIGGER_INBOUND,
-            include=[
-                RunTriggerIncludeOp.RUN_TRIGGER_WORKSPACE,
-                RunTriggerIncludeOp.RUN_TRIGGER_SOURCEABLE,
-            ],
-        )
-
-        run_trigger_list = client.run_triggers.list(workspace_id, options)
-        run_triggers = list(run_trigger_list)
-        print(
-            f"   ✓ Found {len(run_triggers)} inbound run triggers with comprehensive options"
-        )
-
-        for i, trigger in enumerate(run_triggers, 1):
-            print(
-                f"   {i:2d}. Source: {trigger.sourceable_name} → Target: {trigger.workspace_name}"
-            )
-            print(f"       Trigger ID: {trigger.id}")
-            print(f"       Created: {trigger.created_at}")
-
-            # Show sourceable workspace details if available
-            if trigger.sourceable:
-                print(
-                    f"       Source Workspace: {trigger.sourceable.name} (ID: {trigger.sourceable.id})"
-                )
-                if trigger.sourceable.organization:
-                    print(
-                        f"       Source Organization: {trigger.sourceable.organization}"
-                    )
-
-            # Show target workspace details if available
-            if trigger.workspace:
-                print(
-                    f"       Target Workspace: {trigger.workspace.name} (ID: {trigger.workspace.id})"
-                )
-                if trigger.workspace.organization:
-                    print(
-                        f"       Target Organization: {trigger.workspace.organization}"
-                    )
-
-        # Also try listing outbound triggers (without include params - not supported)
-        print("\n   Listing Outbound Run Triggers:")
-        outbound_options = RunTriggerListOptions(
-            page_number=1,
-            page_size=5,
-            run_trigger_type=RunTriggerFilterOp.RUN_TRIGGER_OUTBOUND,
-        )
-
-        outbound_triggers = list(
-            client.run_triggers.list(workspace_id, outbound_options)
-        )
-        print(f"   ✓ Found {len(outbound_triggers)} outbound run triggers")
-
-        for i, trigger in enumerate(outbound_triggers, 1):
-            print(
-                f"   {i:2d}. Source: {trigger.sourceable_name} → Target: {trigger.workspace_name}"
-            )
-
-    except Exception as e:
-        print(f"   Error listing run triggers comprehensively: {e}")
-        traceback.print_exc()
-
-
-def run_trigger_create(client, workspace_id, source_workspace_id):
-    """Create a comprehensive run trigger that demonstrates all available features."""
-    print(
-        f"\n=== Creating Run Trigger from workspace '{source_workspace_id}' to '{workspace_id}' ==="
-    )
-
-    try:
-        source_workspace = Workspace(
-            id=source_workspace_id,
-            name=f"source-workspace-{int(time.time())}",
-            organization="prab-sandbox01",  # This would typically be the actual org name
-        )
-
-        options = RunTriggerCreateOptions(sourceable=source_workspace)
-
-        print("\n2. Creating run trigger with the following configuration:")
-
-        created_trigger = client.run_triggers.create(workspace_id, options)
-
-        print("\n   ✓ Successfully created run trigger!")
-        print(f"     Trigger ID: {created_trigger.id}")
-        print(f"     Source: {created_trigger.sourceable_name}")
-        print(f"     Target: {created_trigger.workspace_name}")
-        print(f"     Created At: {created_trigger.created_at}")
-
-        # Display additional details
-        if created_trigger.sourceable:
-            print(
-                f"     Source Workspace: {created_trigger.sourceable.name} (ID: {created_trigger.sourceable.id})"
-            )
-
-        if created_trigger.workspace:
-            print(
-                f"     Target Workspace: {created_trigger.workspace.name} (ID: {created_trigger.workspace.id})"
-            )
-
-        return (
-            created_trigger.id,
-            created_trigger.sourceable_name,
-            created_trigger.workspace_name,
-        )
-
-    except Exception as e:
-        print(f"   Error creating run trigger: {e}")
-        traceback.print_exc()
-        return None, None, None
-
-
-def run_trigger_read(client, trigger_id, source_name, target_name):
-    """Read and display details of a specific run trigger."""
-    try:
-        print(
-            f"\n3. Reading Run Trigger '{source_name} → {target_name}' (ID: {trigger_id})"
-        )
-        read_trigger = client.run_triggers.read(trigger_id)
-
-        print("\n   ✓ Successfully read run trigger:")
-        print(f"     Trigger ID: {read_trigger.id}")
-        print(f"     Type: {read_trigger.type}")
-        print(f"     Source: {read_trigger.sourceable_name}")
-        print(f"     Target: {read_trigger.workspace_name}")
-        print(f"     Created At: {read_trigger.created_at}")
-
-        # Show detailed workspace information
-        if read_trigger.sourceable:
-            print("     Source Workspace Details:")
-            print(f"       - Name: {read_trigger.sourceable.name}")
-            print(f"       - ID: {read_trigger.sourceable.id}")
-            if read_trigger.sourceable.organization:
-                print(f"       - Organization: {read_trigger.sourceable.organization}")
-
-        if read_trigger.workspace:
-            print("     Target Workspace Details:")
-            print(f"       - Name: {read_trigger.workspace.name}")
-            print(f"       - ID: {read_trigger.workspace.id}")
-            if read_trigger.workspace.organization:
-                print(f"       - Organization: {read_trigger.workspace.organization}")
-
-        # Show sourceable choice if available
-        if read_trigger.sourceable_choice and read_trigger.sourceable_choice.workspace:
-            choice_ws = read_trigger.sourceable_choice.workspace
-            print("     Sourceable Choice Workspace:")
-            print(f"       - Name: {choice_ws.name}")
-            print(f"       - ID: {choice_ws.id}")
-
-    except Exception as e:
-        print(f"   Error reading run trigger '{source_name} → {target_name}': {e}")
-        traceback.print_exc()
-
-
-def run_trigger_delete(client, trigger_id, source_name, target_name):
-    """Delete a specific run trigger."""
-    try:
-        print(
-            f"\n4. Deleting Run Trigger '{source_name} → {target_name}' (ID: {trigger_id})"
-        )
-        client.run_triggers.delete(trigger_id)
-        print(
-            f"\n   ✓ Successfully deleted run trigger: {source_name} → {target_name} (ID: {trigger_id})"
-        )
-        return True
-
-    except Exception as e:
-        print(f"   Error deleting run trigger '{source_name} → {target_name}': {e}")
-        traceback.print_exc()
-        return False
+def _print_header(title: str) -> None:
+    """Print a formatted header for operations."""
+    print("\n" + "=" * 80)
+    print(title)
+    print("=" * 80)
 
 
 def main():
-    """Main function to demonstrate comprehensive run trigger operations."""
-    print("Run Trigger - Comprehensive Example")
-    print("=" * 50)
-
-    # Initialize client
-    config = TFEConfig()
-    client = TFEClient(config)
-
-    # Replace these with actual workspace IDs from your organization
-    target_workspace_id = "target_workspace_id"  # Workspace that will receive triggers
-    source_workspace_id = "source_workspace_id"  # Workspace that will trigger runs
-
-    print(f"Using target workspace: {target_workspace_id}")
-    print(f"Using source workspace: {source_workspace_id}")
-    print(
-        "\nNOTE: Please replace these with actual workspace IDs from your organization"
+    parser = argparse.ArgumentParser(description="Run Trigger demo for python-tfe SDK")
+    parser.add_argument(
+        "--address", default=os.getenv("TFE_ADDRESS", "https://app.terraform.io")
     )
+    parser.add_argument("--token", default=os.getenv("TFE_TOKEN", ""))
+    parser.add_argument("--org", required=True, help="Organization name")
+    parser.add_argument(
+        "--workspace-id", help="Target workspace ID for listing/creating run triggers"
+    )
+    parser.add_argument(
+        "--source-workspace-id", help="Source workspace ID for creating run triggers"
+    )
+    parser.add_argument(
+        "--trigger-id", help="Run Trigger ID for read/delete operations"
+    )
+    parser.add_argument(
+        "--create", action="store_true", help="Create a new run trigger"
+    )
+    parser.add_argument("--delete", action="store_true", help="Delete the run trigger")
+    parser.add_argument(
+        "--filter-type",
+        choices=["inbound", "outbound"],
+        default="inbound",
+        help="Filter by trigger type: inbound or outbound",
+    )
+    parser.add_argument(
+        "--include-workspace",
+        action="store_true",
+        help="Include workspace relationships in read operations",
+    )
+    parser.add_argument(
+        "--include-sourceable",
+        action="store_true",
+        help="Include sourceable relationships in read operations",
+    )
+    parser.add_argument("--page", type=int, default=1, help="Page number for listing")
+    parser.add_argument(
+        "--page-size", type=int, default=10, help="Page size for listing"
+    )
+    args = parser.parse_args()
 
-    try:
-        # Test comprehensive list operations
-        run_trigger_list(client, target_workspace_id)
+    cfg = TFEConfig(address=args.address, token=args.token)
+    client = TFEClient(cfg)
 
-        # Create a new run trigger
-        trigger_id, source_name, target_name = run_trigger_create(
-            client, target_workspace_id, source_workspace_id
+    # 1) List run triggers for the workspace
+    if args.workspace_id:
+        _print_header("Listing run triggers")
+        try:
+            # Create options for listing run triggers with pagination and filtering
+            filter_type = (
+                RunTriggerFilterOp.RUN_TRIGGER_INBOUND
+                if args.filter_type == "inbound"
+                else RunTriggerFilterOp.RUN_TRIGGER_OUTBOUND
+            )
+
+            include_options = []
+            if args.include_workspace:
+                include_options.append(RunTriggerIncludeOp.RUN_TRIGGER_WORKSPACE)
+            if args.include_sourceable:
+                include_options.append(RunTriggerIncludeOp.RUN_TRIGGER_SOURCEABLE)
+
+            options = RunTriggerListOptions(
+                page_number=args.page,
+                page_size=args.page_size,
+                run_trigger_type=filter_type,
+                include=include_options,
+            )
+
+            filter_info = f" ({args.filter_type} triggers)"
+            include_info = (
+                f" with includes: {[opt.value for opt in include_options]}"
+                if include_options
+                else ""
+            )
+            print(
+                f"Fetching run triggers for workspace '{args.workspace_id}' (page {args.page}, size {args.page_size}){filter_info}{include_info}..."
+            )
+
+            # Get run triggers and convert to list safely
+            run_trigger_gen = client.run_triggers.list(args.workspace_id, options)
+            run_trigger_list = []
+            count = 0
+            for trigger in run_trigger_gen:
+                run_trigger_list.append(trigger)
+                count += 1
+                if count >= args.page_size * 2:  # Safety limit based on page size
+                    break
+
+            print(f"✓ Found {len(run_trigger_list)} run triggers")
+            print()
+
+            if not run_trigger_list:
+                print("No run triggers found for this workspace.")
+            else:
+                for i, trigger in enumerate(run_trigger_list, 1):
+                    print(
+                        f"{i:2d}. {trigger.sourceable_name} → {trigger.workspace_name}"
+                    )
+                    print(f"    ID: {trigger.id}")
+                    print(f"    Created: {trigger.created_at}")
+                    if trigger.sourceable and hasattr(trigger.sourceable, "id"):
+                        print(f"    Source Workspace ID: {trigger.sourceable.id}")
+                    if trigger.workspace and hasattr(trigger.workspace, "id"):
+                        print(f"    Target Workspace ID: {trigger.workspace.id}")
+                    print()
+        except Exception as e:
+            print(f"✗ Error listing run triggers: {e}")
+            return
+
+    # 2) Create a new run trigger if requested
+    if args.create and args.workspace_id and args.source_workspace_id:
+        _print_header("Creating a new run trigger")
+        try:
+            # Create a workspace object for the source
+            source_workspace = Workspace(
+                id=args.source_workspace_id,
+                name=f"source-workspace-{int(time.time())}",
+                organization=args.org,
+            )
+
+            create_options = RunTriggerCreateOptions(sourceable=source_workspace)
+
+            print(
+                f"Creating run trigger from workspace '{args.source_workspace_id}' to '{args.workspace_id}'..."
+            )
+            run_trigger = client.run_triggers.create(args.workspace_id, create_options)
+            print("✓ Successfully created run trigger!")
+            print(f"   ID: {run_trigger.id}")
+            print(f"   Source: {run_trigger.sourceable_name}")
+            print(f"   Target: {run_trigger.workspace_name}")
+            print(f"   Created: {run_trigger.created_at}")
+
+            if run_trigger.sourceable:
+                print(
+                    f"   Source Workspace: {run_trigger.sourceable.name} (ID: {run_trigger.sourceable.id})"
+                )
+            if run_trigger.workspace:
+                print(
+                    f"   Target Workspace: {run_trigger.workspace.name} (ID: {run_trigger.workspace.id})"
+                )
+            print()
+
+            args.trigger_id = (
+                run_trigger.id
+            )  # Use the created trigger for other operations
+        except Exception as e:
+            print(f"✗ Error creating run trigger: {e}")
+            return
+    elif args.create:
+        print(
+            "✗ Error: --create requires both --workspace-id and --source-workspace-id"
         )
+        return
 
-        # Read the created trigger
-        if trigger_id:
-            run_trigger_read(client, trigger_id, source_name, target_name)
+    # 3) Read run trigger details if trigger ID is provided
+    if args.trigger_id:
+        _print_header(f"Reading run trigger: {args.trigger_id}")
+        try:
+            print("Reading run trigger details...")
+            run_trigger = client.run_triggers.read(args.trigger_id)
 
-            # Clean up - delete the created trigger
-            run_trigger_delete(client, trigger_id, source_name, target_name)
+            print("✓ Successfully read run trigger!")
+            print(f"   ID: {run_trigger.id}")
+            print(f"   Type: {run_trigger.type}")
+            print(f"   Source: {run_trigger.sourceable_name}")
+            print(f"   Target: {run_trigger.workspace_name}")
+            print(f"   Created: {run_trigger.created_at}")
 
-    except Exception as e:
-        print(f"\nExample failed: {e}")
-        traceback.print_exc()
+            # Show detailed workspace information
+            if run_trigger.sourceable:
+                print("   Source Workspace Details:")
+                print(f"     - Name: {run_trigger.sourceable.name}")
+                print(f"     - ID: {run_trigger.sourceable.id}")
+                if (
+                    hasattr(run_trigger.sourceable, "organization")
+                    and run_trigger.sourceable.organization
+                ):
+                    print(f"     - Organization: {run_trigger.sourceable.organization}")
+
+            if run_trigger.workspace:
+                print("   Target Workspace Details:")
+                print(f"     - Name: {run_trigger.workspace.name}")
+                print(f"     - ID: {run_trigger.workspace.id}")
+                if (
+                    hasattr(run_trigger.workspace, "organization")
+                    and run_trigger.workspace.organization
+                ):
+                    print(f"     - Organization: {run_trigger.workspace.organization}")
+
+            print()
+        except Exception as e:
+            print(f"✗ Error reading run trigger: {e}")
+            return
+
+    # 4) Delete run trigger if requested (should be last operation)
+    if args.delete and args.trigger_id:
+        _print_header(f"Deleting run trigger: {args.trigger_id}")
+        try:
+            print(f"Deleting run trigger '{args.trigger_id}'...")
+            client.run_triggers.delete(args.trigger_id)
+            print(f"✓ Successfully deleted run trigger: {args.trigger_id}")
+            print()
+        except Exception as e:
+            print(f"✗ Error deleting run trigger: {e}")
+            return
 
 
 if __name__ == "__main__":

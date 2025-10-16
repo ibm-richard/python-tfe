@@ -109,22 +109,8 @@ def main():
             wildcard_name=args.wildcard_name,
             project_id=args.project_id,
         )
-
-        filter_info = []
-        if args.search:
-            filter_info.append(f"search='{args.search}'")
-        if args.tags:
-            filter_info.append(f"tags='{args.tags}'")
-        if args.exclude_tags:
-            filter_info.append(f"exclude-tags='{args.exclude_tags}'")
-        if args.wildcard_name:
-            filter_info.append(f"wildcard='{args.wildcard_name}'")
-        if args.project_id:
-            filter_info.append(f"project='{args.project_id}'")
-
-        filter_str = f" with filters: {', '.join(filter_info)}" if filter_info else ""
         print(
-            f"Fetching workspaces from organization '{args.org}' (page {args.page}, size {args.page_size}){filter_str}..."
+            f"Fetching workspaces from organization '{args.org}' (page {args.page}, size {args.page_size})..."
         )
 
         # Get workspaces and convert to list safely
@@ -151,10 +137,6 @@ def main():
                 print()
     except Exception as e:
         print(f"✗ Error listing workspaces: {e}")
-        print("This could be due to:")
-        print("  - Invalid token")
-        print("  - No access to the organization")
-        print("  - Network issues")
         return
 
     # 2) Create a new workspace if requested
@@ -196,11 +178,6 @@ def main():
             args.workspace_id = workspace.id
         except Exception as e:
             print(f"✗ Error creating workspace: {e}")
-            print("This could be due to:")
-            print("  - Invalid token or insufficient permissions")
-            print("  - Workspace name already exists")
-            print("  - Organization doesn't exist or no access")
-            print("  - Invalid workspace configuration")
             return
 
     # 3) Read workspace details if workspace name is provided
@@ -251,10 +228,6 @@ def main():
             print()
         except Exception as e:
             print(f"✗ Error updating workspace: {e}")
-            print("This could be due to:")
-            print("  - Invalid token or insufficient permissions")
-            print("  - Workspace doesn't exist")
-            print("  - Invalid update configuration")
             return
 
     # 5) Lock workspace if requested
@@ -288,11 +261,6 @@ def main():
             print()
         except Exception as e:
             print(f"✗ Error removing VCS connection: {e}")
-            print("This could be due to:")
-            print("  - No VCS connection exists on this workspace")
-            print("  - Invalid token or insufficient permissions")
-            print("  - Workspace doesn't exist")
-            # Don't return here since this might be expected if no VCS is connected
 
     # 8) Demonstrate tag operations
     if args.workspace_id:
