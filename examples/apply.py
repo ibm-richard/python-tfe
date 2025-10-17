@@ -34,12 +34,14 @@ def main():
         print(f"Resource Changes: {apply.resource_changes}")
         print(f"Resource Destructions: {apply.resource_destructions}")
         print(f"Resource Imports: {apply.resource_imports}")
-        print(f"Created At: {apply.created_at}")
         print(f"Status Timestamps: {apply.status_timestamps}")
         print(f"Log Read URL: {apply.log_read_url}")
-        print(
-            f"Execution Details ID: {apply.execution_details.id if apply.execution_details else 'None'}"
-        )
+
+        # Display timestamp details if available
+        if apply.status_timestamps:
+            print(f"  Queued At: {apply.status_timestamps.queued_at}")
+            print(f"  Started At: {apply.status_timestamps.started_at}")
+            print(f"  Finished At: {apply.status_timestamps.finished_at}")
     except Exception as e:
         print(f"Error reading apply: {e}")
         return 1
