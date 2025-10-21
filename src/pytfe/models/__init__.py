@@ -557,3 +557,7 @@ __all__ = [
     "PolicyKind",
     "EnforcementLevel",
 ]
+
+# Rebuild models with forward references after all models are loaded
+PolicyCheck.model_rebuild()
+PolicyCheckList.model_rebuild()
