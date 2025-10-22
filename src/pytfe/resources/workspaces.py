@@ -27,7 +27,6 @@ from ..models.data_retention_policy import (
     DataRetentionPolicyDeleteOlder,
     DataRetentionPolicyDeleteOlderSetOptions,
     DataRetentionPolicyDontDelete,
-    DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
 )
 from ..models.workspace import (
@@ -57,16 +56,13 @@ from ..models.workspace import (
     WorkspaceUpdateRemoteStateConsumersOptions,
 )
 from ..utils import (
+    _safe_str,
     valid_string,
     valid_string_id,
     validate_workspace_create_options,
     validate_workspace_update_options,
 )
 from ._base import _Service
-
-
-def _safe_str(v: Any, default: str = "") -> str:
-    return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
 def _em_safe(v: Any) -> ExecutionMode | None:
@@ -267,8 +263,7 @@ class Workspaces(_Service):
     def list(
         self,
         organization: str,
-        *,
-        options: WorkspaceListOptions,
+        options: WorkspaceListOptions | None = None,
     ) -> Iterator[Workspace]:
         # Validate parameters
         if not valid_string_id(organization):
@@ -276,66 +271,66 @@ class Workspaces(_Service):
 
         params: dict[str, Any] = {}
 
-        # Use structured options
-        if options.search:
-            params["search[name]"] = options.search
-        if options.tags:
-            params["search[tags]"] = options.tags
-        if options.exclude_tags:
-            params["search[exclude-tags]"] = options.exclude_tags
-        if options.wildcard_name:
-            params["search[wildcard-name]"] = options.wildcard_name
-        if options.project_id:
-            params["filter[project][id]"] = options.project_id
-        if options.current_run_status:
-            params["filter[current-run][status]"] = options.current_run_status
-        if options.include:
-            params["include"] = ",".join([i.value for i in options.include])
-        if options.sort:
-            params["sort"] = options.sort
-        if options.page_number:
-            params["page[number]"] = options.page_number
-        if options.page_size:
-            params["page[size]"] = options.page_size
+        if options is not None:
+            # Use structured options
+            if options.search:
+                params["search[name]"] = options.search
+            if options.tags:
+                params["search[tags]"] = options.tags
+            if options.exclude_tags:
+                params["search[exclude-tags]"] = options.exclude_tags
+            if options.wildcard_name:
+                params["search[wildcard-name]"] = options.wildcard_name
+            if options.project_id:
+                params["filter[project][id]"] = options.project_id
+            if options.current_run_status:
+                params["filter[current-run][status]"] = options.current_run_status
+            if options.include:
+                params["include"] = ",".join([i.value for i in options.include])
+            if options.sort:
+                params["sort"] = options.sort
+            if options.page_number:
+                params["page[number]"] = options.page_number
+            if options.page_size:
+                params["page[size]"] = options.page_size
 
-        # Handle tag binding filters
-        if options.tag_bindings:
-            for i, binding in enumerate(options.tag_bindings):
-                if binding.key and binding.value:
-                    params[f"search[tag-bindings][{i}][key]"] = binding.key
-                    params[f"search[tag-bindings][{i}][value]"] = binding.value
-                elif binding.key:
-                    params[f"search[tag-bindings][{i}][key]"] = binding.key
+            # Handle tag binding filters
+            if options.tag_bindings:
+                for i, binding in enumerate(options.tag_bindings):
+                    if binding.key and binding.value:
+                        params[f"search[tag-bindings][{i}][key]"] = binding.key
+                        params[f"search[tag-bindings][{i}][value]"] = binding.value
+                    elif binding.key:
+                        params[f"search[tag-bindings][{i}][key]"] = binding.key
 
         path = f"/api/v2/organizations/{organization}/workspaces"
         for item in self._list(path, params=params):
             yield _ws_from(item, organization)
 
-    def read(self, organization: str, name: str) -> Workspace:
+    def read(self, workspace: str, *, organization: str) -> Workspace:
         """Read workspace by organization and name."""
-        return self.read_with_options(
-            name, organization=organization, options=WorkspaceReadOptions()
-        )
+        return self.read_with_options(workspace, organization=organization)
 
     def read_with_options(
         self,
-        name: str,
-        organization: str,
+        workspace: str,
+        options: WorkspaceReadOptions | None = None,
         *,
-        options: WorkspaceReadOptions,
+        organization: str,
     ) -> Workspace:
         # Validate parameters
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        if not valid_string_id(name):
+        if not valid_string_id(workspace):
             raise InvalidWorkspaceValueError()
 
         params: dict[str, Any] = {}
-        if options.include:
-            params["include"] = ",".join([i.value for i in options.include])
+        if options is not None:
+            if options.include:
+                params["include"] = ",".join([i.value for i in options.include])
         r = self.t.request(
             "GET",
-            f"/api/v2/organizations/{organization}/workspaces/{name}",
+            f"/api/v2/organizations/{organization}/workspaces/{workspace}",
             params=params,
         )
         ws = _ws_from(r.json()["data"], organization)
@@ -346,21 +341,22 @@ class Workspaces(_Service):
         )
         return ws
 
-    def read_by_id(self, id: str) -> Workspace:
+    def read_by_id(self, workspace_id: str) -> Workspace:
         """Read workspace by workspace ID."""
-        return self.read_by_id_with_options(id, options=WorkspaceReadOptions())
+        return self.read_by_id_with_options(workspace_id)
 
     def read_by_id_with_options(
-        self, id: str, *, options: WorkspaceReadOptions
+        self, workspace_id: str, options: WorkspaceReadOptions | None = None
     ) -> Workspace:
         # Validate parameters
-        if not valid_string_id(id):
+        if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
 
         params: dict[str, Any] = {}
-        if options.include:
-            params["include"] = ",".join([i.value for i in options.include])
-        r = self.t.request("GET", f"/api/v2/workspaces/{id}", params=params)
+        if options is not None:
+            if options.include:
+                params["include"] = ",".join([i.value for i in options.include])
+        r = self.t.request("GET", f"/api/v2/workspaces/{workspace_id}", params=params)
         ws = _ws_from(r.json()["data"], None)
         if ws.data_retention_policy_choice is not None:
             ws.data_retention_policy = (
@@ -371,7 +367,6 @@ class Workspaces(_Service):
     def create(
         self,
         organization: str,
-        *,
         options: WorkspaceCreateOptions,
     ) -> Workspace:
         """Create a new workspace in the given organization."""
@@ -390,13 +385,13 @@ class Workspaces(_Service):
 
     # Convenience methods for org+name operations
     def update(
-        self, organization: str, name: str, *, options: WorkspaceUpdateOptions
+        self, workspace: str, options: WorkspaceUpdateOptions, *, organization: str
     ) -> Workspace:
         """Update workspace by organization and name."""
         # Validate parameters
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        if not valid_string_id(name):
+        if not valid_string_id(workspace):
             raise InvalidWorkspaceValueError()
 
         # Validate options before updating workspace
@@ -405,22 +400,26 @@ class Workspaces(_Service):
         body = self._build_workspace_payload(options, is_create=False)
         r = self.t.request(
             "PATCH",
-            f"/api/v2/organizations/{organization}/workspaces/{name}",
+            f"/api/v2/organizations/{organization}/workspaces/{workspace}",
             json_body=body,
         )
         return _ws_from(r.json()["data"], organization)
 
-    def update_by_id(self, id: str, *, options: WorkspaceUpdateOptions) -> Workspace:
+    def update_by_id(
+        self, workspace_id: str, options: WorkspaceUpdateOptions
+    ) -> Workspace:
         """Update workspace by workspace ID."""
         # Validate parameters
-        if not valid_string_id(id):
+        if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
 
         # Validate options before updating workspace
         validate_workspace_update_options(options)
 
         body = self._build_workspace_payload(options, is_create=False)
-        r = self.t.request("PATCH", f"/api/v2/workspaces/{id}", json_body=body)
+        r = self.t.request(
+            "PATCH", f"/api/v2/workspaces/{workspace_id}", json_body=body
+        )
         return _ws_from(r.json()["data"], None)
 
     def _build_workspace_payload(
@@ -575,104 +574,101 @@ class Workspaces(_Service):
 
         return body
 
-    def delete(self, organization: str, name: str) -> None:
+    def delete(self, workspace: str, *, organization: str) -> None:
         """Delete workspace by organization and workspace name."""
         # Validate parameters (similar to Go implementation)
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        if not valid_string_id(name):
+        if not valid_string_id(workspace):
             raise InvalidWorkspaceValueError()
 
         self.t.request(
-            "DELETE", f"/api/v2/organizations/{organization}/workspaces/{name}"
+            "DELETE", f"/api/v2/organizations/{organization}/workspaces/{workspace}"
         )
 
-    def delete_by_id(self, id: str) -> None:
+    def delete_by_id(self, workspace_id: str) -> None:
         """Delete workspace by workspace ID."""
         # Validate parameters (similar to Go implementation)
-        if not valid_string_id(id):
+        if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
 
-        self.t.request("DELETE", f"/api/v2/workspaces/{id}")
+        self.t.request("DELETE", f"/api/v2/workspaces/{workspace_id}")
 
-    def safe_delete(self, organization: str, name: str) -> None:
+    def safe_delete(self, workspace: str, *, organization: str) -> None:
         """Safely delete workspace by organization and name."""
         # Validate parameters (similar to Go implementation)
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        if not valid_string_id(name):
+        if not valid_string_id(workspace):
             raise InvalidWorkspaceValueError()
 
         self.t.request(
             "POST",
-            f"/api/v2/organizations/{organization}/workspaces/{name}/actions/safe-delete",
+            f"/api/v2/organizations/{organization}/workspaces/{workspace}/actions/safe-delete",
         )
 
-    def safe_delete_by_id(self, id: str) -> None:
+    def safe_delete_by_id(self, workspace_id: str) -> None:
         """Safely delete workspace by workspace ID."""
         # Validate parameters (similar to Go implementation)
-        if not valid_string_id(id):
+        if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
 
-        self.t.request("POST", f"/api/v2/workspaces/{id}/actions/safe-delete")
+        self.t.request("POST", f"/api/v2/workspaces/{workspace_id}/actions/safe-delete")
 
     def remove_vcs_connection(
         self,
-        organization: str,
-        name: str,
+        workspace: str,
         *,
-        options: WorkspaceRemoveVCSConnectionOptions,
+        organization: str | None = None,
     ) -> Workspace:
         """Remove VCS connection from workspace by organization and name."""
         # Validate parameters
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        if not valid_string_id(name):
+        if not valid_string_id(workspace):
             raise InvalidWorkspaceValueError()
+
+        # Create empty options with vcs_repo=None to remove VCS connection
+        options = WorkspaceRemoveVCSConnectionOptions(id="", vcs_repo=None)
 
         body = {
             "data": {
                 "type": "workspaces",
-                "id": options.id,
-                "attributes": {
-                    "vcs-repo": None  # Setting to None removes the VCS connection
-                },
+                "attributes": {"vcs-repo": options.vcs_repo},
             }
         }
 
         r = self.t.request(
             "PATCH",
-            f"/api/v2/organizations/{organization}/workspaces/{name}",
+            f"/api/v2/organizations/{organization}/workspaces/{workspace}",
             json_body=body,
         )
         return _ws_from(r.json()["data"], organization)
 
-    def remove_vcs_connection_by_id(
-        self, id: str, *, options: WorkspaceRemoveVCSConnectionOptions
-    ) -> Workspace:
+    def remove_vcs_connection_by_id(self, workspace_id: str) -> Workspace:
         """Remove VCS connection from workspace by workspace ID."""
         # Validate parameters
-        if not valid_string_id(id):
+        if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
+
+        # Create empty options with vcs_repo=None to remove VCS connection
+        options = WorkspaceRemoveVCSConnectionOptions(id="", vcs_repo=None)
 
         body = {
             "data": {
                 "type": "workspaces",
-                "id": options.id,
-                "attributes": {
-                    "vcs-repo": None  # Setting to None removes the VCS connection
-                },
+                "attributes": {"vcs-repo": options.vcs_repo},
             }
         }
 
         r = self.t.request(
             "PATCH",
-            f"/api/v2/workspaces/{id}",
+            f"/api/v2/workspaces/{workspace_id}",
             json_body=body,
         )
         return _ws_from(r.json()["data"], None)
 
-    def lock(self, workspace_id: str, *, options: WorkspaceLockOptions) -> Workspace:
+    def lock(self, workspace_id: str, options: WorkspaceLockOptions) -> Workspace:
         """Lock a workspace by workspace ID."""
         # Validate parameters
         if not valid_string_id(workspace_id):
@@ -716,7 +712,7 @@ class Workspaces(_Service):
         return _ws_from(r.json()["data"], None)
 
     def assign_ssh_key(
-        self, workspace_id: str, *, options: WorkspaceAssignSSHKeyOptions
+        self, workspace_id: str, options: WorkspaceAssignSSHKeyOptions
     ) -> Workspace:
         """Assign an SSH key to a workspace by workspace ID."""
         # Validate parameters
@@ -773,12 +769,12 @@ class Workspaces(_Service):
             raise InvalidWorkspaceIDError()
 
         params: dict[str, Any] = {}
-
-        # Use structured options
-        if options.page_number:
-            params["page[number]"] = options.page_number
-        if options.page_size:
-            params["page[size]"] = options.page_size
+        if options is not None:
+            # Use structured options
+            if options.page_number:
+                params["page[number]"] = options.page_number
+            if options.page_size:
+                params["page[size]"] = options.page_size
 
         path = f"/api/v2/workspaces/{workspace_id}/relationships/remote-state-consumers"
         for item in self._list(path, params=params):
@@ -843,18 +839,19 @@ class Workspaces(_Service):
         )
 
     def list_tags(
-        self, workspace_id: str, options: WorkspaceTagListOptions
+        self, workspace_id: str, options: WorkspaceTagListOptions | None = None
     ) -> Iterator[Tag]:
         if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
 
         params: dict[str, Any] = {}
-        if options.query is not None:
-            params["name"] = options.query
-        if options.page_number is not None:
-            params["page[number]"] = options.page_number
-        if options.page_size is not None:
-            params["page[size]"] = options.page_size
+        if options is not None:
+            if options.query is not None:
+                params["name"] = options.query
+            if options.page_number is not None:
+                params["page[number]"] = options.page_number
+            if options.page_size is not None:
+                params["page[size]"] = options.page_size
 
         path = f"/api/v2/workspaces/{workspace_id}/relationships/tags"
         for item in self._list(path, params=params):
@@ -1066,7 +1063,7 @@ class Workspaces(_Service):
         return data_retention_policy_choice
 
     def set_data_retention_policy(
-        self, workspace_id: str, *, options: DataRetentionPolicySetOptions
+        self, workspace_id: str, options: DataRetentionPolicySetOptions
     ) -> DataRetentionPolicy:
         """Set a workspace's data retention policy (deprecated: use set_data_retention_policy_delete_older instead)."""
         if not valid_string_id(workspace_id):
@@ -1098,7 +1095,7 @@ class Workspaces(_Service):
         return f"/api/v2/workspaces/{workspace_id}/relationships/data-retention-policy"
 
     def set_data_retention_policy_delete_older(
-        self, workspace_id: str, *, options: DataRetentionPolicyDeleteOlderSetOptions
+        self, workspace_id: str, options: DataRetentionPolicyDeleteOlderSetOptions
     ) -> DataRetentionPolicyDeleteOlder:
         """Set a workspace's data retention policy to delete data older than a certain number of days."""
         if not valid_string_id(workspace_id):
@@ -1126,7 +1123,7 @@ class Workspaces(_Service):
         )
 
     def set_data_retention_policy_dont_delete(
-        self, workspace_id: str, *, options: DataRetentionPolicyDontDeleteSetOptions
+        self, workspace_id: str
     ) -> DataRetentionPolicyDontDelete:
         """Set a workspace's data retention policy to explicitly not delete data."""
         if not valid_string_id(workspace_id):
@@ -1135,6 +1132,7 @@ class Workspaces(_Service):
         body = {
             "data": {
                 "type": "data-retention-policy-dont-deletes",
+                "attributes": {},
             }
         }
 

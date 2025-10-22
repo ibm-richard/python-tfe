@@ -22,12 +22,8 @@ from ..models.run_trigger import (
     SourceableChoice,
 )
 from ..models.workspace import Workspace
-from ..utils import valid_string_id
+from ..utils import _safe_str, valid_string_id
 from ._base import _Service
-
-
-def _safe_str(v: Any, default: str = "") -> str:
-    return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
 def _run_trigger_from(d: dict[str, Any], org: str | None = None) -> RunTrigger:
@@ -82,7 +78,7 @@ def _run_trigger_from(d: dict[str, Any], org: str | None = None) -> RunTrigger:
 
 class RunTriggers(_Service):
     def list(
-        self, workspace_id: str, options: RunTriggerListOptions
+        self, workspace_id: str, options: RunTriggerListOptions | None = None
     ) -> Iterator[RunTrigger]:
         if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
@@ -92,14 +88,15 @@ class RunTriggers(_Service):
             options.run_trigger_type, options.include or []
         )
         params: dict[str, str] = {}
-        if options.page_size is not None:
-            params["page[size]"] = str(options.page_size)
-        if options.page_number is not None:
-            params["page[number]"] = str(options.page_number)
-        if options.run_trigger_type:
-            params["filter[run-trigger][type]"] = options.run_trigger_type.value
-        if options.include:
-            params["include"] = ",".join(options.include)
+        if options is not None:
+            if options.page_size is not None:
+                params["page[size]"] = str(options.page_size)
+            if options.page_number is not None:
+                params["page[number]"] = str(options.page_number)
+            if options.run_trigger_type:
+                params["filter[run-trigger][type]"] = options.run_trigger_type.value
+            if options.include:
+                params["include"] = ",".join(options.include)
 
         path = f"/api/v2/workspaces/{workspace_id}/run-triggers"
         for item in self._list(path, params=params):

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 from ..errors import InvalidRunEventIDError, InvalidRunIDError
 from ..models.run_event import (
     RunEvent,
@@ -18,9 +20,9 @@ class RunEvents(_Service):
         """List all the run events of the given run."""
         if not valid_string_id(run_id):
             raise InvalidRunIDError()
-        params = (
-            options.model_dump(by_alias=True, exclude_none=True) if options else None
-        )
+        params: dict[str, Any] = {}
+        if options and options.include:
+            params["include"] = ",".join(options.include)
         r = self.t.request(
             "GET",
             f"/api/v2/runs/{run_id}/run-events",
@@ -45,7 +47,7 @@ class RunEvents(_Service):
 
     def read(self, run_event_id: str) -> RunEvent:
         """Read a specific run event by its ID."""
-        return self.read_with_options(run_event_id, None)
+        return self.read_with_options(run_event_id)
 
     def read_with_options(
         self, run_event_id: str, options: RunEventReadOptions | None = None
@@ -53,9 +55,9 @@ class RunEvents(_Service):
         """Read a specific run event by its ID with the given options."""
         if not valid_string_id(run_event_id):
             raise InvalidRunEventIDError()
-        params = (
-            options.model_dump(by_alias=True, exclude_none=True) if options else None
-        )
+        params: dict[str, Any] = {}
+        if options and options.include:
+            params["include"] = ",".join(options.include)
         r = self.t.request(
             "GET",
             f"/api/v2/run-events/{run_event_id}",

@@ -165,7 +165,7 @@ def main():
                     variables=variables,
                 )
 
-                new_run = client.runs.create(args.workspace_id, create_options)
+                new_run = client.runs.create(create_options)
 
                 print(f"Created new run: {new_run.id}")
                 print(f"Status: {new_run.status}")

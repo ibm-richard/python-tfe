@@ -153,7 +153,7 @@ class PolicySets(_Service):
 
     def read(self, policy_set_id: str) -> PolicySet:
         """Read a policy set by its ID."""
-        return self.read_with_options(policy_set_id, None)
+        return self.read_with_options(policy_set_id)
 
     def read_with_options(
         self, policy_set_id: str, options: PolicySetReadOptions | None = None

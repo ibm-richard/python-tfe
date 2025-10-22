@@ -23,6 +23,7 @@ class RunSource(str, Enum):
     Run_Source_API = "tfe-api"
     Run_Source_Configuration_Version = "tfe-configuration-version"
     Run_Source_UI = "tfe-ui"
+    Run_Source_Terraform_Cloud = "terraform+cloud"
 
 
 class RunStatus(str, Enum):
@@ -314,3 +315,9 @@ class RunDiscardOptions(BaseModel):
     model_config = ConfigDict(populate_by_name=True, validate_by_name=True)
 
     comment: str | None = Field(None, alias="comment")
+
+
+# Rebuild models to resolve forward references
+Run.model_rebuild()
+RunList.model_rebuild()
+OrganizationRunList.model_rebuild()

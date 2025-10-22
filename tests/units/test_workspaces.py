@@ -26,7 +26,6 @@ from src.pytfe.models.common import (
 )
 from src.pytfe.models.data_retention_policy import (
     DataRetentionPolicyDeleteOlderSetOptions,
-    DataRetentionPolicyDontDeleteSetOptions,
     DataRetentionPolicySetOptions,
 )
 from src.pytfe.models.organization import (
@@ -47,7 +46,6 @@ from src.pytfe.models.workspace import (
     WorkspaceReadOptions,
     WorkspaceRemoveRemoteStateConsumersOptions,
     WorkspaceRemoveTagsOptions,
-    WorkspaceRemoveVCSConnectionOptions,
     WorkspaceTagListOptions,
     WorkspaceUpdateOptions,
     WorkspaceUpdateRemoteStateConsumersOptions,
@@ -204,7 +202,7 @@ class TestWorkspaceOperations:
             sample_workspace_response
         )
 
-        workspace = workspaces_service.read("test-org", "test-workspace")
+        workspace = workspaces_service.read("test-workspace", organization="test-org")
 
         assert workspace.id == "ws-abc123def456"
         assert workspace.name == "test-workspace"
@@ -246,7 +244,7 @@ class TestWorkspaceOperations:
         )
 
         workspace = workspaces_service.read_with_options(
-            "test-workspace", "test-org", options=options
+            "test-workspace", options=options, organization="test-org"
         )
 
         assert workspace.id == "ws-abc123def456"
@@ -259,10 +257,10 @@ class TestWorkspaceOperations:
     def test_read_workspace_invalid_params(self, workspaces_service):
         """Test read with invalid parameters."""
         with pytest.raises(InvalidOrgError):
-            workspaces_service.read("", "workspace-name")
+            workspaces_service.read("workspace-name", organization="")
 
         with pytest.raises(InvalidWorkspaceValueError):
-            workspaces_service.read("valid-org", "")
+            workspaces_service.read("", organization="valid-org")
 
         with pytest.raises(InvalidWorkspaceIDError):
             workspaces_service.read_by_id("")
@@ -381,7 +379,7 @@ class TestWorkspaceOperations:
         )
 
         workspace = workspaces_service.update(
-            "test-org", "test-workspace", options=options
+            "test-workspace", options=options, organization="test-org"
         )
 
         assert workspace.id == "ws-abc123def456"
@@ -417,7 +415,7 @@ class TestWorkspaceOperations:
         """Test deleting workspace by name."""
         mock_transport.request.return_value = Mock()
 
-        workspaces_service.delete("test-org", "test-workspace")
+        workspaces_service.delete("test-workspace", organization="test-org")
 
         # Verify DELETE request was made
         call_args = mock_transport.request.call_args
@@ -439,7 +437,7 @@ class TestWorkspaceOperations:
         mock_transport.request.return_value = Mock()
 
         # Test safe delete by name
-        workspaces_service.safe_delete("test-org", "test-workspace")
+        workspaces_service.safe_delete("test-workspace", organization="test-org")
         call_args = mock_transport.request.call_args
         assert call_args[0][0] == "POST"
         assert "actions/safe-delete" in call_args[0][1]
@@ -461,9 +459,8 @@ class TestWorkspaceOperations:
             sample_workspace_response
         )
 
-        options = WorkspaceRemoveVCSConnectionOptions(id="ws-123")
         workspace = workspaces_service.remove_vcs_connection(
-            "test-org", "test-workspace", options=options
+            "test-workspace", organization="test-org"
         )
 
         assert workspace.id == "ws-abc123def456"
@@ -482,10 +479,7 @@ class TestWorkspaceOperations:
             sample_workspace_response
         )
 
-        options = WorkspaceRemoveVCSConnectionOptions(id="ws-123")
-        workspace = workspaces_service.remove_vcs_connection_by_id(
-            "ws-123", options=options
-        )
+        workspace = workspaces_service.remove_vcs_connection_by_id("ws-123")
 
         assert workspace.id == "ws-abc123def456"
 
@@ -1433,13 +1427,8 @@ class TestWorkspaceOperations:
         }
         mock_transport.request.return_value = mock_response
 
-        # Create options
-        options = DataRetentionPolicyDontDeleteSetOptions()
-
         # Call the method
-        result = workspaces_service.set_data_retention_policy_dont_delete(
-            "ws-123", options=options
-        )
+        result = workspaces_service.set_data_retention_policy_dont_delete("ws-123")
 
         # Verify API call
         mock_transport.request.assert_called_once()
@@ -1455,6 +1444,7 @@ class TestWorkspaceOperations:
         expected_body = {
             "data": {
                 "type": "data-retention-policy-dont-deletes",
+                "attributes": {},
             }
         }
         assert body == expected_body

@@ -1,5 +1,44 @@
+"""
+Terraform Cloud/Enterprise Run Task Management Example
+
+This example demonstrates comprehensive run task operations using the python-tfe SDK.
+It provides a command-line interface for managing TFE run tasks with various operations
+including create, read, update, delete, and advanced listing capabilities.
+
+Prerequisites:
+    - Set TFE_TOKEN environment variable with your Terraform Cloud API token
+    - Ensure you have access to the target organization
+
+Basic Usage:
+    python examples/run_task.py --help
+
+Core Operations:
+
+1. List Run Tasks (default operation):
+    python examples/run_task.py --org my-org
+    python examples/run_task.py --org my-org --page-size 20
+    python examples/run_task.py --org my-org --page 2 --page-size 10
+
+2. Create New Run Task:
+    python examples/run_task.py --org my-org --create
+
+3. Read Run Task Details:
+    python examples/run_task.py --org my-org --task-id "rt-abc123xyz"
+    python examples/run_task.py --org my-org --task-id "rt-abc123xyz" --include-workspace-tasks
+
+4. Update Run Task Settings:
+    python examples/run_task.py --org my-org --task-id "rt-abc123xyz" --update
+
+5. Delete Run Task:
+    python examples/run_task.py --org my-org --task-id "rt-abc123xyz" --delete
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
 import time
-import traceback
+from datetime import datetime
 
 from pytfe import TFEClient, TFEConfig
 from pytfe.models import (
@@ -11,220 +50,191 @@ from pytfe.models import (
 )
 
 
-def run_task_list(client, org_name):
-    """Test run task list with all options combined."""
-    print(f"=== Testing Run Task List Comprehensive Options for '{org_name}' ===")
+def _print_header(title: str) -> None:
+    """Print a formatted header for operations."""
+    print("\n" + "=" * 80)
+    print(title)
+    print("=" * 80)
 
-    # List run tasks with all options
-    print("\n1. Listing Run Tasks with All Options Combined:")
+
+def main():
+    parser = argparse.ArgumentParser(description="Run Task demo for python-tfe SDK")
+    parser.add_argument(
+        "--address", default=os.getenv("TFE_ADDRESS", "https://app.terraform.io")
+    )
+    parser.add_argument("--token", default=os.getenv("TFE_TOKEN", ""))
+    parser.add_argument("--org", required=True, help="Organization name")
+    parser.add_argument(
+        "--task-id", help="Run Task ID for read/update/delete operations"
+    )
+    parser.add_argument("--create", action="store_true", help="Create a new run task")
+    parser.add_argument(
+        "--update", action="store_true", help="Update run task settings"
+    )
+    parser.add_argument("--delete", action="store_true", help="Delete the run task")
+    parser.add_argument(
+        "--include-workspace-tasks",
+        action="store_true",
+        help="Include workspace task relationships in read operations",
+    )
+    parser.add_argument("--page", type=int, default=1, help="Page number for listing")
+    parser.add_argument(
+        "--page-size", type=int, default=10, help="Page size for listing"
+    )
+    args = parser.parse_args()
+
+    cfg = TFEConfig(address=args.address, token=args.token)
+    client = TFEClient(cfg)
+
+    # 1) List run tasks in the organization
+    _print_header("Listing run tasks")
     try:
+        # Create options for listing run tasks with pagination
         options = RunTaskListOptions(
-            page_number=1,
-            page_size=10,
+            page_number=args.page,
+            page_size=args.page_size,
             include=[
                 RunTaskIncludeOptions.RUN_TASK_WORKSPACE_TASKS,
                 RunTaskIncludeOptions.RUN_TASK_WORKSPACE,
             ],
         )
 
-        run_task_list = client.run_tasks.list(org_name, options)
-        run_tasks = list(run_task_list)
-        print(f"   ✓ Found {len(run_tasks)} run tasks with comprehensive options")
-
-        for i, task in enumerate(run_tasks, 1):
-            print(f"   {i:2d}. {task.name}")
-            print(f"       URL: {task.url}")
-            print(f"       Category: {task.category}")
-            print(f"       Enabled: {task.enabled}")
-
-            # Show description if available
-            if task.description:
-                print(f"       Description: {task.description}")
-
-            # Show global configuration details
-            if task.global_configuration:
-                gc = task.global_configuration
-                print("       Global Config:")
-                print(f"         - Enabled: {gc.enabled}")
-                print(f"         - Enforcement: {gc.enforcement_level.value}")
-                if gc.stages:
-                    stages = [stage.value for stage in gc.stages]
-                    print(f"         - Stages: {', '.join(stages)}")
-
-            # Show relationships
-            if task.organization:
-                print(f"       Organization: {task.organization.id}")
-
-            if task.workspace_run_tasks:
-                print(
-                    f"       Workspace Run Tasks: {len(task.workspace_run_tasks)} items"
-                )
-
-            if task.agent_pool:
-                print(f"       Agent Pool: {task.agent_pool.id}")
-
-    except Exception as e:
-        print(f"   Error listing run tasks comprehensively: {e}")
-        traceback.print_exc()
-
-
-def run_task_create(client, org_name):
-    """Create a comprehensive run task that demonstrates all available features."""
-    print("\n=== Creating Comprehensive Demonstration Run Task ===")
-
-    try:
-        timestamp = int(time.time())
-
-        # Create the most comprehensive example possible
-        options = RunTaskCreateOptions(
-            name=f"comprehensive-demo-{timestamp}",
-            url="https://httpbin.org/post",
-            category="task",
-            description="A comprehensive demonstration task showcasing all available features and configurations",
-            enabled=True,
-            hmac_key=f"demo-secret-key-{timestamp}",
-        )
-
-        print("\n2. Creating task with the following configuration:")
-        created_task = client.run_tasks.create(org_name, options)
-
-        print("\n   ✓ Successfully created comprehensive run task!")
-        print(f"     Task Name: {created_task.name}")
-        print(f"     Task ID: {created_task.id}")
-        print(f"     URL: {created_task.url}")
-        print(f"     Enabled: {created_task.enabled}")
-        print(f"     Description: {created_task.description}")
-
-        # Display additional details
-        if created_task.organization:
-            print(f"     Organization: {created_task.organization.id}")
-
-        if created_task.hmac_key:
-            print("     HMAC Key: ***configured***")
-
-        return created_task.id, created_task.name
-
-    except Exception as e:
-        print(f"   ✗ Error creating comprehensive run task: {e}")
-        return None, None
-
-
-def run_task_read(client, task_id, task_name):
-    """Read and display details of a specific run task."""
-    try:
-        print(f"\n4. Reading Run Task '{task_name}' (ID: {task_id})")
-        read_task = client.run_tasks.read(task_id)
-
-        print("\n   ✓ Successfully read run task:")
-        print(f"     Task Name: {read_task.name}")
-        print(f"     Task ID: {read_task.id}")
-        print(f"     URL: {read_task.url}")
-        print(f"     Category: {read_task.category}")
-        print(f"     Enabled: {read_task.enabled}")
-        print(f"     Description: {read_task.description or 'None'}")
-        print(f"     HMAC Key: {'[SET]' if read_task.hmac_key else 'None'}")
-
-        if read_task.organization:
-            print(f"     Organization: {read_task.organization.id}")
-
-    except Exception as e:
-        print(f"   ✗ Error reading run task '{task_name}': {e}")
-        traceback.print_exc()
-
-
-def run_task_read_with_options(client, task_id, task_name):
-    """Read a specific run task with include options."""
-    try:
-        options = RunTaskReadOptions(
-            include=[RunTaskIncludeOptions.RUN_TASK_WORKSPACE_TASKS]
-        )
         print(
-            f"\n5. Reading Run Task '{task_name}' (ID: {task_id}) with includes: {options}"
+            f"Fetching run tasks from organization '{args.org}' (page {args.page}, size {args.page_size})..."
         )
-        read_task_with_option = client.run_tasks.read_with_options(task_id, options)
+        # Get run tasks and convert to list safely
+        run_task_gen = client.run_tasks.list(args.org, options)
+        run_task_list = []
+        count = 0
+        for task in run_task_gen:
+            run_task_list.append(task)
+            count += 1
+            if count >= args.page_size * 2:  # Safety limit based on page size
+                break
 
-        print("\n   ✓ Successfully read run task with includes:")
-        print(f"     Task Name: {read_task_with_option.name}")
-        print(f"     Task ID: {read_task_with_option.id}")
-        print(f"     URL: {read_task_with_option.url}")
-        print(f"     Category: {read_task_with_option.category}")
+        print(f"✓ Found {len(run_task_list)} run tasks")
+        print()
 
-        if RunTaskIncludeOptions.RUN_TASK_WORKSPACE_TASKS in options.include:
-            print(
-                "     (Workspace tasks relationship data would be included in API response)"
+        if not run_task_list:
+            print("No run tasks found in this organization.")
+        else:
+            for i, task in enumerate(run_task_list, 1):
+                print(f"{i:2d}. {task.name}")
+                print(f"    ID: {task.id}")
+                print(f"    URL: {task.url}")
+                print(f"    Category: {task.category}")
+                print(f"    Enabled: {task.enabled}")
+                if task.description:
+                    print(f"    Description: {task.description}")
+                print()
+    except Exception as e:
+        print(f"✗ Error listing run tasks: {e}")
+        return
+
+    # 2) Create a new run task if requested
+    if args.create:
+        _print_header("Creating a new run task")
+        try:
+            timestamp = int(time.time())
+            task_name = f"demo-run-task-{timestamp}"
+
+            create_options = RunTaskCreateOptions(
+                name=task_name,
+                url="https://httpbin.org/post",
+                category="task",
+                description=f"Demo run task created at {datetime.now()}",
+                enabled=True,
+                hmac_key=f"demo-secret-key-{timestamp}",
             )
 
-        if RunTaskIncludeOptions.RUN_TASK_WORKSPACE in options.include:
-            print("     (Workspace data would be included in API response)")
+            print(f"Creating run task '{task_name}' in organization '{args.org}'...")
+            run_task = client.run_tasks.create(args.org, create_options)
+            print("✓ Successfully created run task!")
+            print(f"   Name: {run_task.name}")
+            print(f"   ID: {run_task.id}")
+            print(f"   URL: {run_task.url}")
+            print(f"   Category: {run_task.category}")
+            print(f"   Enabled: {run_task.enabled}")
+            print(f"   Description: {run_task.description}")
+            print(f"   HMAC Key: {'[CONFIGURED]' if run_task.hmac_key else 'None'}")
+            print()
 
-    except Exception as e:
-        print(f"   ✗ Error reading run task '{task_name}' with includes: {e}")
-        traceback.print_exc()
+            args.task_id = run_task.id  # Use the created task for other operations
+        except Exception as e:
+            print(f"✗ Error creating run task: {e}")
+            return
 
+    # 3) Read run task details if task ID is provided
+    if args.task_id:
+        _print_header(f"Reading run task: {args.task_id}")
+        try:
+            if args.include_workspace_tasks:
+                read_options = RunTaskReadOptions(
+                    include=[RunTaskIncludeOptions.RUN_TASK_WORKSPACE_TASKS]
+                )
+                run_task = client.run_tasks.read_with_options(
+                    args.task_id, read_options
+                )
+                print("Reading run task with workspace task relationships...")
+            else:
+                run_task = client.run_tasks.read(args.task_id)
+                print("Reading run task details...")
 
-def run_task_update(client, task_id):
-    """Update various fields of a specific run task."""
-    print(f"\n=== Updating Run Task (ID: {task_id}) with Various Configurations ===")
+            print("✓ Successfully read run task!")
+            print(f"   Name: {run_task.name}")
+            print(f"   ID: {run_task.id}")
+            print(f"   URL: {run_task.url}")
+            print(f"   Category: {run_task.category}")
+            print(f"   Enabled: {run_task.enabled}")
+            print(f"   Description: {run_task.description or 'None'}")
+            print(f"   HMAC Key: {'[SET]' if run_task.hmac_key else 'None'}")
 
-    try:
-        # Update basic fields
-        print("\n3. Updating basic fields (name, description, url)...")
-        update_options = RunTaskUpdateOptions(
-            name=f"updated-name-{int(time.time())}",
-            description="Updated description for the run task",
-            url="https://httpbin.org/anything",
-        )
-        updated_task = client.run_tasks.update(task_id, update_options)
+            if run_task.organization:
+                print(f"   Organization: {run_task.organization.id}")
 
-        print(" Successfully updated basic fields:")
-        print(f"   Name: {updated_task.name}")
-        print(f"   Description: {updated_task.description}")
-        print(f"   URL: {updated_task.url}")
+            if run_task.workspace_run_tasks:
+                print(
+                    f"   Workspace Run Tasks: {len(run_task.workspace_run_tasks)} items"
+                )
 
-    except Exception as e:
-        print(f" Error updating basic fields: {e}")
+            print()
+        except Exception as e:
+            print(f"✗ Error reading run task: {e}")
+            return
 
+    # 4) Update run task if requested
+    if args.update and args.task_id:
+        _print_header(f"Updating run task: {args.task_id}")
+        try:
+            update_options = RunTaskUpdateOptions(
+                name=f"updated-task-{int(time.time())}",
+                description=f"Updated run task at {datetime.now()}",
+                url="https://httpbin.org/anything",
+                enabled=True,
+            )
+            print(f"Updating run task '{args.task_id}'...")
+            updated_task = client.run_tasks.update(args.task_id, update_options)
+            print("✓ Successfully updated run task!")
+            print(f"   Name: {updated_task.name}")
+            print(f"   Description: {updated_task.description}")
+            print(f"   URL: {updated_task.url}")
+            print(f"   Enabled: {updated_task.enabled}")
+            print()
+        except Exception as e:
+            print(f"✗ Error updating run task: {e}")
+            return
 
-def run_task_delete(client, task_id, task_name):
-    """Delete a specific run task."""
-    try:
-        print(f"\n6. Deleting Run Task '{task_name}' (ID: {task_id})")
-        client.run_tasks.delete(task_id)
-        print(f"\n   ✓ Successfully deleted run task: {task_name} (ID: {task_id})")
-        return True
-
-    except Exception as e:
-        print(f"   ✗ Error deleting run task '{task_name}': {e}")
-        return False
-
-
-def main():
-    """Main function to demonstrate comprehensive run task list operations."""
-    print("Run Task List - Comprehensive Example")
-    print("=" * 50)
-
-    # Initialize client
-    config = TFEConfig()
-    client = TFEClient(config)
-
-    # Replace 'your-org-name' with an actual organization name
-    org_name = "your-org-name"
-
-    print(f"Using organization: {org_name}")
-
-    try:
-        # Test comprehensive list operations
-        run_task_list(client, org_name)
-        task_id, task_name = run_task_create(client, org_name)
-        if task_id:
-            run_task_update(client, task_id)
-        if task_id and task_name:
-            run_task_read(client, task_id, task_name)
-            run_task_read_with_options(client, task_id, task_name)
-        run_task_delete(client, task_id, task_name)
-
-    except Exception as e:
-        print(f"\n Example failed: {e}")
+    # 5) Delete run task if requested (should be last operation)
+    if args.delete and args.task_id:
+        _print_header(f"Deleting run task: {args.task_id}")
+        try:
+            print(f"Deleting run task '{args.task_id}'...")
+            client.run_tasks.delete(args.task_id)
+            print(f"✓ Successfully deleted run task: {args.task_id}")
+            print()
+        except Exception as e:
+            print(f"✗ Error deleting run task: {e}")
+            return
 
 
 if __name__ == "__main__":

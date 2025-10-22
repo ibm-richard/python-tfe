@@ -23,12 +23,8 @@ from ..models.run_task import (
     TaskEnforcementLevel,
 )
 from ..models.workspace_run_task import WorkspaceRunTask
-from ..utils import valid_string, valid_string_id
+from ..utils import _safe_str, valid_string, valid_string_id
 from ._base import _Service
-
-
-def _safe_str(v: Any, default: str = "") -> str:
-    return v if isinstance(v, str) else (str(v) if v is not None else default)
 
 
 def _run_task_from(d: dict[str, Any], org: str | None = None) -> RunTask:
@@ -195,15 +191,15 @@ class RunTasks(_Service):
         return _run_task_from(r.json()["data"], organization_id)
 
     def read(self, run_task_id: str) -> RunTask:
-        return self.read_with_options(run_task_id, RunTaskReadOptions())
+        return self.read_with_options(run_task_id)
 
     def read_with_options(
-        self, run_task_id: str, options: RunTaskReadOptions
+        self, run_task_id: str, options: RunTaskReadOptions | None = None
     ) -> RunTask:
         if not valid_string_id(run_task_id):
             raise InvalidRunTaskIDError()
         params: dict[str, str] = {}
-        if options.include:
+        if options and options.include:
             params["include"] = ",".join(options.include)
 
         path = f"/api/v2/tasks/{run_task_id}"
