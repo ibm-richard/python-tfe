@@ -32,14 +32,16 @@ def main():
 
     print("=== Python TFE Notification Configuration Example ===\n")
 
-    # Use example workspace ID (replace with your actual workspace ID)
-    workspace_id = "ws-example123456789"  # Replace with your workspace ID
-    workspace_name = "your-workspace-name"
+    # Resolve workspace and team from environment (fallback to demo placeholders)
+    workspace_id = os.getenv("TFE_WORKSPACE_ID", "ws-example123456789")
+    workspace_name = os.getenv("TFE_ORG", "your-workspace-name")
     print(f"Using workspace: {workspace_name} (ID: {workspace_id})")
 
-    # Use fake team ID for demonstration (teams not available in free plan)
-    team_id = "team-example123456789"
-    print("Using fake team ID for demonstration (teams not available in free plan)")
+    team_id = os.getenv("TFE_TEAM_ID", "team-example123456789")
+    if team_id == "team-example123456789":
+        print("Using fake team ID for demonstration (teams may require paid plan)")
+    else:
+        print(f"Using real team ID: {team_id}")
 
     try:
         # ===== List notification configurations for workspace =====
@@ -91,12 +93,16 @@ def main():
             workspace_choice = NotificationConfigurationSubscribableChoice(
                 workspace={"id": workspace_id}
             )
+            slack_url = os.getenv(
+                "WEBHOOK_URL",
+                "https://hooks.slack.com/services/YOUR_SLACK_WORKSPACE/YOUR_CHANNEL/YOUR_WEBHOOK_TOKEN",
+            )
             create_options = NotificationConfigurationCreateOptions(
                 destination_type=NotificationDestinationType.SLACK,
                 enabled=True,
                 name="Python TFE Example Slack Notification",
                 subscribable_choice=workspace_choice,
-                url="https://hooks.slack.com/services/YOUR_SLACK_WORKSPACE/YOUR_CHANNEL/YOUR_WEBHOOK_TOKEN",
+                url=slack_url,
                 triggers=[
                     NotificationTriggerType.COMPLETED,
                     NotificationTriggerType.ERRORED,
@@ -191,13 +197,18 @@ def main():
                 team_choice = NotificationConfigurationSubscribableChoice(
                     team={"id": team_id}
                 )
+                team_slack_url = os.getenv(
+                    "WEBHOOK_URL",
+                    "https://hooks.slack.com/services/YOUR_SLACK_WORKSPACE/YOUR_CHANNEL/YOUR_WEBHOOK_TOKEN",
+                )
+                # Try with minimal triggers for teams - some triggers may not be supported
                 team_create_options = NotificationConfigurationCreateOptions(
                     destination_type=NotificationDestinationType.SLACK,
                     enabled=True,
                     name="Team Slack Notifications",
                     subscribable_choice=team_choice,
-                    url="https://hooks.slack.com/services/YOUR_SLACK_WORKSPACE/YOUR_CHANNEL/YOUR_WEBHOOK_TOKEN",
-                    triggers=[NotificationTriggerType.COMPLETED],
+                    url=team_slack_url,
+                    triggers=[],  # Try with no triggers first
                 )
 
                 team_notification = client.notification_configurations.create(
@@ -218,12 +229,14 @@ def main():
                 )
 
         except Exception as e:
+            print(f"  ❌ Error in team notification operations: {e}")
             error_msg = str(e).lower()
-            if "not found" in error_msg or "team" in error_msg:
-                print("  ⚠️  Team operations not available (expected with fake team ID)")
-                print("  💡 Teams require HCP Terraform paid plan or Enterprise")
-            else:
-                print(f"  ❌ Error in team notification operations: {e}")
+            if "not found" in error_msg:
+                print("  💡 Team may not exist or token lacks team permissions")
+            elif "forbidden" in error_msg or "unauthorized" in error_msg:
+                print("  💡 Token may lack team notification permissions")
+            elif "team" in error_msg:
+                print("  💡 Team-specific error - check team settings or plan level")
 
         print()
 
@@ -238,7 +251,10 @@ def main():
                 enabled=True,
                 name="Teams Notifications",
                 subscribable_choice=workspace_choice,
-                url="https://outlook.office.com/webhook/YOUR_TENANT_ID@YOUR_TENANT_ID/IncomingWebhook/YOUR_CONNECTOR_ID/YOUR_TEAMS_WEBHOOK_TOKEN",
+                url=os.getenv(
+                    "TEAMS_WEBHOOK_URL",
+                    "https://outlook.office.com/webhook/YOUR_TENANT_ID@YOUR_TENANT_ID/IncomingWebhook/YOUR_CONNECTOR_ID/YOUR_TEAMS_WEBHOOK_TOKEN",
+                ),
                 triggers=[
                     NotificationTriggerType.ERRORED,
                     NotificationTriggerType.NEEDS_ATTENTION,
