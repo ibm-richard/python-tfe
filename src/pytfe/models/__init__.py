@@ -137,7 +137,13 @@ from .policy_types import (
     EnforcementLevel,
     PolicyKind,
 )
-from .project import Project
+from .project import (
+    Project,
+    ProjectAddTagBindingsOptions,
+    ProjectCreateOptions,
+    ProjectListOptions,
+    ProjectUpdateOptions,
+)
 
 # ── Query Runs ────────────────────────────────────────────────────────────────
 from .query_run import (
@@ -271,10 +277,31 @@ from .ssh_key import (
 
 # Variables
 from .variable import (
+    CategoryType,
     Variable,
     VariableCreateOptions,
     VariableListOptions,
     VariableUpdateOptions,
+)
+
+# ── Variable Sets ──────────────────────────────────────────────────────────────
+from .variable_set import (
+    Parent,
+    VariableSet,
+    VariableSetApplyToProjectsOptions,
+    VariableSetApplyToWorkspacesOptions,
+    VariableSetCreateOptions,
+    VariableSetIncludeOpt,
+    VariableSetListOptions,
+    VariableSetReadOptions,
+    VariableSetRemoveFromProjectsOptions,
+    VariableSetRemoveFromWorkspacesOptions,
+    VariableSetUpdateOptions,
+    VariableSetUpdateWorkspacesOptions,
+    VariableSetVariable,
+    VariableSetVariableCreateOptions,
+    VariableSetVariableListOptions,
+    VariableSetVariableUpdateOptions,
 )
 
 # Workspaces
@@ -423,6 +450,10 @@ __all__ = [
     "OrganizationCreateOptions",
     "OrganizationUpdateOptions",
     "Project",
+    "ProjectAddTagBindingsOptions",
+    "ProjectCreateOptions",
+    "ProjectListOptions",
+    "ProjectUpdateOptions",
     "DataRetentionPolicy",
     "DataRetentionPolicyChoice",
     "DataRetentionPolicyDeleteOlder",
@@ -434,6 +465,7 @@ __all__ = [
     "Tag",
     "TagBinding",
     "TagList",
+    "CategoryType",
     "Variable",
     "VariableCreateOptions",
     "VariableListOptions",
@@ -556,6 +588,23 @@ __all__ = [
     "PolicySetUpdateOptions",
     "PolicyKind",
     "EnforcementLevel",
+    # Variable Sets
+    "Parent",
+    "VariableSet",
+    "VariableSetApplyToProjectsOptions",
+    "VariableSetApplyToWorkspacesOptions",
+    "VariableSetCreateOptions",
+    "VariableSetIncludeOpt",
+    "VariableSetListOptions",
+    "VariableSetReadOptions",
+    "VariableSetRemoveFromProjectsOptions",
+    "VariableSetRemoveFromWorkspacesOptions",
+    "VariableSetUpdateOptions",
+    "VariableSetUpdateWorkspacesOptions",
+    "VariableSetVariable",
+    "VariableSetVariableCreateOptions",
+    "VariableSetVariableListOptions",
+    "VariableSetVariableUpdateOptions",
 ]
 
 # Rebuild models with forward references after all models are loaded
