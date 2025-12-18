@@ -628,7 +628,6 @@ class VariableSets(_Service):
                             {
                                 "id": ws["id"],
                                 "name": f"workspace-{ws['id']}",  # Placeholder name
-                                "organization": "placeholder-org",  # Placeholder organization
                             }
                         )
         parsed_data["workspaces"] = workspaces

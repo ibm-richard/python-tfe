@@ -125,14 +125,16 @@ def _ws_from(d: dict[str, Any]) -> Workspace:
                     DataRetentionPolicyDeleteOlder.model_validate(
                         {
                             "id": drp_data.get("id"),
-                            "delete-older-than-n-days": drp_data.get(
+                            "delete_older_than_n_days": drp_data.get(
                                 "attributes", {}
                             ).get("delete-older-than-n-days", 0),
                         }
                     )
                 )
                 data_retention_policy_choice = DataRetentionPolicyChoice.model_validate(
-                    data_retention_policy_delete_older
+                    {
+                        "data_retention_policy_delete_older": data_retention_policy_delete_older
+                    }
                 )
             elif drp_data.get("type") == "data-retention-policy-dont-deletes":
                 data_retention_policy_dont_delete = (
@@ -141,20 +143,22 @@ def _ws_from(d: dict[str, Any]) -> Workspace:
                     )
                 )
                 data_retention_policy_choice = DataRetentionPolicyChoice.model_validate(
-                    data_retention_policy_dont_delete
+                    {
+                        "data_retention_policy_dont_delete": data_retention_policy_dont_delete
+                    }
                 )
             elif drp_data.get("type") == "data-retention-policies":
                 # Legacy data retention policy
                 data_retention_policy = DataRetentionPolicy.model_validate(
                     {
                         "id": drp_data.get("id"),
-                        "delete-older-than-n-days": drp_data.get("attributes", {}).get(
+                        "delete_older_than_n_days": drp_data.get("attributes", {}).get(
                             "delete-older-than-n-days", 0
                         ),
                     }
                 )
                 data_retention_policy_choice = DataRetentionPolicyChoice.model_validate(
-                    data_retention_policy
+                    {"data_retention_policy": data_retention_policy}
                 )
 
     attr["id"] = d.get("id")
