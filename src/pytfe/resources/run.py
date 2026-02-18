@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
 from typing import Any
 
 from ..errors import (
@@ -10,14 +11,12 @@ from ..errors import (
     TerraformVersionValidForPlanOnlyError,
 )
 from ..models.run import (
-    OrganizationRunList,
     Run,
     RunApplyOptions,
     RunCancelOptions,
     RunCreateOptions,
     RunDiscardOptions,
     RunForceCancelOptions,
-    RunList,
     RunListForOrganizationOptions,
     RunListOptions,
     RunReadOptions,
@@ -27,63 +26,33 @@ from ._base import _Service
 
 
 class Runs(_Service):
-    def list(self, workspace_id: str, options: RunListOptions | None = None) -> RunList:
+    def list(
+        self, workspace_id: str, options: RunListOptions | None = None
+    ) -> Iterator[Run]:
         """List all the runs of the given workspace."""
         if not valid_string_id(workspace_id):
             raise InvalidWorkspaceIDError()
-        params = (
-            options.model_dump(by_alias=True, exclude_none=True) if options else None
-        )
-        r = self.t.request(
-            "GET",
-            f"/api/v2/workspaces/{workspace_id}/runs",
-            params=params,
-        )
-        jd = r.json()
-        items = []
-        meta = jd.get("meta", {})
-        pagination = meta.get("pagination", {})
-        for d in jd.get("data", []):
-            attrs = d.get("attributes", {})
-            attrs["id"] = d.get("id")
-            items.append(Run.model_validate(attrs))
-        return RunList(
-            items=items,
-            current_page=pagination.get("current-page"),
-            total_pages=pagination.get("total-pages"),
-            prev_page=pagination.get("prev-page"),
-            next_page=pagination.get("next-page"),
-            total_count=pagination.get("total-count"),
-        )
+        params = options.model_dump(by_alias=True) if options else {}
+        path = f"/api/v2/workspaces/{workspace_id}/runs"
+        for item in self._list(path, params=params):
+            attrs = item.get("attributes", {})
+            attrs["id"] = item.get("id")
+            yield Run.model_validate(attrs)
 
     def list_for_organization(
         self, organization: str, options: RunListForOrganizationOptions | None = None
-    ) -> OrganizationRunList:
+    ) -> Iterator[Run]:
         """List all the runs of the given organization."""
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        params = (
-            options.model_dump(by_alias=True, exclude_none=True) if options else None
-        )
-        r = self.t.request(
-            "GET",
-            f"/api/v2/organizations/{organization}/runs",
-            params=params,
-        )
-        jd = r.json()
-        items = []
-        meta = jd.get("meta", {})
-        pagination = meta.get("pagination", {})
-        for d in jd.get("data", []):
-            attrs = d.get("attributes", {})
-            attrs["id"] = d.get("id")
-            items.append(Run.model_validate(attrs))
-        return OrganizationRunList(
-            items=items,
-            current_page=pagination.get("current-page"),
-            prev_page=pagination.get("prev-page"),
-            next_page=pagination.get("next-page"),
-        )
+        path = f"/api/v2/organizations/{organization}/runs"
+        params = options.model_dump(by_alias=True, exclude_none=True) if options else {}
+        # meta = jd.get("meta", {})
+        # pagination = meta.get("pagination", {})
+        for item in self._list(path, params=params):
+            attrs = item.get("attributes", {})
+            attrs["id"] = item.get("id")
+            yield Run.model_validate(attrs)
 
     def create(self, options: RunCreateOptions) -> Run:
         """Create a new run for the given workspace."""

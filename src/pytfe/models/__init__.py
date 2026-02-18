@@ -232,7 +232,6 @@ from .reserved_tag_key import (
 
 # Runs
 from .run import (
-    OrganizationRunList,
     Run,
     RunActions,
     RunApplyOptions,
@@ -241,7 +240,6 @@ from .run import (
     RunDiscardOptions,
     RunForceCancelOptions,
     RunIncludeOpt,
-    RunList,
     RunListForOrganizationOptions,
     RunListOptions,
     RunOperation,
@@ -552,9 +550,7 @@ __all__ = [
     "RunStatusTimestamps",
     "RunVariable",
     "RunVariableAttr",
-    "RunList",
     "RunListOptions",
-    "OrganizationRunList",
     "RunListForOrganizationOptions",
     "RunCreateOptions",
     "RunReadOptions",

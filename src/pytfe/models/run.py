@@ -202,19 +202,6 @@ class RunVariableAttr(BaseModel):
     value: str = Field(..., alias="value")
 
 
-class RunList(BaseModel):
-    """RunList represents a list of runs."""
-
-    model_config = ConfigDict(populate_by_name=True, validate_by_name=True)
-
-    items: list[Run] = Field(default_factory=list)
-    current_page: int | None = None
-    prev_page: int | None = None
-    next_page: int | None = None
-    total_pages: int | None = None
-    total_count: int | None = None
-
-
 class RunListOptions(BaseModel):
     page_number: int | None = Field(default=1, alias="page[number]")
     page_size: int | None = Field(default=20, alias="page[size]")
@@ -227,20 +214,6 @@ class RunListOptions(BaseModel):
     operation: str | None = Field(default=None, alias="filter[operation]")
 
     include: list[RunIncludeOpt] | None = Field(default_factory=list, alias="include")
-
-
-class OrganizationRunList(BaseModel):
-    """
-    OrganizationRunList represents a list of runs across an organization.
-    It differs from the RunList in that it does not include a TotalCount of records in the pagination details
-    """
-
-    model_config = ConfigDict(populate_by_name=True, validate_by_name=True)
-
-    items: list[Run] = Field(default_factory=list)
-    current_page: int | None = None
-    prev_page: int | None = None
-    next_page: int | None = None
 
 
 class RunListForOrganizationOptions(BaseModel):
@@ -319,5 +292,3 @@ class RunDiscardOptions(BaseModel):
 
 # Rebuild models to resolve forward references
 Run.model_rebuild()
-RunList.model_rebuild()
-OrganizationRunList.model_rebuild()
