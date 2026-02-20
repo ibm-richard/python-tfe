@@ -9,6 +9,16 @@ from ..errors import (
     RequiredWorkspaceError,
     TerraformVersionValidForPlanOnlyError,
 )
+from ..models.apply import Apply
+from ..models.configuration_version import ConfigurationVersion
+from ..models.cost_estimate import CostEstimate
+from ..models.plan import Plan
+from ..models.policy_check import PolicyCheck
+from ..models.comment import Comment
+from ..models.run_event import RunEvent
+from ..models.task_stage import TaskStage
+from ..models.user import User
+from ..models.workspace import Workspace
 from ..models.run import (
     OrganizationRunList,
     Run,
@@ -24,6 +34,48 @@ from ..models.run import (
 )
 from ..utils import _safe_str, valid_string, valid_string_id
 from ._base import _Service
+
+def transform_relationships(relationships):
+    """
+    Transform relationships dict to map relationship names to their model objects.
+    Single IDs become model instances, multiple IDs become lists of model instances.
+    """
+    result = {}
+    
+    # Map relationship keys to their model constructors
+    model_map = {
+        'apply': Apply,
+        'configuration-version': ConfigurationVersion,
+        'cost-estimate': CostEstimate,
+        'created-by': User,
+        'confirmed-by': User,
+        'plan': Plan,
+        'workspace': Workspace,
+        'policy-checks': PolicyCheck,
+        'run-events': RunEvent,
+        'task-stages': TaskStage,
+        'comments': Comment,
+    }
+    
+    for key, value in relationships.items():
+        data = value.get('data')
+        
+        if data is None:
+            continue
+        
+        model_class = model_map.get(key)
+        if not model_class:
+            # Unknown relationship type, skip it
+            continue
+            
+        if isinstance(data, list):
+            # Multiple entries - create list of model instances
+            result[key] = [model_class(id=item['id']) for item in data if 'id' in item]
+        elif isinstance(data, dict) and 'id' in data:
+            # Single entry - create model instance
+            result[key] = model_class(id=data['id'])
+    
+    return result
 
 
 class Runs(_Service):
@@ -150,9 +202,12 @@ class Runs(_Service):
         )
         d = r.json().get("data", {})
         attrs = d.get("attributes", {})
+        relationships = transform_relationships(d.get("relationships", {}))
+        combined = {k.replace("-", "_"): v for k, v in {**attrs, **relationships}.items()}
+        
         return Run(
             id=_safe_str(d.get("id")),
-            **{k.replace("-", "_"): v for k, v in attrs.items()},
+            **combined
         )
 
     def apply(self, run_id: str, options: RunApplyOptions | None = None) -> None:
