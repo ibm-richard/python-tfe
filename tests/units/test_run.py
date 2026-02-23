@@ -85,7 +85,7 @@ class TestRuns:
             assert mock_list.call_count == 1
             call_args = mock_list.call_args
             assert call_args[0][0] == "/api/v2/workspaces/ws-123/runs"
-            
+
             # Verify params structure includes pagination and options
             params = call_args[1]["params"]
             assert "page[number]" in params
