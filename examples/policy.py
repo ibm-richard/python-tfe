@@ -94,7 +94,6 @@ def main():
 
     policy_iter = client.policies.list(args.org, list_options)
 
-
     existing_policy = None
     for policy in policy_iter:
         print(

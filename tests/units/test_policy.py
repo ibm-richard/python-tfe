@@ -84,7 +84,7 @@ class TestPolicies:
         mock_transport.request.return_value = mock_response
 
         result_iter = policies_service.list("org-123")
-        items = list(result_iter)   
+        items = list(result_iter)
 
         assert mock_transport.request.called
 

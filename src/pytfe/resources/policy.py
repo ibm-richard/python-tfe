@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Iterator
-from urllib.parse import quote
+from collections.abc import Iterator
+from typing import Any
 
 from ..errors import (
     InvalidNameError,
@@ -29,12 +29,13 @@ class Policies(_Service):
         if not valid_string_id(organization):
             raise InvalidOrgError()
 
-        path = f"/api/v2/organizations/{quote(organization)}/policies"
+        path = f"/api/v2/organizations/{organization}/policies"
         params: dict[str, Any] = {}
 
         if options:
             if getattr(options, "page_size", None):
                 params["page[size]"] = str(options.page_size)
+
         def _gen() -> Iterator[Policy]:
             for item in self._list(path, params=params):
                 attrs = item.get("attributes", {})

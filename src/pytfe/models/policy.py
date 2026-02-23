@@ -22,6 +22,17 @@ class Policy(BaseModel):
     organization: Organization | None = Field(None, alias="organization")
 
 
+class PolicyList(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, validate_by_name=True)
+
+    items: list[Policy] = Field(default_factory=list)
+    current_page: int | None = None
+    total_pages: int | None = None
+    prev_page: int | None = None
+    next_page: int | None = None
+    total_count: int | None = None
+
+
 class PolicyListOptions(BaseModel):
     model_config = ConfigDict(populate_by_name=True, validate_by_name=True)
 
