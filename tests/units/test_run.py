@@ -45,64 +45,59 @@ class TestRuns:
     def test_list_runs_success(self, runs_service):
         """Test successful list operation."""
 
-        mock_response_data = {
-            "data": [
-                {
-                    "id": "run-123",
-                    "attributes": {
-                        "status": "applied",
-                        "source": "tfe-configuration-version",
-                        "message": "Test run",
-                        "created-at": "2023-01-01T12:00:00Z",
-                        "has-changes": True,
-                        "is-destroy": False,
-                        "auto-apply": False,
-                        "plan-only": False,
-                    },
+        mock_list_data = [
+            {
+                "id": "run-123",
+                "attributes": {
+                    "status": "applied",
+                    "source": "tfe-configuration-version",
+                    "message": "Test run",
+                    "created-at": "2023-01-01T12:00:00Z",
+                    "has-changes": True,
+                    "is-destroy": False,
+                    "auto-apply": False,
+                    "plan-only": False,
                 },
-                {
-                    "id": "run-456",
-                    "attributes": {
-                        "status": "planned",
-                        "source": "tfe-ui",
-                        "message": "Another test run",
-                        "created-at": "2023-01-02T14:00:00Z",
-                        "has-changes": False,
-                        "is-destroy": True,
-                        "auto-apply": True,
-                        "plan-only": True,
-                    },
-                },
-            ],
-            "meta": {
-                "pagination": {
-                    "current-page": 1,
-                    "total-pages": 2,
-                    "prev-page": None,
-                    "next-page": 2,
-                    "total-count": 10,
-                }
             },
-        }
+            {
+                "id": "run-456",
+                "attributes": {
+                    "status": "planned",
+                    "source": "tfe-ui",
+                    "message": "Another test run",
+                    "created-at": "2023-01-02T14:00:00Z",
+                    "has-changes": False,
+                    "is-destroy": True,
+                    "auto-apply": True,
+                    "plan-only": True,
+                },
+            },
+        ]
 
-        mock_response = Mock()
-        mock_response.json.return_value = mock_response_data
+        with patch.object(runs_service, "_list") as mock_list:
+            mock_list.return_value = mock_list_data
 
-        with patch.object(runs_service, "t") as mock_transport:
-            mock_transport.request.return_value = mock_response
-
-            # Test with custom page_size
+            # Test with options
             options = RunListOptions(page_number=1, page_size=5)
             result = list(runs_service.list("ws-123", options))
 
-            # Verify request was made
-            assert mock_transport.request.called
+            # Verify _list was called with correct path
+            assert mock_list.call_count == 1
+            call_args = mock_list.call_args
+            assert call_args[0][0] == "/api/v2/workspaces/ws-123/runs"
+            
+            # Verify params structure includes pagination and options
+            params = call_args[1]["params"]
+            assert "page[number]" in params
+            assert "page[size]" in params
+            assert "include" in params
 
-            # Verify result structure - now it's a list of Run objects
+            # Verify result structure - iterator yields Run objects
             assert len(result) == 2
 
-            # Verify run objects
+            # Verify run objects were created correctly from response data
             run1 = result[0]
+            assert isinstance(run1, Run)
             assert run1.id == "run-123"
             assert run1.status == RunStatus.Run_Applied
             assert run1.source == RunSource.Run_Source_Configuration_Version
@@ -111,9 +106,11 @@ class TestRuns:
             assert run1.is_destroy is False
 
             run2 = result[1]
+            assert isinstance(run2, Run)
             assert run2.id == "run-456"
             assert run2.status == RunStatus.Run_Planned
             assert run2.source == RunSource.Run_Source_UI
+            assert run2.message == "Another test run"
             assert run2.has_changes is False
             assert run2.is_destroy is True
 
