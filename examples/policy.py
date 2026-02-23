@@ -82,7 +82,6 @@ def main():
     _print_header(f"Listing policies in organization: {args.org}")
 
     list_options = PolicyListOptions(
-        page_number=args.page,
         page_size=args.page_size,
     )
 
@@ -93,14 +92,11 @@ def main():
             PolicyKind.SENTINEL if args.kind == "sentinel" else PolicyKind.OPA
         )
 
-    policy_list = client.policies.list(args.org, list_options)
+    policy_iter = client.policies.list(args.org, list_options)
 
-    print(f"Total policies: {policy_list.total_count}")
-    print(f"Page {policy_list.current_page} of {policy_list.total_pages}")
-    print()
 
     existing_policy = None
-    for policy in policy_list.items:
+    for policy in policy_iter:
         print(
             f"- {policy.id} | {policy.name} | kind={policy.kind} | enforcement={policy.enforcement_level}"
         )

@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from typing import Any, Iterator
+from urllib.parse import quote
+
 from ..errors import (
     InvalidNameError,
     InvalidOrgError,
@@ -11,7 +14,6 @@ from ..errors import (
 from ..models.policy import (
     Policy,
     PolicyCreateOptions,
-    PolicyList,
     PolicyListOptions,
     PolicyUpdateOptions,
 )
@@ -22,35 +24,27 @@ from ._base import _Service
 class Policies(_Service):
     def list(
         self, organization: str, options: PolicyListOptions | None = None
-    ) -> PolicyList:
-        """List all the policies of the given organization."""
+    ) -> Iterator[Policy]:
+        """Iterate all the policies of the given organization."""
         if not valid_string_id(organization):
             raise InvalidOrgError()
-        params = (
-            options.model_dump(by_alias=True, exclude_none=True) if options else None
-        )
-        r = self.t.request(
-            "GET",
-            f"/api/v2/organizations/{organization}/policies",
-            params=params,
-        )
-        jd = r.json()
-        items = []
-        meta = jd.get("meta", {})
-        pagination = meta.get("pagination", {})
-        for d in jd.get("data", []):
-            attrs = d.get("attributes", {})
-            attrs["id"] = d.get("id")
-            attrs["organization"] = d.get("relationships", {}).get("organization", {})
-            items.append(Policy.model_validate(attrs))
-        return PolicyList(
-            items=items,
-            current_page=pagination.get("current-page"),
-            total_pages=pagination.get("total-pages"),
-            prev_page=pagination.get("prev-page"),
-            next_page=pagination.get("next-page"),
-            total_count=pagination.get("total-count"),
-        )
+
+        path = f"/api/v2/organizations/{quote(organization)}/policies"
+        params: dict[str, Any] = {}
+
+        if options:
+            if getattr(options, "page_size", None):
+                params["page[size]"] = str(options.page_size)
+        def _gen() -> Iterator[Policy]:
+            for item in self._list(path, params=params):
+                attrs = item.get("attributes", {})
+                attrs["id"] = item.get("id")
+                attrs["organization"] = item.get("relationships", {}).get(
+                    "organization", {}
+                )
+                yield Policy.model_validate(attrs)
+
+        return _gen()
 
     def create(self, organization: str, options: PolicyCreateOptions) -> Policy:
         """Create a new policy in the given organization."""
