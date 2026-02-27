@@ -67,7 +67,8 @@ def main():
         )
 
         try:
-            run_list = client.runs.list(args.workspace_id, options)
+            print("running inside run list")
+            run_list = list(client.runs.list(args.workspace_id, options))
         except Exception as e:
             print(f"Error listing runs: {e}")
             if args.organization:
@@ -75,23 +76,22 @@ def main():
             else:
                 return
 
-        if "run_list" in locals():
-            print(f"Total runs: {run_list.total_count}")
-            print(f"Page {run_list.current_page} of {run_list.total_pages}")
+        if "run_list" in locals() and run_list:
+            print(f"Total runs fetched: {len(run_list)}")
             print()
 
-            for run in run_list.items:
+            for run in run_list:
                 print(f"- {run.id} | status={run.status} | created={run.created_at}")
                 print(f"message: {run.message}")
                 print(f"has_changes: {run.has_changes} | is_destroy: {run.is_destroy}")
 
-            if not run_list.items:
+            if not run_list:
                 print("No runs found.")
             else:
                 # 2) Read the most recent run with details
                 _print_header("Reading most recent run details")
 
-                latest_run = run_list.items[0]
+                latest_run = run_list[0]
                 read_options = RunReadOptions(
                     include=[
                         RunIncludeOpt.RUN_PLAN,
@@ -188,10 +188,12 @@ def main():
                 status="applied,planned,errored",
             )
 
-            org_runs = client.runs.list_for_organization(args.organization, org_options)
-            print(f"Found {len(org_runs.items)} runs across organization")
+            org_runs = list(
+                client.runs.list_for_organization(args.organization, org_options)
+            )
+            print(f"Found {len(org_runs)} runs across organization")
 
-            for run in org_runs.items[:3]:  # Show first 3
+            for run in org_runs[:3]:  # Show first 3
                 print(f"- {run.id} | status={run.status}")
                 if run.workspace:
                     print(f"workspace: {run.workspace.name}")
@@ -204,15 +206,15 @@ def main():
         _print_header("Run Actions Demo (Safe Mode)")
 
         # Get runs first if not already available
-        if "run_list" not in locals() or not run_list.items:
+        if "run_list" not in locals() or not run_list:
             try:
                 options = RunListOptions(page_size=1)
-                run_list = client.runs.list(args.workspace_id, options)
+                run_list = list(client.runs.list(args.workspace_id, options))
             except Exception as e:
                 print(f"Error getting runs for actions demo: {e}")
                 return
 
-        if not run_list.items:
+        if not run_list:
             print("No runs available for actions demo")
             return
 
