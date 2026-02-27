@@ -38,7 +38,6 @@ class PolicyListOptions(BaseModel):
 
     search: str | None = Field(None, alias="search[name]")
     kind: PolicyKind | None = Field(None, alias="filter[kind]")
-    page_number: int | None = Field(None, alias="page[number]")
     page_size: int | None = Field(None, alias="page[size]")
 
 
