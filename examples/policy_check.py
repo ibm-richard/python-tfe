@@ -55,16 +55,16 @@ def main():
     )
 
     try:
-        pc_list = client.policy_checks.list(args.run_id, options)
+        pcs = list(client.policy_checks.list(args.run_id, options))
 
-        print(f"Total policy checks: {pc_list.total_count}")
-        print(f"Page {pc_list.current_page} of {pc_list.total_pages}")
+        print(f"Total policy checks: {len(pcs)}")
+        print("Page N/A of N/A")
         print()
 
-        if not pc_list.items:
+        if not pcs:
             print("No policy checks found for this run.")
         else:
-            for pc in pc_list.items:
+            for pc in pcs:
                 print(f"- ID: {pc.id}")
                 print(f"Status: {pc.status}")
                 print(f"Scope: {pc.scope}")

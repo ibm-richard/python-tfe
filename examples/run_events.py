@@ -94,17 +94,16 @@ def main():
     options = RunEventListOptions(include=include_opts if include_opts else None)
 
     try:
-        event_list = client.run_events.list(args.run_id, options)
+        events = list(client.run_events.list(args.run_id, options))
 
-        print(f"Total run events: {event_list.total_count or 'N/A'}")
-        if event_list.current_page and event_list.total_pages:
-            print(f"Page {event_list.current_page} of {event_list.total_pages}")
+        print(f"Total run events: {len(events)}")
+        print("Page N/A of N/A")
         print()
 
-        if not event_list.items:
+        if not events:
             print("No run events found for this run.")
         else:
-            for event in event_list.items:
+            for event in events:
                 print(f"Event ID: {event.id}")
                 print(f"Action: {event.action or 'N/A'}")
                 print(f"Description: {event.description or 'N/A'}")
@@ -139,7 +138,7 @@ def main():
     # 3) Summary
     _print_header("Summary")
     print(f"Successfully demonstrated run events for run: {args.run_id}")
-    print(f"Total events found: {event_list.total_count or 'N/A'}")
+    print(f"Total events found: {len(events)}")
     if args.event_id:
         print(f"Successfully read specific event: {args.event_id}")
     return 0
