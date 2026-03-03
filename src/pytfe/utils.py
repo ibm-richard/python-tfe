@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 from urllib.parse import urlparse
 
 try:
-    import slug  # type: ignore[import-not-found]
+    import slug  # type: ignore[import-untyped]
 except ImportError:
     slug = None
 

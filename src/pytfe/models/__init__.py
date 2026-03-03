@@ -291,6 +291,19 @@ from .ssh_key import (
     SSHKeyListOptions,
     SSHKeyUpdateOptions,
 )
+from .state_version import (
+    StateVersion,
+    StateVersionCreateOptions,
+    StateVersionCurrentOptions,
+    StateVersionList,
+    StateVersionListOptions,
+    StateVersionReadOptions,
+)
+from .state_version_output import (
+    StateVersionOutput,
+    StateVersionOutputsList,
+    StateVersionOutputsListOptions,
+)
 from .team import (
     OrganizationAccess,
     Team,
@@ -652,6 +665,17 @@ __all__ = [
     "VariableSetVariableCreateOptions",
     "VariableSetVariableListOptions",
     "VariableSetVariableUpdateOptions",
+    # State Versions
+    "StateVersion",
+    "StateVersionCreateOptions",
+    "StateVersionCurrentOptions",
+    "StateVersionList",
+    "StateVersionListOptions",
+    "StateVersionReadOptions",
+    # State Version Outputs
+    "StateVersionOutput",
+    "StateVersionOutputsList",
+    "StateVersionOutputsListOptions",
 ]
 
 # Rebuild models with forward references after all models are loaded
