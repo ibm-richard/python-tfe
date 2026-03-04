@@ -17,7 +17,7 @@ This test suite covers all 12 configuration version methods:
 """
 
 import io
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
 
@@ -343,9 +343,7 @@ class TestConfigurationVersionsReadWithOptions:
 class TestConfigurationVersionsUpload:
     """Test configuration versions upload functionality."""
 
-    def test_upload_packs_with_tar(
-        self, configuration_versions_service, tmp_path
-    ):
+    def test_upload_packs_with_tar(self, configuration_versions_service, tmp_path):
         """Test upload works by packing a directory to tar.gz with stdlib."""
         upload_url = "https://example.com/upload"
         directory_path = tmp_path

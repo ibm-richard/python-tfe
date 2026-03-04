@@ -366,7 +366,9 @@ def pack_contents(path: str) -> io.BytesIO:
         ValueError: If path is invalid
     """
     if not path or not os.path.isdir(path):
-        raise ValueError(f"Failed to pack directory {path}: path must be an existing directory")
+        raise ValueError(
+            f"Failed to pack directory {path}: path must be an existing directory"
+        )
 
     body = io.BytesIO()
 
@@ -375,7 +377,9 @@ def pack_contents(path: str) -> io.BytesIO:
             rel_root = os.path.relpath(root, path)
             for filename in files:
                 full_path = os.path.join(root, filename)
-                arcname = filename if rel_root == "." else os.path.join(rel_root, filename)
+                arcname = (
+                    filename if rel_root == "." else os.path.join(rel_root, filename)
+                )
                 tar.add(full_path, arcname=arcname, recursive=False)
 
     body.seek(0)
