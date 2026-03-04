@@ -667,12 +667,10 @@ __all__ = [
     "StateVersion",
     "StateVersionCreateOptions",
     "StateVersionCurrentOptions",
-    "StateVersionList",
     "StateVersionListOptions",
     "StateVersionReadOptions",
     # State Version Outputs
-    "StateVersionOutput",
-    "StateVersionOutputsList",
+    "StateVersionOutput"
     "StateVersionOutputsListOptions",
 ]
 
