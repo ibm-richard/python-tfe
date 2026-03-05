@@ -435,9 +435,9 @@ def main():
         # First, list available SSH keys
         try:
             print("Listing available SSH keys...")
-            ssh_keys = list(client.ssh_keys.list(args.org))
-            if ssh_keys:
-                ssh_key = ssh_keys[0]
+            ssh_keys = client.ssh_keys.list(args.org)
+            if ssh_keys.items:
+                ssh_key = ssh_keys.items[0]
                 print(f"Found SSH key: {ssh_key.name} (ID: {ssh_key.id})")
 
                 # Test assign SSH key

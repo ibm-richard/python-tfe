@@ -120,9 +120,7 @@ class TestNotificationConfigurations:
         self.mock_transport.request.assert_called_once()
         call_args = self.mock_transport.request.call_args
         assert call_args[0][0] == "GET"
-        assert (
-            call_args[0][1] == f"/api/v2/teams/{team_id}/notification-configurations"
-        )
+        assert call_args[0][1] == f"/api/v2/teams/{team_id}/notification-configurations"
         params = call_args[1].get("params")
         assert isinstance(params, dict)
         assert "page[number]" in params and "page[size]" in params

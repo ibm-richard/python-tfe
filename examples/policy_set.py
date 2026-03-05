@@ -163,16 +163,16 @@ def main():
         )
 
     try:
-        ps_items = list(client.policy_sets.list(args.org, list_options))
+        ps_list = client.policy_sets.list(args.org, list_options)
 
-        print(f"Total policy sets: {len(ps_items)}")
-        print("Page N/A of N/A")
+        print(f"Total policy sets: {ps_list.total_count}")
+        print(f"Page {ps_list.current_page} of {ps_list.total_pages}")
         print()
 
-        if not ps_items:
+        if not ps_list.items:
             print("No policy sets found for this organization.")
         else:
-            for ps in ps_items:
+            for ps in ps_list.items:
                 print(
                     f"- ID: {ps.id} | Name: {ps.name} | Kind: {ps.kind} | Global: {ps.Global}"
                 )

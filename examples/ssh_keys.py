@@ -99,9 +99,9 @@ def main():
     try:
         # 1. List existing SSH keys
         print("\n1. Listing SSH keys...")
-        ssh_keys = list(client.ssh_keys.list(TFE_ORG))
-        print(f"Found {len(ssh_keys)} SSH keys:")
-        for key in ssh_keys:
+        ssh_keys = client.ssh_keys.list(TFE_ORG)
+        print(f"Found {len(ssh_keys.items)} SSH keys:")
+        for key in ssh_keys.items:
             print(f"- ID: {key.id}, Name: {key.name}")
 
         # 2. Create a new SSH key
@@ -132,16 +132,16 @@ def main():
 
         # 6. Verify deletion by listing again
         print("\n6. Verifying deletion...")
-        ssh_keys_after = list(client.ssh_keys.list(TFE_ORG))
-        print(f"SSH keys after deletion: {len(ssh_keys_after)}")
+        ssh_keys_after = client.ssh_keys.list(TFE_ORG)
+        print(f"SSH keys after deletion: {len(ssh_keys_after.items)}")
 
         # 7. Demonstrate pagination with options
         print("\n7. Demonstrating pagination options...")
         list_options = SSHKeyListOptions(page_size=5, page_number=1)
-        paginated_keys = list(client.ssh_keys.list(TFE_ORG, list_options))
-        print(f"Page 1 with page size 5: {len(paginated_keys)} keys")
-        print("Total pages: N/A")
-        print(f"Total count: {len(paginated_keys)}")
+        paginated_keys = client.ssh_keys.list(TFE_ORG, list_options)
+        print(f"Page 1 with page size 5: {len(paginated_keys.items)} keys")
+        print(f"Total pages: {paginated_keys.total_pages}")
+        print(f"Total count: {paginated_keys.total_count}")
 
         print("\n SSH Keys API example completed successfully!")
 

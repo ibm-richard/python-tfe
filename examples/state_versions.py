@@ -47,25 +47,23 @@ def main():
         workspace=args.workspace,
     )
 
-    sv_list = list(client.state_versions.list(options))
+    sv_list = client.state_versions.list(options)
 
-    print(f"Total state versions: {len(sv_list)}")
-    print("Page N/A of N/A")
+    print(f"Total state versions: {sv_list.total_count}")
+    print(f"Page {sv_list.current_page} of {sv_list.total_pages}")
     print()
 
-    for sv in sv_list:
+    for sv in sv_list.items:
         print(f"- {sv.id} | status={sv.status} | created_at={sv.created_at}")
 
     # 1) List all state versions across org and workspace filters
     _print_header("Org-scoped listing via /api/v2/state-versions (first page)")
-    all_sv = list(
-        client.state_versions.list(
-            StateVersionListOptions(
-                organization=args.org, workspace=args.workspace, page_size=args.page_size
-            )
+    all_sv = client.state_versions.list(
+        StateVersionListOptions(
+            organization=args.org, workspace=args.workspace, page_size=args.page_size
         )
     )
-    for sv in all_sv:
+    for sv in all_sv.items:
         print(f"- {sv.id} | status={sv.status} | created_at={sv.created_at}")
 
     # 2) Read the current state version (with outputs included if you want)
@@ -86,14 +84,12 @@ def main():
 
     # 4) List outputs for the current state version (paged)
     _print_header("Listing outputs (current state version)")
-    outs = list(
-        client.state_versions.list_outputs(
-            current.id, options=StateVersionOutputsListOptions(page_size=50)
-        )
+    outs = client.state_versions.list_outputs(
+        current.id, options=StateVersionOutputsListOptions(page_size=50)
     )
-    if not outs:
+    if not outs.items:
         print("No outputs found.")
-    for o in outs:
+    for o in outs.items:
         # Sensitive outputs will have value = None
         print(f"- {o.name}: sensitive={o.sensitive} type={o.type} value={o.value}")
 

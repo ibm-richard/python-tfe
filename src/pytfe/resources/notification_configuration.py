@@ -6,8 +6,8 @@ This module provides CRUD operations for Terraform Cloud/Enterprise notification
 
 from __future__ import annotations
 
-from typing import Any, Iterator
-
+from collections.abc import Iterator
+from typing import Any
 
 from ..errors import (
     InvalidOrgError,
@@ -16,7 +16,6 @@ from ..errors import (
 from ..models.notification_configuration import (
     NotificationConfiguration,
     NotificationConfigurationCreateOptions,
-    NotificationConfigurationList,
     NotificationConfigurationListOptions,
     NotificationConfigurationUpdateOptions,
 )
@@ -48,7 +47,7 @@ class NotificationConfigurations(_Service):
             params.pop("page[size]", None)
             params.pop("page_number", None)
 
-        def _gen():
+        def _gen() -> Iterator[NotificationConfiguration]:
             for d in self._list(path, params=params):
                 yield self._parse_notification_configuration(d)
 

@@ -21,8 +21,15 @@ def main():
     # Initialize the TFE client
     client = TFEClient(TFEConfig.from_env())
 
-    # Replace this with your actual workspace ID
-    workspace_id = "ws-example123456789"  # Get this from your TFE workspace
+    # Resolve organization and workspace from environment variables
+    org_name = os.environ["TFE_ORG"]
+    workspace_name = os.getenv("TFE_WORKSPACE_NAME", "test-api")
+    workspace_id = os.getenv("TFE_WORKSPACE_ID", "").strip()
+    if not workspace_id:
+        print(f"Looking up workspace '{workspace_name}' in org '{org_name}'...")
+        ws = client.workspaces.read(workspace_name, organization=org_name)
+        workspace_id = ws.id
+        print(f"Resolved workspace ID: {workspace_id}")
 
     print(f"Testing all variable operations in workspace: {workspace_id}")
     print("=" * 60)
