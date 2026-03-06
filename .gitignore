@@ -137,3 +137,6 @@ protos.bin
 
 # Local RSA keys
 .local/*
+
+terraform_key*
+*.pub
