@@ -164,7 +164,7 @@ class TestConfigurationVersionsList:
 
         workspace_id = "ws-YnyXLq9fy38afEeb"
         options = ConfigurationVersionListOptions(
-            include=[ConfigVerIncludeOpt.INGRESS_ATTRIBUTES], page_size=5, page_number=1
+            include=[ConfigVerIncludeOpt.INGRESS_ATTRIBUTES], page_size=5
         )
 
         list(configuration_versions_service.list(workspace_id, options))
@@ -173,7 +173,7 @@ class TestConfigurationVersionsList:
         expected_params = {
             "include": "ingress_attributes",
             "page[size]": "5",
-            "page[number]": "1",
+            "page[number]": 1,
         }
         mock_transport.request.assert_called_with(
             "GET",

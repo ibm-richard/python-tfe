@@ -139,7 +139,6 @@ class TestAgentPoolOperations:
         mock_transport.request.return_value.json.return_value = mock_response
 
         options = AgentPoolListOptions(
-            page_number=2,
             page_size=10,
             allowed_workspace_policy=AgentPoolAllowedWorkspacePolicy.ALL_WORKSPACES,
         )
@@ -150,7 +149,7 @@ class TestAgentPoolOperations:
         mock_transport.request.assert_called_once()
         call_args = mock_transport.request.call_args
         params = call_args[1]["params"]
-        assert params["page[number]"] == 2
+        assert params["page[number]"] == 1
         assert params["page[size]"] == 10
         assert params["filter[allowed_workspace_policy]"] == "all-workspaces"
 
