@@ -42,16 +42,9 @@ class NotificationConfigurations(_Service):
             path = f"/api/v2/workspaces/{subscribable_id}/notification-configurations"
 
         params = options.to_dict() if options else None
-        if params:
-            params.pop("page[number]", None)
-            params.pop("page[size]", None)
-            params.pop("page_number", None)
 
-        def _gen() -> Iterator[NotificationConfiguration]:
-            for d in self._list(path, params=params):
-                yield self._parse_notification_configuration(d)
-
-        return _gen()
+        for d in self._list(path, params=params):
+            yield self._parse_notification_configuration(d)
 
     def create(
         self, subscribable_id: str, options: NotificationConfigurationCreateOptions

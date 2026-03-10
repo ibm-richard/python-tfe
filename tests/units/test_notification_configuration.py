@@ -145,12 +145,12 @@ class TestNotificationConfigurations:
 
         # Test with pagination
         workspace_id = "ws-123456789"
-        options = NotificationConfigurationListOptions(page_number=2, page_size=50)
+        options = NotificationConfigurationListOptions(page_size=50)
 
         result_iter = self.notifications.list(workspace_id, options)
         _ = list(result_iter)
 
-        # Verify API call with default pagination keys
+        # page_size from options is respected by _list(); page[number] is controlled by _list()
         self.mock_transport.request.assert_called_once()
         call_args = self.mock_transport.request.call_args
         assert call_args[0][0] == "GET"
@@ -162,12 +162,12 @@ class TestNotificationConfigurations:
         assert isinstance(params, dict)
         assert "page[number]" in params and "page[size]" in params
         assert params["page[number]"] == 1
-        assert params["page[size]"] == 100
+        assert params["page[size]"] == 50
 
     def test_list_invalid_id(self):
         """Test list with invalid subscribable ID."""
         with pytest.raises(InvalidOrgError):
-            self.notifications.list("")
+            list(self.notifications.list(""))
 
     def test_create_workspace_notification(self):
         """Test creating a notification configuration for a workspace."""
@@ -642,10 +642,10 @@ class TestNotificationConfigurationModels:
 
     def test_list_options_to_dict(self):
         """Test list options conversion to dictionary."""
-        options = NotificationConfigurationListOptions(page_number=2, page_size=50)
+        options = NotificationConfigurationListOptions(page_size=50)
         result = options.to_dict()
 
-        assert result == {"page[number]": 2, "page[size]": 50}
+        assert result == {"page[size]": 50}
 
     def test_create_options_to_dict(self):
         """Test create options conversion to dictionary."""
