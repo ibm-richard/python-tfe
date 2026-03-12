@@ -295,13 +295,11 @@ from .state_version import (
     StateVersion,
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
-    StateVersionList,
     StateVersionListOptions,
     StateVersionReadOptions,
 )
 from .state_version_output import (
     StateVersionOutput,
-    StateVersionOutputsList,
     StateVersionOutputsListOptions,
 )
 from .team import (
@@ -670,7 +668,7 @@ __all__ = [
     "StateVersionListOptions",
     "StateVersionReadOptions",
     # State Version Outputs
-    "StateVersionOutput"
+    "StateVersionOutput",
     "StateVersionOutputsListOptions",
 ]
 
