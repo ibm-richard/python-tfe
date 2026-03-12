@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import io
+import os
 import re
+import tarfile
 import time
 from collections.abc import Callable, Mapping
 from typing import TYPE_CHECKING, Any
@@ -14,11 +16,6 @@ if TYPE_CHECKING:
     )
 
 from urllib.parse import urlparse
-
-try:
-    import slug  # type: ignore[import-not-found]
-except ImportError:
-    slug = None
 
 from .errors import (
     InvalidNameError,
@@ -366,26 +363,25 @@ def pack_contents(path: str) -> io.BytesIO:
         BytesIO buffer containing the tar.gz archive
 
     Raises:
-        ImportError: If go-slug is not available
         ValueError: If path is invalid
     """
-    if slug is None:
-        raise ImportError(
-            "go-slug package is required for packing configuration files. "
-            "Install it with: pip install go-slug"
+    if not path or not os.path.isdir(path):
+        raise ValueError(
+            f"Failed to pack directory {path}: path must be an existing directory"
         )
 
     body = io.BytesIO()
 
-    # Use go-slug to pack the configuration directory
-    # This handles .terraformignore and other Terraform-specific behaviors
-    packer = slug.Packer()
-    _, err = packer.pack(path, body)
+    with tarfile.open(fileobj=body, mode="w:gz") as tar:
+        for root, _, files in os.walk(path):
+            rel_root = os.path.relpath(root, path)
+            for filename in files:
+                full_path = os.path.join(root, filename)
+                arcname = (
+                    filename if rel_root == "." else os.path.join(rel_root, filename)
+                )
+                tar.add(full_path, arcname=arcname, recursive=False)
 
-    if err:
-        raise ValueError(f"Failed to pack directory {path}: {err}")
-
-    # Reset buffer position to beginning for reading
     body.seek(0)
     return body
 
