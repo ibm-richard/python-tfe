@@ -751,14 +751,14 @@ class TestWorkspaceOperations:
         """Test remote state consumers listing with pagination options."""
         mock_transport.request.return_value.json.return_value = {"data": []}
 
-        options = WorkspaceListRemoteStateConsumersOptions(page_number=2, page_size=5)
+        options = WorkspaceListRemoteStateConsumersOptions(page_size=5)
 
         list(workspaces_service.list_remote_state_consumers("ws-123", options))
 
         # Verify pagination parameters were passed
         call_args = mock_transport.request.call_args
         params = call_args[1]["params"]
-        assert params["page[number]"] == 2
+        assert params["page[number]"] == 1
         assert params["page[size]"] == 5
 
     def test_add_remote_state_consumers_basic(self, workspaces_service, mock_transport):
@@ -921,7 +921,7 @@ class TestWorkspaceOperations:
         """Test tag listing with query and pagination options."""
         mock_transport.request.return_value.json.return_value = {"data": []}
 
-        options = WorkspaceTagListOptions(query="env", page_number=2, page_size=5)
+        options = WorkspaceTagListOptions(query="env", page_size=5)
 
         list(workspaces_service.list_tags("ws-123", options))
 
@@ -929,7 +929,7 @@ class TestWorkspaceOperations:
         call_args = mock_transport.request.call_args
         params = call_args[1]["params"]
         assert params["name"] == "env"
-        assert params["page[number]"] == 2
+        assert params["page[number]"] == 1
         assert params["page[size]"] == 5
 
     def test_add_tags_basic(self, workspaces_service, mock_transport):

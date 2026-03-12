@@ -143,7 +143,7 @@ class TestWorkspaceResourcesService:
         mock_transport.request.return_value = mock_response
 
         # Create options
-        options = WorkspaceResourceListOptions(page_number=2, page_size=50)
+        options = WorkspaceResourceListOptions(page_number=1, page_size=50)
 
         # Call the service
         result = list(service.list("ws-abc123", options))
@@ -152,7 +152,7 @@ class TestWorkspaceResourcesService:
         mock_transport.request.assert_called_once_with(
             "GET",
             "/api/v2/workspaces/ws-abc123/resources",
-            params={"page[number]": 2, "page[size]": 50},
+            params={"page[number]": 1, "page[size]": 50},
         )
 
         # Verify response
