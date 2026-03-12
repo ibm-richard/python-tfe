@@ -1,6 +1,7 @@
 """Variable Set resource implementation for the Python TFE SDK."""
 
 import builtins
+from collections.abc import Iterator
 from typing import Any
 
 from .._http import HTTPTransport
@@ -48,7 +49,7 @@ class VariableSets(_Service):
         self,
         organization: str,
         options: VariableSetListOptions | None = None,
-    ) -> list[VariableSet]:
+    ) -> Iterator[VariableSet]:
         """List all variable sets within an organization.
 
         Args:
@@ -56,8 +57,7 @@ class VariableSets(_Service):
             options: Optional parameters for filtering and pagination
 
         Returns:
-            List of VariableSet objects
-
+            Iterator of VariableSet objects within the organization
         Raises:
             ValueError: If organization name is invalid
             TFEError: If API request fails
@@ -69,8 +69,6 @@ class VariableSets(_Service):
         params: dict[str, str] = {}
 
         if options:
-            if options.page_number:
-                params["page[number]"] = str(options.page_number)
             if options.page_size:
                 params["page[size]"] = str(options.page_size)
             if options.query:
@@ -78,16 +76,14 @@ class VariableSets(_Service):
             if options.include:
                 params["include"] = ",".join([opt.value for opt in options.include])
 
-        response = self.t.request("GET", path, params=params)
-        data = response.json()
-
-        return self._parse_variable_sets_response(data)
+        for item in self._list(path, params=params):
+            yield self._parse_variable_set(item)
 
     def list_for_workspace(
         self,
         workspace_id: str,
         options: VariableSetListOptions | None = None,
-    ) -> builtins.list[VariableSet]:
+    ) -> Iterator[VariableSet]:
         """List variable sets associated with a workspace.
 
         Args:
@@ -95,7 +91,7 @@ class VariableSets(_Service):
             options: Optional parameters for filtering and pagination
 
         Returns:
-            List of VariableSet objects associated with the workspace
+            Iterator of VariableSet objects associated with the workspace
 
         Raises:
             ValueError: If workspace_id is invalid
@@ -108,8 +104,6 @@ class VariableSets(_Service):
         params: dict[str, str] = {}
 
         if options:
-            if options.page_number:
-                params["page[number]"] = str(options.page_number)
             if options.page_size:
                 params["page[size]"] = str(options.page_size)
             if options.query:
@@ -117,16 +111,14 @@ class VariableSets(_Service):
             if options.include:
                 params["include"] = ",".join([opt.value for opt in options.include])
 
-        response = self.t.request("GET", path, params=params)
-        data = response.json()
-
-        return self._parse_variable_sets_response(data)
+        for item in self._list(path, params=params):
+            yield self._parse_variable_set(item)
 
     def list_for_project(
         self,
         project_id: str,
         options: VariableSetListOptions | None = None,
-    ) -> builtins.list[VariableSet]:
+    ) -> Iterator[VariableSet]:
         """List variable sets associated with a project.
 
         Args:
@@ -134,7 +126,7 @@ class VariableSets(_Service):
             options: Optional parameters for filtering and pagination
 
         Returns:
-            List of VariableSet objects associated with the project
+            Iterator of VariableSet objects associated with the project
 
         Raises:
             ValueError: If project_id is invalid
@@ -147,8 +139,6 @@ class VariableSets(_Service):
         params: dict[str, str] = {}
 
         if options:
-            if options.page_number:
-                params["page[number]"] = str(options.page_number)
             if options.page_size:
                 params["page[size]"] = str(options.page_size)
             if options.query:
@@ -156,10 +146,8 @@ class VariableSets(_Service):
             if options.include:
                 params["include"] = ",".join([opt.value for opt in options.include])
 
-        response = self.t.request("GET", path, params=params)
-        data = response.json()
-
-        return self._parse_variable_sets_response(data)
+        for item in self._list(path, params=params):
+            yield self._parse_variable_set(item)
 
     def create(
         self,
@@ -714,7 +702,7 @@ class VariableSetVariables(_Service):
         self,
         variable_set_id: str,
         options: VariableSetVariableListOptions | None = None,
-    ) -> list[VariableSetVariable]:
+    ) -> Iterator[VariableSetVariable]:
         """List all variables in a variable set.
 
         Args:
@@ -722,7 +710,7 @@ class VariableSetVariables(_Service):
             options: Optional parameters for pagination
 
         Returns:
-            List of VariableSetVariable objects
+            Iterator of VariableSetVariable objects
 
         Raises:
             ValueError: If variable_set_id is invalid
@@ -735,19 +723,11 @@ class VariableSetVariables(_Service):
         params: dict[str, str] = {}
 
         if options:
-            if options.page_number:
-                params["page[number]"] = str(options.page_number)
             if options.page_size:
                 params["page[size]"] = str(options.page_size)
 
-        response = self.t.request("GET", path, params=params)
-        data = response.json()
-
-        variables = []
-        for item in data.get("data", []):
-            variables.append(self._parse_variable_set_variable(item))
-
-        return variables
+        for item in self._list(path, params=params):
+            yield self._parse_variable_set_variable(item)
 
     def create(
         self,
