@@ -33,7 +33,6 @@ def main():
     parser.add_argument("--workspace-id", required=True, help="Workspace ID")
     parser.add_argument("--download", help="Path to save downloaded current state")
     parser.add_argument("--upload", help="Path to a .tfstate (or JSON state) to upload")
-    parser.add_argument("--page", type=int, default=1)
     parser.add_argument("--page-size", type=int, default=10)
     args = parser.parse_args()
 
@@ -41,19 +40,16 @@ def main():
     client = TFEClient(cfg)
 
     options = StateVersionListOptions(
-        page_number=args.page,
         page_size=args.page_size,
         organization=args.org,
         workspace=args.workspace,
     )
 
-    sv_list = client.state_versions.list(options)
-
-    print(f"Total state versions: {sv_list.total_count}")
-    print(f"Page {sv_list.current_page} of {sv_list.total_pages}")
+    sv_list = list(client.state_versions.list(options))
+    print(f"Total state versions: {len(sv_list)}")
     print()
 
-    for sv in sv_list.items:
+    for sv in sv_list:
         print(f"- {sv.id} | status={sv.status} | created_at={sv.created_at}")
 
     # 1) List all state versions across org and workspace filters
@@ -63,7 +59,7 @@ def main():
             organization=args.org, workspace=args.workspace, page_size=args.page_size
         )
     )
-    for sv in all_sv.items:
+    for sv in all_sv:
         print(f"- {sv.id} | status={sv.status} | created_at={sv.created_at}")
 
     # 2) Read the current state version (with outputs included if you want)

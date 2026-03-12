@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
 from typing import Any
 from urllib.parse import urlencode
 
@@ -10,7 +11,6 @@ from ..models.state_version import (
     StateVersion,
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
-    StateVersionList,
     StateVersionListOptions,
     StateVersionReadOptions,
 )
@@ -69,28 +69,19 @@ class StateVersions(_Service):
             return ""
         return "?" + urlencode(clean, doseq=True)
 
-    def list(self, options: StateVersionListOptions | None = None) -> StateVersionList:
+    def list(
+        self, options: StateVersionListOptions | None = None
+    ) -> Iterator[StateVersion]:
         """
         GET /state-versions
         Accepts filters for organization and workspace and standard pagination.
         """
         params = options.model_dump(by_alias=True, exclude_none=True) if options else {}
         path = f"/api/v2/state-versions{self._encode_query(params)}"
-        r = self.t.request("GET", path)
-        jd = r.json()
-        # Expecting JSON:API list. Normalize to models.
-        items = []
-        meta = jd.get("meta", {})
-        for d in jd.get("data", []):
+        for d in self._list(path, params=params):
             attrs = d.get("attributes", {})
             attrs["id"] = d.get("id")
-            items.append(StateVersion.model_validate(attrs))
-        return StateVersionList(
-            items=items,
-            current_page=meta.get("pagination", {}).get("current-page"),
-            total_pages=meta.get("pagination", {}).get("total-pages"),
-            total_count=meta.get("pagination", {}).get("total-count"),
-        )
+            yield StateVersion.model_validate(attrs)
 
     def read(self, state_version_id: str) -> StateVersion:
         """Read a state version by ID."""

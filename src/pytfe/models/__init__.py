@@ -294,7 +294,6 @@ from .state_version import (
     StateVersion,
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
-    StateVersionList,
     StateVersionListOptions,
     StateVersionReadOptions,
 )
@@ -667,7 +666,6 @@ __all__ = [
     "StateVersion",
     "StateVersionCreateOptions",
     "StateVersionCurrentOptions",
-    "StateVersionList",
     "StateVersionListOptions",
     "StateVersionReadOptions",
     # State Version Outputs
