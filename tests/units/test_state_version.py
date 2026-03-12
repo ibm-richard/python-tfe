@@ -287,31 +287,29 @@ class TestStateVersions:
         )
         assert result == b"{}"
 
-    def test_list_outputs_success(self, state_versions_service, mock_transport):
-        """Test successful list_outputs() operation."""
-        mock_response = Mock()
-        mock_response.json.return_value = {
-            "data": [
-                {
-                    "id": "wsout-1",
-                    "attributes": {
-                        "name": "vpc_id",
-                        "sensitive": False,
-                        "type": "string",
-                        "value": "vpc-123",
-                    },
-                }
-            ],
-        }
-        mock_transport.request.return_value = mock_response
+    def test_list_outputs_success(self, state_versions_service):
+        """Test successful list_outputs() iterator operation."""
+        mock_items = [
+            {
+                "id": "wsout-1",
+                "attributes": {
+                    "name": "vpc_id",
+                    "sensitive": False,
+                    "type": "string",
+                    "value": "vpc-123",
+                },
+            }
+        ]
 
-        options = StateVersionOutputsListOptions(page_number=1, page_size=5)
-        result = state_versions_service.list_outputs("sv-outputs-1", options)
+        with patch.object(state_versions_service, "_list") as mock_list:
+            mock_list.return_value = mock_items
 
-        mock_transport.request.assert_called_once_with(
-            "GET",
-            "/api/v2/state-versions/sv-outputs-1/outputs",
-            params={"page[number]": 1, "page[size]": 5},
-        )
-        assert len(result.items) == 1
-        assert result.items[0].id == "wsout-1"
+            options = StateVersionOutputsListOptions(page_size=5)
+            result = list(state_versions_service.list_outputs("sv-outputs-1", options))
+
+            mock_list.assert_called_once_with(
+                "/api/v2/state-versions/sv-outputs-1/outputs",
+                params={"page[size]": 5},
+            )
+            assert len(result) == 1
+            assert result[0].id == "wsout-1"

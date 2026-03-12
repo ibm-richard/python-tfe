@@ -16,7 +16,6 @@ from ..models.state_version import (
 )
 from ..models.state_version_output import (
     StateVersionOutput,
-    StateVersionOutputsList,
     StateVersionOutputsListOptions,
 )
 from ..utils import looks_like_workspace_id, valid_string_id
@@ -254,40 +253,24 @@ class StateVersions(_Service):
         self,
         state_version_id: str,
         options: StateVersionOutputsListOptions | None = None,
-    ) -> StateVersionOutputsList:
+    ) -> Iterator[StateVersionOutput]:
         """List outputs for a given state version (paged)."""
         if not valid_string_id(state_version_id):
             raise ValueError("invalid state version id")
 
         params: dict[str, Any] = {}
         if options:
-            if options.page_number is not None:
-                params["page[number]"] = options.page_number
             if options.page_size is not None:
                 params["page[size]"] = options.page_size
 
-        r = self.t.request(
-            "GET", f"/api/v2/state-versions/{state_version_id}/outputs", params=params
-        )
-        data = r.json()
+        path = f"/api/v2/state-versions/{state_version_id}/outputs"
 
-        items: list[StateVersionOutput] = []
-        for item in data.get("data", []):
-            attr = item.get("attributes", {}) or {}
-            items.append(
-                StateVersionOutput(
-                    id=_safe_str(item.get("id")),
-                    **{k.replace("-", "_"): v for k, v in attr.items()},
-                )
+        for d in self._list(path, params=params):
+            attr = d.get("attributes", {}) or {}
+            yield StateVersionOutput(
+                id=_safe_str(d.get("id")),
+                **{k.replace("-", "_"): v for k, v in attr.items()},
             )
-
-        meta = data.get("meta", {}).get("pagination", {}) or {}
-        return StateVersionOutputsList(
-            items=items,
-            current_page=meta.get("current-page"),
-            total_pages=meta.get("total-pages"),
-            total_count=meta.get("total-count"),
-        )
 
     # ----------------------------
     # TFE-only backing data actions

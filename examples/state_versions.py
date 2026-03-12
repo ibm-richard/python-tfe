@@ -80,14 +80,29 @@ def main():
 
     # 4) List outputs for the current state version (paged)
     _print_header("Listing outputs (current state version)")
-    outs = client.state_versions.list_outputs(
-        current.id, options=StateVersionOutputsListOptions(page_size=50)
+    outs = list(
+        client.state_versions.list_outputs(
+            current.id, options=StateVersionOutputsListOptions(page_size=50)
+        )
     )
-    if not outs.items:
+    if not outs:
         print("No outputs found.")
-    for o in outs.items:
+    for o in outs:
         # Sensitive outputs will have value = None
         print(f"- {o.name}: sensitive={o.sensitive} type={o.type} value={o.value}")
+
+    if args.workspace_id:
+        # 4b) List outputs for the current state version via workspace endpoint
+        _print_header("Listing outputs via workspace endpoint")
+        outs2 = list(
+            client.state_version_outputs.read_current(
+                args.workspace_id, options=StateVersionOutputsListOptions(page_size=50)
+            )
+        )
+        if not outs2:
+            print("No outputs found.")
+        for o in outs2:
+            print(f"- {o.name}: sensitive={o.sensitive} type={o.type} value={o.value}")
 
     # 5) (Optional) Upload a new state file
     if args.upload:
