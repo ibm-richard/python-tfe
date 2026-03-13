@@ -14,25 +14,9 @@ if TYPE_CHECKING:
         OAuthClientCreateOptions,
         OAuthClientRemoveProjectsOptions,
     )
+    from .models.workspace import VCSRepoOptions
 
 from urllib.parse import urlparse
-
-from .errors import (
-    InvalidNameError,
-    RequiredAgentModeError,
-    RequiredAgentPoolIDError,
-    RequiredNameError,
-    UnsupportedBothTagsRegexAndFileTriggersEnabledError,
-    UnsupportedBothTagsRegexAndTriggerPatternsError,
-    UnsupportedBothTagsRegexAndTriggerPrefixesError,
-    UnsupportedBothTriggerPatternsAndPrefixesError,
-    UnsupportedOperationsError,
-)
-from .models.workspace import (
-    VCSRepo,
-    WorkspaceCreateOptions,
-    WorkspaceUpdateOptions,
-)
 
 _STRING_ID_PATTERN = re.compile(r"^[^/\s]+$")
 _WS_ID_RE = re.compile(r"^ws-[A-Za-z0-9]+$")
@@ -123,92 +107,9 @@ def is_valid_workspace_name(name: str | None) -> bool:
     return True
 
 
-def has_tags_regex_defined(vcs_repo: VCSRepo | None) -> bool:
+def has_tags_regex_defined(vcs_repo: VCSRepoOptions | None) -> bool:
     """Check if VCS repo has tags regex defined."""
     return vcs_repo is not None and valid_string(vcs_repo.tags_regex)
-
-
-def validate_workspace_create_options(options: WorkspaceCreateOptions) -> None:
-    """
-    Validate workspace create options for proper API usage.
-    Raises specific validation errors if validation fails.
-    """
-    # Check required name
-    if not valid_string(options.name):
-        raise RequiredNameError()
-
-    # Check name format
-    if not is_valid_workspace_name(options.name):
-        raise InvalidNameError()
-
-    # Check operations and execution mode conflict
-    if options.operations is not None and options.execution_mode is not None:
-        raise UnsupportedOperationsError()
-
-    # Check agent mode requirements
-    if options.agent_pool_id is not None and (
-        options.execution_mode is None or options.execution_mode != "agent"
-    ):
-        raise RequiredAgentModeError()
-
-    if (
-        options.agent_pool_id is None
-        and options.execution_mode is not None
-        and options.execution_mode == "agent"
-    ):
-        raise RequiredAgentPoolIDError()
-
-    # Check trigger patterns and prefixes conflict
-    if len(options.trigger_prefixes) > 0 and len(options.trigger_patterns) > 0:
-        raise UnsupportedBothTriggerPatternsAndPrefixesError()
-
-    # Check tags regex conflicts
-    if has_tags_regex_defined(options.vcs_repo):
-        if len(options.trigger_patterns) > 0:
-            raise UnsupportedBothTagsRegexAndTriggerPatternsError()
-
-        if len(options.trigger_prefixes) > 0:
-            raise UnsupportedBothTagsRegexAndTriggerPrefixesError()
-
-        if options.file_triggers_enabled is not None and options.file_triggers_enabled:
-            raise UnsupportedBothTagsRegexAndFileTriggersEnabledError()
-
-
-def validate_workspace_update_options(options: WorkspaceUpdateOptions) -> None:
-    """
-    Validate workspace update options for proper API usage.
-    Raises specific validation errors if validation fails.
-    """
-    # Check name format if provided
-    if options.name is not None and not is_valid_workspace_name(options.name):
-        raise InvalidNameError()
-
-    # Check operations and execution mode conflict
-    if options.operations is not None and options.execution_mode is not None:
-        raise UnsupportedOperationsError()
-
-    # Check agent mode requirements
-    if (
-        options.agent_pool_id is None
-        and options.execution_mode is not None
-        and options.execution_mode == "agent"
-    ):
-        raise RequiredAgentPoolIDError()
-
-    # Check trigger patterns and prefixes conflict
-    if len(options.trigger_prefixes) > 0 and len(options.trigger_patterns) > 0:
-        raise UnsupportedBothTriggerPatternsAndPrefixesError()
-
-    # Check tags regex conflicts
-    if has_tags_regex_defined(options.vcs_repo):
-        if len(options.trigger_patterns) > 0:
-            raise UnsupportedBothTagsRegexAndTriggerPatternsError()
-
-        if len(options.trigger_prefixes) > 0:
-            raise UnsupportedBothTagsRegexAndTriggerPrefixesError()
-
-        if options.file_triggers_enabled is not None and options.file_triggers_enabled:
-            raise UnsupportedBothTagsRegexAndFileTriggersEnabledError()
 
 
 def validate_oauth_client_create_options(options: OAuthClientCreateOptions) -> None:

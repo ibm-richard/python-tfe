@@ -1,15 +1,6 @@
 """
 Terraform Cloud/Enterprise Workspace Management Example
 
-This comprehensive example demonstrates 38 workspace operations using the python-tfe SDK,
-providing a complete command-line interface for managing TFE workspaces with advanced
-operations including create, read, update, delete, lock/unlock, tag management, VCS
-integration, SSH keys, remote state, data retention, and filtering capabilities.
-
-API Coverage: 38/38 workspace methods (100% coverage)
-Testing Status: All operations tested and validated
-Organization: Logically grouped into 16 sections for easy navigation
-
 Prerequisites:
     - Set TFE_TOKEN environment variable with your Terraform Cloud API token
     - Ensure you have access to the target organization
@@ -133,7 +124,6 @@ def main():
     parser.add_argument("--all-tests", action="store_true", help="Run all method tests")
 
     # Listing and Filtering
-    parser.add_argument("--page", type=int, default=1, help="Page number for listing")
     parser.add_argument(
         "--page-size", type=int, default=10, help="Page size for listing"
     )
@@ -154,7 +144,6 @@ def main():
     try:
         # Create options for listing workspaces with pagination and filters
         options = WorkspaceListOptions(
-            page_number=args.page,
             page_size=args.page_size,
             search=args.search,
             tags=args.tags,
@@ -163,7 +152,7 @@ def main():
             project_id=args.project_id,
         )
         print(
-            f"Fetching workspaces from organization '{args.org}' (page {args.page}, size {args.page_size})..."
+            f"Fetching workspaces from organization '{args.org}', size {args.page_size})..."
         )
 
         # Get workspaces and convert to list safely

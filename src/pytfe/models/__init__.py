@@ -294,13 +294,11 @@ from .state_version import (
     StateVersion,
     StateVersionCreateOptions,
     StateVersionCurrentOptions,
-    StateVersionList,
     StateVersionListOptions,
     StateVersionReadOptions,
 )
 from .state_version_output import (
     StateVersionOutput,
-    StateVersionOutputsList,
     StateVersionOutputsListOptions,
 )
 from .team import (
@@ -351,7 +349,6 @@ from .workspace import (
     WorkspaceAssignSSHKeyOptions,
     WorkspaceCreateOptions,
     WorkspaceIncludeOpt,
-    WorkspaceList,
     WorkspaceListOptions,
     WorkspaceListRemoteStateConsumersOptions,
     WorkspaceLockOptions,
@@ -532,7 +529,6 @@ __all__ = [
     "WorkspaceAssignSSHKeyOptions",
     "WorkspaceCreateOptions",
     "WorkspaceIncludeOpt",
-    "WorkspaceList",
     "WorkspaceListOptions",
     "WorkspaceListRemoteStateConsumersOptions",
     "WorkspaceLockOptions",
@@ -667,12 +663,10 @@ __all__ = [
     "StateVersion",
     "StateVersionCreateOptions",
     "StateVersionCurrentOptions",
-    "StateVersionList",
     "StateVersionListOptions",
     "StateVersionReadOptions",
     # State Version Outputs
     "StateVersionOutput",
-    "StateVersionOutputsList",
     "StateVersionOutputsListOptions",
 ]
 
