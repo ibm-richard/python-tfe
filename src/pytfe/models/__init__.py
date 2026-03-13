@@ -287,7 +287,6 @@ from .run_trigger import (
 from .ssh_key import (
     SSHKey,
     SSHKeyCreateOptions,
-    SSHKeyList,
     SSHKeyListOptions,
     SSHKeyUpdateOptions,
 )
@@ -395,7 +394,6 @@ __all__ = [
     # SSH keys
     "SSHKey",
     "SSHKeyCreateOptions",
-    "SSHKeyList",
     "SSHKeyListOptions",
     "SSHKeyUpdateOptions",
     # Reserved tag keys
