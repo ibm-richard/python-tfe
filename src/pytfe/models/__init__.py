@@ -106,7 +106,6 @@ from .policy_check import (
     PolicyActions,
     PolicyCheck,
     PolicyCheckIncludeOpt,
-    PolicyCheckList,
     PolicyCheckListOptions,
     PolicyPermissions,
     PolicyResult,
@@ -605,7 +604,6 @@ __all__ = [
     "PolicyResult",
     "PolicyStatusTimestamps",
     "PolicyCheckListOptions",
-    "PolicyCheckList",
     # Policy Evaluation
     "PolicyAttachable",
     "PolicyEvaluation",
@@ -672,4 +670,3 @@ __all__ = [
 
 # Rebuild models with forward references after all models are loaded
 PolicyCheck.model_rebuild()
-PolicyCheckList.model_rebuild()
