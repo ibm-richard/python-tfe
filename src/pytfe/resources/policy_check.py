@@ -43,7 +43,7 @@ class PolicyChecks(_Service):
         for d in jd.get("data", []):
             attrs = d.get("attributes", {})
             attrs["id"] = d.get("id")
-            attrs["run"] = d.get("relationships", {}).get("run", {})
+            attrs["run"] = d.get("relationships", {}).get("run", {}).get("data", {})
             items.append(PolicyCheck.model_validate(attrs))
         return PolicyCheckList(
             items=items,
@@ -66,7 +66,7 @@ class PolicyChecks(_Service):
         d = jd.get("data", {})
         attrs = d.get("attributes", {})
         attrs["id"] = d.get("id")
-        attrs["run"] = d.get("relationships", {}).get("run", {})
+        attrs["run"] = d.get("relationships", {}).get("run", {}).get("data", {})
         return PolicyCheck.model_validate(attrs)
 
     def override(self, policy_check_id: str) -> PolicyCheck:
